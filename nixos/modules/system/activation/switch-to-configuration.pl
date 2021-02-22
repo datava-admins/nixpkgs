@@ -21,7 +21,8 @@ use File::Slurp qw(read_file write_file edit_file);
 use JSON::PP;
 use IPC::Cmd;
 use Sys::Syslog qw(:standard :macros);
-use Cwd qw(abs_path);
+use Cwd 'abs_path';
+use experimental 'smartmatch';
 
 ## no critic(ControlStructures::ProhibitDeepNests)
 ## no critic(ErrorHandling::RequireCarping)
@@ -534,9 +535,40 @@ my %units_to_filter; # units not shown
 %units_to_reload = map { $_ => 1 }
     split(/\n/msx, read_file($reload_list_file, err_mode => "quiet") // "");
 
-my $active_cur = get_active_units();
-while (my ($unit, $state) = each(%{$active_cur})) {
-    my $base_unit = $unit;
+my @currentNspawnUnits = glob("/etc/systemd/nspawn/*.nspawn");
+my @upcomingNspawnUnits = glob("$out/etc/systemd/nspawn/*.nspawn");
+foreach (@upcomingNspawnUnits) {
+    my $unit = basename($_);
+    $unit =~ s/\.nspawn//;
+    my $unitName = "systemd-nspawn\@$unit.service";
+    my $orig = $_;
+    $orig =~ s/^$out//;
+    if ($orig ~~ @currentNspawnUnits) {
+        if (fingerprintUnit($_) ne fingerprintUnit($orig)) {
+            my $info = parseUnit("$out/etc/systemd/system/systemd-nspawn\@$unit.service");
+            if (($info->{'X-ReloadIfChanged'} // "false") eq "true") {
+                $unitsToReload{$unitName} = 1;
+            } elsif (($info->{'X-RestartIfChanged'} // "true") ne "false") {
+                $unitsToRestart{$unitName} = 1;
+            }
+        }
+    } else {
+        $unitsToStart{$unitName} = 1;
+    }
+}
+
+foreach (@currentNspawnUnits) {
+    unless ("$out$_" ~~ @upcomingNspawnUnits) {
+        my $unit = basename($_);
+        $unit =~ s/\.nspawn//;
+        my $unitName = "systemd-nspawn\@$unit.service";
+        $unitsToStop{$unitName} = 1;
+    }
+}
+
+my $activePrev = getActiveUnits;
+while (my ($unit, $state) = each %{$activePrev}) {
+    my $baseUnit = $unit;
 
     my $cur_unit_file = "/etc/systemd/system/$base_unit";
     my $new_unit_file = "$out/etc/systemd/system/$base_unit";
