@@ -14,7 +14,9 @@
   if libc == null then
     null
   else if stdenvNoCC.targetPlatform.isNetBSD then
-    if libc != targetPackages.netbsdCross.headers then
+    if !(targetPackages ? netbsdCross) then
+      netbsd.ld_elf_so
+    else if libc != targetPackages.netbsdCross.headers then
       targetPackages.netbsdCross.ld_elf_so
     else
       null
@@ -206,6 +208,8 @@ stdenv.mkDerivation {
       else if targetPlatform.isAlpha then "alpha"
       else if targetPlatform.isVc4 then "vc4"
       else if targetPlatform.isOr1k then "or1k"
+      else if targetPlatform.isM68k then "m68k"
+      else if targetPlatform.isS390 then "s390"
       else if targetPlatform.isRiscV then "lriscv"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
     in if targetPlatform.useLLVM or false then ""

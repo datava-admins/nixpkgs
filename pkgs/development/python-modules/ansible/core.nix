@@ -1,8 +1,8 @@
 { lib
+, callPackage
 , buildPythonPackage
 , fetchPypi
 , installShellFiles
-, ansible-collections
 , cryptography
 , jinja2
 , junit-xml
@@ -21,13 +21,19 @@
 , xmltodict
 }:
 
+let
+  ansible-collections = callPackage ./collections.nix {
+    version = "4.2.0";
+    sha256 = "1l30j97q24klylchvbskdmp1xllswn9xskjvg4l0ra6pzfgq2zbk";
+  };
+in
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.11.0";
+  version = "2.11.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1if9cybdicjhrfzi6nndqakb4sh3mw1fijhvbzbsq7ki22vwww4l";
+    sha256 = "sha256-DO0bT2cZftsntQk0yV1MtkTG1jXXLH+CbEQl3+RTdnQ=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -36,9 +42,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
       --replace "[python," "["
-
-    substituteInPlace requirements.txt \
-      --replace "resolvelib >= 0.5.3, < 0.6.0" "resolvelib"
   '';
 
   nativeBuildInputs = [
@@ -73,6 +76,10 @@ buildPythonPackage rec {
 
   # internal import errors, missing dependencies
   doCheck = false;
+
+  passthru = {
+    collections = ansible-collections;
+  };
 
   meta = with lib; {
     description = "Radically simple IT automation";

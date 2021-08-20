@@ -21,8 +21,8 @@ let
       inherit (callPackage ../tools/build-managers/rebar3 { }) rebar3 rebar3WithPlugins;
       rebar = callPackage ../tools/build-managers/rebar { };
 
-      # rebar3 port compiler plugin is required by buildRebar3
       pc = callPackage ./pc { };
+      rebar3-proper = callPackage ./rebar3-proper { };
       rebar3-nix = callPackage ./rebar3-nix { };
 
       fetchHex = callPackage ./fetch-hex.nix { };
@@ -38,6 +38,8 @@ let
       mixRelease = callPackage ./mix-release.nix { };
 
       erlang-ls = callPackage ./erlang-ls { };
+      erlfmt = callPackage ./erlfmt { };
+      elvis-erlang = callPackage ./elvis-erlang { };
 
       # BEAM-based languages.
       elixir = elixir_1_12;

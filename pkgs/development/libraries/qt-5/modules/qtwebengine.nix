@@ -8,7 +8,7 @@
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
-, alsaLib
+, alsa-lib
 , libcap
 , pciutils
 , systemd
@@ -156,7 +156,7 @@ qtModule {
     dbus zlib minizip snappy nss protobuf jsoncpp
 
     # Audio formats
-    alsaLib
+    alsa-lib
 
     # Text rendering
     fontconfig freetype
@@ -166,7 +166,7 @@ qtModule {
 
     # X11 libs
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
-    xorg.libXcomposite xorg.libXdamage libdrm
+    xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
 
   ] ++ optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
     # Pipewire

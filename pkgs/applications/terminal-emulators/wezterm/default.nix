@@ -2,6 +2,7 @@
 , rustPlatform
 , lib
 , fetchFromGitHub
+, ncurses
 , pkg-config
 , fontconfig
 , python3
@@ -33,7 +34,7 @@ let
     zlib
     fontconfig
     freetype
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ] ++ lib.optionals stdenv.isLinux [
     libX11
     xcbutil
     libxcb
@@ -48,7 +49,7 @@ let
     libGLU
     libGL
     openssl
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals stdenv.isDarwin [
     Foundation
     CoreGraphics
     Cocoa
@@ -58,29 +59,47 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20210502-154244-3f7122cb";
+  version = "20210814-124438-54e29167";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
-    sha256 = "9HPhb7Vyy5DwBW1xeA6sEIBmmOXlky9lPShu6ZoixPw=";
+    sha256 = "sha256-6HXTftgAs6JMzOMCY+laN74in8xfjE8yJc5xSl9PQCE=";
     fetchSubmodules = true;
   };
+
+  outputs = [ "out" "terminfo" ];
 
   postPatch = ''
     echo ${version} > .tag
   '';
 
-  cargoSha256 = "sha256-cbZg2wc3G2ffMQBB6gd0vBbow5GRbXaj8Xh5ga1cMxU=";
+  cargoSha256 = "sha256-yjTrWoqIKoRV4oZQ0mfTGrIGmm89AaKJd16WL1Ozhnw=";
 
   nativeBuildInputs = [
     pkg-config
     python3
     perl
+    ncurses
   ];
 
   buildInputs = runtimeDeps;
+
+  postInstall = ''
+    # terminfo
+    mkdir -p $terminfo/share/terminfo/w $out/nix-support
+    tic -x -o $terminfo/share/terminfo termwiz/data/wezterm.terminfo
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    # desktop icon
+    install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
+    install -Dm644 assets/wezterm.desktop $out/share/applications/org.wezfurlong.wezterm.desktop
+    install -Dm644 assets/wezterm.appdata.xml $out/share/metainfo/org.wezfurlong.wezterm.appdata.xml
+
+    # helper scripts
+    install -Dm644 assets/shell-integration/wezterm.sh $out/share/wezterm/shell-integration/wezterm.sh
+  '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
     for artifact in wezterm wezterm-gui wezterm-mux-server strip-ansi-escapes; do

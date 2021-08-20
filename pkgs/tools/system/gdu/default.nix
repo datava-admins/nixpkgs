@@ -7,21 +7,20 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.0.1";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-78eQinKR4w7K8MFd4uyj5IPkUs0Mz5XeO7JUG/1cKLw=";
+    sha256 = "sha256-cnDYeL1BdxBaCZtK+DnIbtsTVUr3AujA50ttchPX6V0=";
   };
 
-  vendorSha256 = "sha256-9upXhTvQJ9oFfomgqja3SiifiZpl8RUQ85HwL9bDPlQ=";
+  vendorSha256 = "sha256-9W1K01PJ+tRLSJ0L7NGHXT5w5oHmlBkT8kwnOLOzSCc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
@@ -35,7 +34,7 @@ buildGoModule rec {
     installManPage gdu.1
   '';
 
-  doCheck = !(stdenv.isAarch64 || stdenv.isDarwin);
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Disk usage analyzer with console interface";

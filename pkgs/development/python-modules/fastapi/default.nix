@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.65.0";
+  version = "0.68.0";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     rev = version;
-    sha256 = "sha256-DPfijCGORF3ThZblqaYTKN0H8+wlhtdIS8lfKfJl/bY=";
+    sha256 = "00cjkc90h0qlca30g981zvwlxh2wc3rfipw25v667jdl9x5gxv9p";
   };
 
   postPatch = ''
@@ -51,7 +51,11 @@ buildPythonPackage rec {
   ];
 
   # disabled tests require orjson which requires rust nightly
-  pytestFlagsArray = [ "--ignore=tests/test_default_response_class.py" ];
+
+  # ignoring deprecation warnings to avoid test failure from
+  # tests/test_tutorial/test_testing/test_tutorial001.py
+
+  pytestFlagsArray = [ "--ignore=tests/test_default_response_class.py" "-W ignore::DeprecationWarning"];
   disabledTests = [ "test_get_custom_response" ];
 
   meta = with lib; {

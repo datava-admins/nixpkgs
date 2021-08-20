@@ -10,6 +10,7 @@
 , mock
 , oauth2client
 , pyasn1-modules
+, pyu2f
 , pytest-localserver
 , responses
 , rsa
@@ -19,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.28.0";
+  version = "1.34.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9bd436d19ab047001a1340720d2b629eb96dd503258c524921ec2af3ee88a80e";
+    sha256 = "sha256-8QlAiLrgRvsG89Gj198UcX6NlZ6RBbecV3Jb1OF1l6I=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     rsa
     six
     pyopenssl
+    pyu2f
   ];
 
   checkInputs = [

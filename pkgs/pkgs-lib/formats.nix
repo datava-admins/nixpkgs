@@ -30,6 +30,7 @@ rec {
         int
         float
         str
+        path
         (attrsOf valueType)
         (listOf valueType)
       ]) // {
@@ -37,7 +38,7 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.runCommandNoCC name {
+    generate = name: value: pkgs.runCommand name {
       nativeBuildInputs = [ pkgs.jq ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
@@ -112,6 +113,7 @@ rec {
         int
         float
         str
+        path
         (attrsOf valueType)
         (listOf valueType)
       ] // {
@@ -119,7 +121,7 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.runCommandNoCC name {
+    generate = name: value: pkgs.runCommand name {
       nativeBuildInputs = [ pkgs.remarshal ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];

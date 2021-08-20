@@ -2,13 +2,14 @@
 let
   cfg = config.virtualisation.podman;
   toml = pkgs.formats.toml { };
+  json = pkgs.formats.json { };
 
   inherit (lib) mkOption types;
 
   podmanPackage = (pkgs.podman.override { inherit (cfg) extraPackages; });
 
   # Provides a fake "docker" binary mapping to podman
-  dockerCompat = pkgs.runCommandNoCC "${podmanPackage.pname}-docker-compat-${podmanPackage.version}" {
+  dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}" {
     outputs = [ "out" "man" ];
     inherit (podmanPackage) meta;
   } ''
@@ -22,9 +23,23 @@ let
     done
   '';
 
+  net-conflist = pkgs.runCommand "87-podman-bridge.conflist" {
+    nativeBuildInputs = [ pkgs.jq ];
+    extraPlugins = builtins.toJSON cfg.defaultNetwork.extraPlugins;
+    jqScript = ''
+      . + { "plugins": (.plugins + $extraPlugins) }
+    '';
+  } ''
+    jq <${cfg.package}/etc/cni/net.d/87-podman-bridge.conflist \
+      --argjson extraPlugins "$extraPlugins" \
+      "$jqScript" \
+      >$out
+  '';
+
 in
 {
   imports = [
+    ./podman-dnsname.nix
     ./podman-network-socket.nix
     (lib.mkRenamedOptionModule [ "virtualisation" "podman" "libpod" ] [ "virtualisation" "containers" "containersConf" ])
   ];
@@ -99,6 +114,13 @@ in
       '';
     };
 
+    defaultNetwork.extraPlugins = lib.mkOption {
+      type = types.listOf json.type;
+      default = [];
+      description = ''
+        Extra CNI plugin configurations to add to podman's default network.
+      '';
+    };
 
   };
 
@@ -107,7 +129,7 @@ in
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
 
-      environment.etc."cni/net.d/87-podman-bridge.conflist".source = "${cfg.package}/etc/cni/net.d/87-podman-bridge.conflist";
+      environment.etc."cni/net.d/87-podman-bridge.conflist".source = net-conflist;
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration

@@ -1,11 +1,11 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
 , dotnetCorePackages, dotnetPackages, cacert
-, ffmpeg_4, alsaLib, SDL2, lttng-ust, numactl, alsaPlugins
+, ffmpeg_4, alsa-lib, SDL2, lttng-ust, numactl, alsa-plugins
 }:
 
 let
   runtimeDeps = [
-    ffmpeg_4 alsaLib SDL2 lttng-ust numactl
+    ffmpeg_4 alsa-lib SDL2 lttng-ust numactl
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
@@ -16,17 +16,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2021.515.0";
+  version = "2021.720.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "c2+Ybb9wMb9FSTxprJPLKGEv2q6y0jcMA4kEN2r7yyA=";
+    sha256 = "I7UkbyH2i218d5RCq4al9Gr1C0MX339jFOeyKrKQ3b0=";
   };
-
-  patches = [ ./bypass-tamper-detection.patch ];
-  patchFlags = [ "--binary" "-p1" ];
 
   nativeBuildInputs = [
     dotnet-sdk dotnetPackages.Nuget makeWrapper

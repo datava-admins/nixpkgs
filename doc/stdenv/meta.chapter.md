@@ -130,11 +130,32 @@ Attribute Set `lib.platforms` defines [various common lists](https://github.com/
 
 ### `tests` {#var-meta-tests}
 
-::: warning
+::: {.warning}
 This attribute is special in that it is not actually under the `meta` attribute set but rather under the `passthru` attribute set. This is due to how `meta` attributes work, and the fact that they are supposed to contain only metadata, not derivations.
 :::
 
-An attribute set with as values tests. A test is a derivation, which builds successfully when the test passes, and fails to build otherwise. A derivation that is a test needs to have `meta.timeout` defined.
+An attribute set with tests as values. A test is a derivation that builds when the test passes and fails to build otherwise.
+
+You can run these tests with:
+
+```ShellSession
+$ cd path/to/nixpkgs
+$ nix-build -A your-package.tests
+```
+
+#### Package tests
+
+Tests that are part of the source package are often executed in the `installCheckPhase`.
+
+Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
+
+* `passthru.tests` tests the 'real' package, independently from the environment in which it was built
+* we can run `passthru.tests` independently
+* `installCheckPhase` adds overhead to each build
+
+For more on how to write and run package tests, see <xref linkend="sec-package-tests"/>.
+
+#### NixOS tests
 
 The NixOS tests are available as `nixosTests` in parameters of derivations. For instance, the OpenSMTPD derivation includes lines similar to:
 
@@ -147,6 +168,8 @@ The NixOS tests are available as `nixosTests` in parameters of derivations. For 
   };
 }
 ```
+
+NixOS tests run in a VM, so they are slower than regular package tests. For more information see [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
 ### `timeout` {#var-meta-timeout}
 
@@ -175,20 +198,20 @@ The `meta.license` attribute should preferably contain a value from `lib.license
 
 Although it’s typically better to indicate the specific license, a few generic options are available:
 
-### `lib.licenses.free`, `"free"`
+### `lib.licenses.free`, `"free"` {#lib.licenses.free-free}
 
 Catch-all for free software licenses not listed above.
 
-### `lib.licenses.unfreeRedistributable`, `"unfree-redistributable"`
+### `lib.licenses.unfreeRedistributable`, `"unfree-redistributable"` {#lib.licenses.unfreeredistributable-unfree-redistributable}
 
 Unfree package that can be redistributed in binary form. That is, it’s legal to redistribute the *output* of the derivation. This means that the package can be included in the Nixpkgs channel.
 
 Sometimes proprietary software can only be redistributed unmodified. Make sure the builder doesn’t actually modify the original binaries; otherwise we’re breaking the license. For instance, the NVIDIA X11 drivers can be redistributed unmodified, but our builder applies `patchelf` to make them work. Thus, its license is `"unfree"` and it cannot be included in the Nixpkgs channel.
 
-### `lib.licenses.unfree`, `"unfree"`
+### `lib.licenses.unfree`, `"unfree"` {#lib.licenses.unfree-unfree}
 
 Unfree package that cannot be redistributed. You can build it yourself, but you cannot redistribute the output of the derivation. Thus it cannot be included in the Nixpkgs channel.
 
-### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"`
+### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"` {#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware}
 
 This package supplies unfree, redistributable firmware. This is a separate value from `unfree-redistributable` because not everybody cares whether firmware is free.
