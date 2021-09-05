@@ -11729,6 +11729,8 @@ with pkgs;
 
   sudo = callPackage ../tools/security/sudo { };
 
+  sudo-nspawn = callPackage ../tools/security/sudo/nspawn.nix { };
+
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
   sundtek = callPackage ../misc/drivers/sundtek { };
