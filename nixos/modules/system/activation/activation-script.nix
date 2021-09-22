@@ -213,7 +213,7 @@ in
 
     system.activationScripts.stdio = ""; # obsolete
 
-    system.activationScripts.var =
+    system.activationScripts.var = mkIf (!config.boot.isContainer)
       ''
         # Various log/runtime directories.
 
