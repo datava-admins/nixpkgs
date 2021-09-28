@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
-  ];
+  ] ++ [ ../../common/compiler-rt/libsanitizer-no-cyclades-rocm.patch ];
 
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
