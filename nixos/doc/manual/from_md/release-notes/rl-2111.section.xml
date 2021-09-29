@@ -99,7 +99,15 @@
         <para>
           <link xlink:href="https://github.com/xrelkd/clipcat/">clipcat</link>,
           an X11 clipboard manager written in Rust. Available at
-          [services.clipcat](options.html#o pt-services.clipcat.enable).
+          <link xlink:href="options.html#opt-services.clipcat.enable">services.clipcat</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/dexidp/dex">dex</link>,
+          an OpenID Connect (OIDC) identity and OAuth 2.0 provider.
+          Available at
+          <link xlink:href="options.html#opt-services.dex.enable">services.dex</link>.
         </para>
       </listitem>
       <listitem>
@@ -1068,6 +1076,40 @@ Superuser created successfully.
           now live under <literal>pkgs.linuxKernel.packages.*</literal>.
           The unversioned ones (such as
           <literal>linuxPackages_latest</literal>) remain untouched.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          In NixOS virtual machines (QEMU), the
+          <literal>virtualisation</literal> module has been updated with
+          new options to configure:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              IPv4 port forwarding
+              (<link xlink:href="options.html#opt-virtualisation.forwardPorts"><literal>virtualisation.forwardPorts</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              shared host directories
+              (<link xlink:href="options.html#opt-virtualisation.sharedDirectories"><literal>virtualisation.sharedDirectories</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              screen resolution
+              (<link xlink:href="options.html#opt-virtualisation.resolution"><literal>virtualisation.resolution</literal></link>).
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          In addition, the default
+          <link xlink:href="options.html#opt-virtualisation.msize"><literal>msize</literal></link>
+          parameter in 9P filesystems (including /nix/store and all
+          shared directories) has been increased to 16K for improved
+          performance.
         </para>
       </listitem>
       <listitem>
