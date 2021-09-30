@@ -618,7 +618,15 @@ with pkgs;
       drvPath = (f args).drvPath;
       # It's safe to discard the context, because we don't access the path.
       salt = builtins.unsafeDiscardStringContext (lib.substring 0 12 (baseNameOf drvPath));
-    in f (args // { name = "${args.name or "source"}-salted-${salt}"; });
+      # New derivation incorporating the original drv hash in the name
+      salted = f (args // { name = "${args.name or "source"}-salted-${salt}"; });
+      # Make sure we did change the derivation. If the fetcher ignores `name`,
+      # `invalidateFetcherByDrvHash` doesn't work.
+      checked =
+        if salted.drvPath == drvPath
+        then throw "invalidateFetcherByDrvHash: Adding the derivation hash to the fixed-output derivation name had no effect. Make sure the fetcher's name argument ends up in the derivation name. Otherwise, the fetcher will not be re-run when its implementation changes. This is important for testing."
+        else salted;
+    in checked;
 
   lazydocker = callPackage ../tools/misc/lazydocker { };
 
@@ -1324,6 +1332,8 @@ with pkgs;
   betterdiscord-installer = callPackage ../tools/misc/betterdiscord-installer { };
 
   bitwise = callPackage ../tools/misc/bitwise { };
+
+  blanket = callPackage ../applications/audio/blanket { };
 
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
@@ -5421,6 +5431,10 @@ with pkgs;
 
   git-open = callPackage ../applications/version-management/git-and-tools/git-open { };
 
+  git-quickfix = callPackage ../applications/version-management/git-and-tools/git-quickfix {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
+
   git-radar = callPackage ../applications/version-management/git-and-tools/git-radar { };
 
   git-recent = callPackage ../applications/version-management/git-and-tools/git-recent {
@@ -5666,6 +5680,8 @@ with pkgs;
   google-compute-engine-oslogin = callPackage ../tools/virtualization/google-compute-engine-oslogin { };
 
   google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp { };
+
+  google-java-format = callPackage ../development/tools/google-java-format { };
 
   gdown = with python3Packages; toPythonApplication gdown;
 
@@ -6230,6 +6246,8 @@ with pkgs;
   inxi = callPackage ../tools/system/inxi { };
 
   iodine = callPackage ../tools/networking/iodine { };
+
+  ioccheck = callPackage ../tools/security/ioccheck { };
 
   ioping = callPackage ../tools/system/ioping { };
 
@@ -8630,6 +8648,8 @@ with pkgs;
 
   ranger = callPackage ../applications/misc/ranger { };
 
+  rar = callPackage ../tools/archivers/rar { };
+
   rarcrack = callPackage ../tools/security/rarcrack { };
 
   rarian = callPackage ../development/libraries/rarian { };
@@ -8866,6 +8886,10 @@ with pkgs;
 
   rust-petname = callPackage ../tools/text/rust-petname { };
 
+  rustcat = callPackage ../tools/networking/rustcat {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   rustscan = callPackage ../tools/security/rustscan {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -9055,6 +9079,8 @@ with pkgs;
   shelldap = callPackage ../tools/misc/shelldap { };
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
+
+  sharedown = callPackage ../tools/misc/sharedown { };
 
   shen-sbcl = callPackage ../development/interpreters/shen-sbcl { };
 
@@ -12538,6 +12564,7 @@ with pkgs;
 
   rhack = callPackage ../development/tools/rust/rhack { };
   inherit (rustPackages) rls;
+  roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
   rustracer = callPackage ../development/tools/rust/racer {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -14239,6 +14266,8 @@ with pkgs;
     inherit (llvmPackages_9) stdenv clang llvm;
   };
 
+  img = callPackage ../development/tools/img { };
+
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
     llvmPackages = llvmPackages_12;
   };
@@ -14600,7 +14629,9 @@ with pkgs;
 
   pycritty = with python3Packages; toPythonApplication pycritty;
 
-  qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
+  qtcreator = libsForQt5.callPackage ../development/tools/qtcreator {
+    inherit (linuxPackages) perf;
+  };
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit {} ;
 
@@ -20445,6 +20476,11 @@ with pkgs;
 
   petidomo = callPackage ../servers/mail/petidomo { };
 
+  pict-rs = callPackage ../servers/web-apps/pict-rs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+    ffmpeg = ffmpeg_4;
+  };
+
   popa3d = callPackage ../servers/mail/popa3d { };
 
   postfix = callPackage ../servers/mail/postfix { };
@@ -21547,8 +21583,6 @@ with pkgs;
   linux_5_4_hardened = linuxKernel.kernels.linux_5_4_hardened;
   linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
   linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
-  linuxPackages_5_13_hardened = linuxKernel.packages.linux_5_13_hardened;
-  linux_5_13_hardened = linuxKernel.kernels.linux_5_13_hardened;
   linuxPackages_5_14_hardened = linuxKernel.packages.linux_5_14_hardened;
   linux_5_14_hardened = linuxKernel.kernels.linux_5_14_hardened;
 
@@ -24103,6 +24137,8 @@ with pkgs;
   expenses = callPackage ../applications/misc/expenses { };
 
   fnott = callPackage ../applications/misc/fnott { };
+
+  gigalixir = with python3Packages; toPythonApplication gigalixir;
 
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 
@@ -26937,6 +26973,7 @@ with pkgs;
   qemu = callPackage ../applications/virtualization/qemu {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor;
     inherit (darwin.stubs) rez setfile;
+    inherit (darwin) sigtool;
     python = python3;
   };
 
@@ -31367,7 +31404,7 @@ with pkgs;
 
   depotdownloader = callPackage ../tools/misc/depotdownloader { };
 
-  desmume = callPackage ../misc/emulators/desmume { inherit (gnome2) gtkglext libglade; };
+  desmume = callPackage ../misc/emulators/desmume { };
 
   dbacl = callPackage ../tools/misc/dbacl { };
 
@@ -31479,6 +31516,8 @@ with pkgs;
     gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
     binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
+
+  go365 = callPackage ../tools/security/go365 { };
 
   gobuster = callPackage ../tools/security/gobuster { };
 
