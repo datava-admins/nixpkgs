@@ -2976,6 +2976,8 @@ in {
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
+  gigalixir = callPackage ../development/python-modules/gigalixir { };
+
   gin-config = callPackage ../development/python-modules/gin-config { };
 
   gios = callPackage ../development/python-modules/gios { };
@@ -7989,6 +7991,8 @@ in {
 
   rokuecp = callPackage ../development/python-modules/rokuecp { };
 
+  rollbar = callPackage ../development/python-modules/rollbar { };
+
   roman = callPackage ../development/python-modules/roman { };
 
   roombapy = callPackage ../development/python-modules/roombapy { };
@@ -9364,6 +9368,8 @@ in {
 
   url-normalize = callPackage ../development/python-modules/url-normalize { };
 
+  urlextract = callPackage ../development/python-modules/urlextract { };
+
   urlgrabber = callPackage ../development/python-modules/urlgrabber { };
 
   urllib3 = callPackage ../development/python-modules/urllib3 { };
@@ -9487,6 +9493,8 @@ in {
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
 
   vsure = callPackage ../development/python-modules/vsure { };
+
+  vt-py = callPackage ../development/python-modules/vt-py { };
 
   vtk = toPythonModule (pkgs.vtk.override {
     pythonInterpreter = python;
