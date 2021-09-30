@@ -2520,6 +2520,8 @@ in {
 
   falcon = callPackage ../development/python-modules/falcon { };
 
+  faraday-agent-parameters-types = callPackage ../development/python-modules/faraday-agent-parameters-types { };
+
   faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
 
   fastapi = callPackage ../development/python-modules/fastapi { };
@@ -2624,6 +2626,8 @@ in {
   fixerio = callPackage ../development/python-modules/fixerio { };
 
   fixtures = callPackage ../development/python-modules/fixtures { };
+
+  fjaraskupan = callPackage ../development/python-modules/fjaraskupan { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
 
@@ -2975,6 +2979,8 @@ in {
   gibberish-detector = callPackage ../development/python-modules/gibberish-detector { };
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
+
+  gigalixir = callPackage ../development/python-modules/gigalixir { };
 
   gin-config = callPackage ../development/python-modules/gin-config { };
 
@@ -4529,6 +4535,8 @@ in {
     inherit buildPythonPackage pythonOlder fetchPypi;
     inherit (self) pyface pygments numpy vtk traitsui envisage apptools pyqt5;
   };
+
+  mbddns = callPackage ../development/python-modules/mbddns { };
 
   mccabe = callPackage ../development/python-modules/mccabe { };
 
@@ -7989,6 +7997,8 @@ in {
 
   rokuecp = callPackage ../development/python-modules/rokuecp { };
 
+  rollbar = callPackage ../development/python-modules/rollbar { };
+
   roman = callPackage ../development/python-modules/roman { };
 
   roombapy = callPackage ../development/python-modules/roombapy { };
@@ -8756,6 +8766,8 @@ in {
   sumtypes = callPackage ../development/python-modules/sumtypes { };
 
   sunpy = callPackage ../development/python-modules/sunpy { };
+
+  sunwatcher = callPackage ../development/python-modules/sunwatcher { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
@@ -9542,7 +9554,7 @@ in {
 
   wavedrom = callPackage ../development/python-modules/wavedrom { };
 
-  WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
+  wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 
   wcmatch = callPackage ../development/python-modules/wcmatch { };
 
