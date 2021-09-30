@@ -14192,6 +14192,7 @@ in
 
   aspell = callPackage ../development/libraries/aspell { };
 
+  mssql = recurseIntoAttrs (callPackages ../servers/sql/mssql/15.x.nix {});
   aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
 
   aspellWithDicts = callPackage ../development/libraries/aspell/aspell-with-dicts.nix {
