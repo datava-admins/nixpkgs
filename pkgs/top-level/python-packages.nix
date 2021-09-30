@@ -9364,6 +9364,8 @@ in {
 
   url-normalize = callPackage ../development/python-modules/url-normalize { };
 
+  urlextract = callPackage ../development/python-modules/urlextract { };
+
   urlgrabber = callPackage ../development/python-modules/urlgrabber { };
 
   urllib3 = callPackage ../development/python-modules/urllib3 { };
@@ -9487,6 +9489,8 @@ in {
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
 
   vsure = callPackage ../development/python-modules/vsure { };
+
+  vt-py = callPackage ../development/python-modules/vt-py { };
 
   vtk = toPythonModule (pkgs.vtk.override {
     pythonInterpreter = python;
