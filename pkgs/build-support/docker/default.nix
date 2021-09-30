@@ -636,7 +636,7 @@ rec {
              <(sort -n layerFiles|uniq|grep -v ${layer}) -1 -3 > newFiles
         # Append the new files to the layer.
         tar -rpf temp/layer.tar --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
-          --owner=0 --group=0 --no-recursion --files-from newFiles
+          --owner=0 --group=0 --no-recursion --verbatim-files-from --files-from newFiles
 
         echo "Adding meta..."
 
@@ -750,11 +750,21 @@ rec {
         root:x:0:
         nobody:x:65534:
       '')
+      (writeTextDir "etc/nsswitch.conf" ''
+        hosts: files dns
+      '')
       (runCommand "var-empty" { } ''
         mkdir -p $out/var/empty
       '')
     ];
   };
+
+  # This provides a /usr/bin/env, for shell scripts using the
+  # "#!/usr/bin/env executable" shebang.
+  usrBinEnv = runCommand "usr-bin-env" { } ''
+    mkdir -p $out/usr/bin
+    ln -s ${pkgs.coreutils}/bin/env $out/usr/bin
+  '';
 
   # This provides /bin/sh, pointing to bashInteractive.
   binSh = runCommand "bin-sh" { } ''

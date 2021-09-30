@@ -1,4 +1,4 @@
-{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch }:
+{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
 
 let
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
@@ -45,6 +45,17 @@ let
         done
       '';
     };
+
+    carbon-now-cli = super.carbon-now-cli.override ({
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/carbon-now \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
 
     deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
       meta.broken = true; # use the top-level package instead
@@ -168,36 +179,6 @@ let
       meta.mainProgram = "markdownlint";
     };
 
-    mirakurun = super.mirakurun.override rec {
-      nativeBuildInputs = with pkgs; [ makeWrapper ];
-      postInstall = let
-        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l-utils ]);
-      in
-      ''
-        substituteInPlace $out/lib/node_modules/mirakurun/processes.json \
-          --replace "/usr/local" ""
-
-        # XXX: Files copied from the Nix store are non-writable, so they need
-        # to be given explicit write permissions
-        substituteInPlace $out/lib/node_modules/mirakurun/lib/Mirakurun/config.js \
-          --replace 'fs.copyFileSync("config/server.yml", path);' \
-                    'fs.copyFileSync("config/server.yml", path); fs.chmodSync(path, 0o644);' \
-          --replace 'fs.copyFileSync("config/tuners.yml", path);' \
-                    'fs.copyFileSync("config/tuners.yml", path); fs.chmodSync(path, 0o644);' \
-          --replace 'fs.copyFileSync("config/channels.yml", path);' \
-                    'fs.copyFileSync("config/channels.yml", path); fs.chmodSync(path, 0o644);'
-
-        # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
-        # server.  However, we invoke the server directly and let systemd
-        # manage it to avoid complication. This is okay since no features
-        # unique to PM2 is currently being used.
-        makeWrapper ${nodejs}/bin/npm $out/bin/mirakurun \
-          --add-flags "start" \
-          --run "cd $out/lib/node_modules/mirakurun" \
-          --prefix PATH : ${pkgs.lib.makeBinPath runtimeDeps}
-      '';
-    };
-
     node-gyp = super.node-gyp.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
@@ -295,6 +276,34 @@ let
         };
       };
       meta.mainProgram = "postcss";
+    };
+
+    prisma = super.prisma.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      version = "3.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/prisma/-/prisma-3.1.1.tgz";
+        sha512 = "sha512-+eZtWIL6hnOKUOvqq9WLBzSw2d/EbTmOx1Td1LI8/0XE40ctXMLG2N1p6NK5/+yivGaoNJ9PDpPsPL9lO4nJrQ==";
+      };
+      dependencies = [
+        {
+          name = "_at_prisma_slash_engines";
+          packageName = "@prisma/engines";
+          version = "3.1.0-24.c22652b7e418506fab23052d569b85d3aec4883f";
+          src = fetchurl {
+            url = "https://registry.npmjs.org/@prisma/engines/-/engines-3.1.0-24.c22652b7e418506fab23052d569b85d3aec4883f.tgz";
+            sha512 = "sha512-6NEp0VlLho3hVtIvj2P4h0e19AYqQSXtFGts8gSIXDnV+l5pRFZaDMfGo2RiLMR0Kfrs8c3ZYxYX0sWmVL0tWw==";
+          };
+        }
+      ];
+      postInstall = with pkgs; ''
+        wrapProgram "$out/bin/prisma" \
+          --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \
+          --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
+          --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
+          --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
+          --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
+      '';
     };
 
     pulp = super.pulp.override {

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2.1.0";
+  version = "2.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-S2X7cTArjiWOFjQGnrZ4AuhgN8t18wf9d6i9X5thRZg=";
+    sha256 = "sha256-9hpXVKCpVbUAoTxd5mHP9NK1dZxbrQUxrQrOEVHpaPo=";
   };
 
   nativeBuildInputs = [ poetry-core ];

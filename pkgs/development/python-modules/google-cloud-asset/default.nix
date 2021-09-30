@@ -9,7 +9,6 @@
 , google-cloud-testutils
 , libcst
 , proto-plus
-, pytest
 , pytest-asyncio
 , pytestCheckHook
 , mock
@@ -17,17 +16,12 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.3.0";
+  version = "3.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/iTpO1Y+v//ZzaXUpOfBOXDRfftpmUV4hxsFmMj3tM0=";
+    sha256 = "7d7218ffdd17d64184e1de69ef016f1f070bb0c888785510c4731948b078067d";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"google-cloud-org-policy >= 0.1.2, < 0.2.0dev"' '"google-cloud-org-policy >= 0.1.2"'
-  '';
 
   propagatedBuildInputs = [
     grpc-google-iam-v1

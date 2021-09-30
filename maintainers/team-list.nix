@@ -164,6 +164,14 @@ with lib.maintainers; {
     scope = "Maintain Kodi and related packages.";
   };
 
+  mate = {
+    members = [
+      j03
+      romildo
+    ];
+    scope = "Maintain Mate desktop environment and related packages.";
+  };
+
   matrix = {
     members = [
       ma27
@@ -176,6 +184,15 @@ with lib.maintainers; {
       sumnerevans
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+  };
+
+  openstack = {
+    members = [
+      angustrau
+      superherointj
+      SuperSandro2000
+    ];
+    scope = "Maintain the ecosystem around OpenStack";
   };
 
   pantheon = {

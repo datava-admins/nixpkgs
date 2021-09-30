@@ -1,5 +1,6 @@
 { stdenv, lib, python3
 , fetchFromGitHub
+, fetchPypi
 , git
 , spdx-license-list-data
 , version, src
@@ -9,10 +10,23 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
+        pname = "aiofiles";
         version = "0.6.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "e0281b157d3d5d59d803e3f4557dcc9a3dff28a4dd4829a9ff478adae50ca092";
+        src = fetchFromGitHub {
+          owner = "Tinche";
+          repo = pname;
+          rev = "v${version}";
+          sha256 = "0w23d88q65m06884pfcps661clr11w9wm701ihx6kfxjwga6fkzf";
+        };
+        doCheck = false;
+      });
+
+      ajsonrpc = super.ajsonrpc.overridePythonAttrs (oldAttrs: rec {
+        pname = "ajsonrpc";
+        version = "1.1.0";
+        src = fetchPypi {
+          inherit pname version;
+          sha256 = "sha256-CgHCtW0gxZho7ZavvEaODNc+KbFW4sAsHtM2Xk5Cuaw=";
         };
       });
 
@@ -22,6 +36,18 @@ let
           inherit version;
           sha256 = "06kbzd6sjfkqan3miwj9wqyddfxc2b6hi7p5s4dvqjb3gif2bdfj";
         };
+      });
+
+      starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
+        pname = "starlette";
+        version = "0.14.2";
+        src = fetchFromGitHub {
+          owner = "encode";
+          repo = pname;
+          rev = version;
+          sha256 = "sha256-Ki5jTEr5w6CrGK6F60E9uvdUlGx8pxdHMpxHvj9D4js=";
+        };
+        doCheck = false;
       });
 
       uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {

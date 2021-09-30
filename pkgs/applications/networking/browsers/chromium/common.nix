@@ -1,6 +1,8 @@
 { stdenv, lib, fetchurl, fetchpatch
 # Channel data:
 , channel, upstream-info
+# Helper functions:
+, chromiumVersionAtLeast, versionRange
 
 # Native build inputs:
 , ninja, pkg-config
@@ -83,17 +85,18 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
-  gnSystemLibraries = lib.optionals (!chromiumVersionAtLeast "93") [
-    "ffmpeg"
-    "snappy"
+  gnSystemLibraries = lib.optionals (!chromiumVersionAtLeast "95") [
+    "zlib"
   ] ++ [
+    # TODO:
+    # "ffmpeg"
+    # "snappy"
     "flac"
     "libjpeg"
     "libpng"
     "libwebp"
     "libxslt"
     "opus"
-    "zlib"
   ];
 
   opusWithCustomModes = libopus.override {
@@ -105,18 +108,6 @@ let
   buildType = "Release";
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
-
-  warnObsoleteVersionConditional = min-version: result:
-    let ungoogled-version = (importJSON ./upstream-info.json).ungoogled-chromium.version;
-    in warnIf (versionAtLeast ungoogled-version min-version) "chromium: ungoogled version ${ungoogled-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
-      result;
-  chromiumVersionAtLeast = min-version:
-    let result = versionAtLeast upstream-info.version min-version;
-    in  warnObsoleteVersionConditional min-version result;
-  versionRange = min-version: upto-version:
-    let inherit (upstream-info) version;
-        result = versionAtLeast version min-version && versionOlder version upto-version;
-    in warnObsoleteVersionConditional upto-version result;
 
   ungoogler = ungoogled-chromium {
     inherit (upstream-info.deps.ungoogled-patches) rev sha256;
@@ -169,21 +160,6 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
-      # Fix the build by adding a missing dependency (s. https://crbug.com/1197837):
-      ./patches/fix-missing-atspi2-dependency.patch
-    ] ++ lib.optionals (versionRange "91" "94.0.4583.0") [
-      # Required as dependency for the next patch:
-      (githubPatch {
-        # Reland "Reland "Linux sandbox syscall broker: use struct kernel_stat""
-        commit = "4b438323d68840453b5ef826c3997568e2e0e8c7";
-        sha256 = "1lf6yilx2ffd3r0840ilihp4px35w7jvr19ll56bncqmz4r5fd82";
-      })
-      # To fix the text rendering, see #131074:
-      (githubPatch {
-        # Linux sandbox: fix fstatat() crash
-        commit = "60d5e803ef2a4874d29799b638754152285e0ed9";
-        sha256 = "0apmsqqlfxprmdmi3qzp3kr9jc52mcc4xzps206kwr8kzwv48b70";
-      })
     ];
 
     postPatch = ''
@@ -205,7 +181,7 @@ let
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
-      chmod -x third_party/webgpu-cts/src/tools/deno
+      chmod -x third_party/webgpu-cts/src/tools/${lib.optionalString (chromiumVersionAtLeast "96") "run_"}deno
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
@@ -262,6 +238,7 @@ let
       # e.g. unsafe developer builds have developer-friendly features that may
       # weaken or disable security measures like sandboxing or ASLR):
       is_official_build = true;
+      disable_fieldtrial_testing_config = true;
       # Build Chromium using the system toolchain (for Linux distributions):
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
       host_toolchain = "//build/toolchain/linux/unbundle:default";
@@ -298,10 +275,6 @@ let
       enable_widevine = true;
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
-    } // optionalAttrs (!chromiumVersionAtLeast "94") {
-      fieldtrial_testing_like_official_build = true;
-    } // optionalAttrs (chromiumVersionAtLeast "94") {
-      disable_fieldtrial_testing_config = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;

@@ -9,7 +9,7 @@
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
 , libvpx_1_8
-, icu69, libpng, jemalloc, glib, pciutils
+, icu69, libpng, glib, pciutils
 , autoconf213, which, gnused, rustPackages, rustPackages_1_45
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
@@ -27,6 +27,7 @@
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
 , gssSupport ? true, libkrb5
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
+, jemallocSupport ? true, jemalloc
 
 ## privacy-related options
 
@@ -155,6 +156,23 @@ buildStdenv.mkDerivation ({
       sha256 = "0qc62di5823r7ly2lxkclzj9rhg2z7ms81igz44nv0fzv3dszdab";
     })
 
+  # These fix Firefox on sway and other non-Gnome wayland WMs. They should be
+  # removed whenever the following two patches make it onto a release:
+  # 1. https://hg.mozilla.org/mozilla-central/rev/51c13987d1b8
+  # 2. https://hg.mozilla.org/integration/autoland/rev/3b856ecc00e4
+  # This will probably happen in the next point release, but let's be careful
+  # and double check whether it's working on sway on the next v bump.
+  ++ lib.optionals (lib.versionAtLeast version "92") [
+      (fetchpatch {
+        url = "https://hg.mozilla.org/integration/autoland/raw-rev/3b856ecc00e4";
+        sha256 = "sha256-d8IRJD6ELC3ZgEs1ES/gy2kTNu/ivoUkUNGMEUoq8r8=";
+      })
+      (fetchpatch {
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/51c13987d1b8";
+        sha256 = "sha256-C2jcoWLuxW0Ic+Mbh3UpEzxTKZInljqVdcuA9WjspoA=";
+      })
+  ]
+
   ++ patches;
 
 
@@ -172,7 +190,7 @@ buildStdenv.mkDerivation ({
     xorg.libXdamage
     xorg.libXext
     libevent libstartup_notification /* cairo */
-    libpng jemalloc glib
+    libpng glib
     nasm icu69 libvpx_1_8
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
@@ -185,6 +203,7 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  pipewireSupport pipewire
+  ++ lib.optional  jemallocSupport jemalloc
   ++ lib.optional  (lib.versionAtLeast version "82") gnum4
   ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                           AVFoundation MediaToolbox CoreLocation
@@ -292,7 +311,6 @@ buildStdenv.mkDerivation ({
     "--disable-tests"
     "--disable-necko-wifi" # maybe we want to enable this at some point
     "--disable-updater"
-    "--enable-jemalloc"
     "--enable-default-toolkit=${default-toolkit}"
     "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
     "--with-system-nspr"
@@ -312,6 +330,7 @@ buildStdenv.mkDerivation ({
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
   ++ flag ffmpegSupport "ffmpeg"
+  ++ flag jemallocSupport "jemalloc"
   ++ flag gssSupport "negotiateauth"
   ++ flag webrtcSupport "webrtc"
   ++ flag crashreporterSupport "crashreporter"
