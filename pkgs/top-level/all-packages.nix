@@ -708,7 +708,8 @@ with pkgs;
     inherit (darwin) signingUtils;
   };
 
-  vmTools = callPackage ../build-support/vm { };
+  # No callPackage.  In particular, we don't want `img` *package* in parameters.
+  vmTools = makeOverridable (import ../build-support/vm) { inherit pkgs lib; };
 
   releaseTools = callPackage ../build-support/release { };
 
@@ -1039,6 +1040,8 @@ with pkgs;
   };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
+
+  natls = callPackage ../tools/misc/natls { };
 
   nimmm = callPackage ../applications/terminal-emulators/nimmm { };
 
@@ -6921,6 +6924,10 @@ with pkgs;
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
+  ledit = callPackage ../tools/misc/ledit {
+    inherit (ocamlPackages) camlp5;
+  };
+
   ledmon = callPackage ../tools/system/ledmon { };
 
   leela = callPackage ../tools/graphics/leela { };
@@ -8765,7 +8772,7 @@ with pkgs;
   rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
 
   inherit (callPackage ../development/misc/resholve { })
-    resholve resholvePackage;
+    resholve resholvePackage resholveScript resholveScriptBin;
 
   restool = callPackage ../os-specific/linux/restool {};
 
@@ -12822,6 +12829,19 @@ with pkgs;
   angelscript_2_22 = callPackage ../development/interpreters/angelscript/2.22.nix {};
 
   babashka = callPackage ../development/interpreters/clojure/babashka.nix { };
+
+  # BQN interpreters and compilers
+  cbqn = cbqn-phase2;
+  # And the classic bootstrapping process
+  cbqn-phase0 = callPackage ../development/interpreters/bqn/cbqn {
+    bqn-path = null;
+  };
+  cbqn-phase1 = callPackage ../development/interpreters/bqn/cbqn {
+    bqn-path = "${cbqn-phase0}/bin/bqn";
+  };
+  cbqn-phase2 = callPackage ../development/interpreters/bqn/cbqn {
+    bqn-path = "${cbqn-phase1}/bin/bqn";
+  };
 
   chibi = callPackage ../development/interpreters/chibi { };
 
@@ -25020,6 +25040,7 @@ with pkgs;
   hivelytracker = callPackage ../applications/audio/hivelytracker { };
 
   hledger = haskell.lib.justStaticExecutables haskellPackages.hledger;
+  hledger-check-fancyassertions = callPackage ../applications/office/hledger-check-fancyassertions { };
   hledger-iadd = haskell.lib.justStaticExecutables haskellPackages.hledger-iadd;
   hledger-interest = haskell.lib.justStaticExecutables haskellPackages.hledger-interest;
   hledger-ui = haskell.lib.justStaticExecutables haskellPackages.hledger-ui;
@@ -31932,6 +31953,8 @@ with pkgs;
 
   nixos-rebuild = callPackage ../os-specific/linux/nixos-rebuild { };
 
+  extra-container = callPackage ../tools/virtualization/extra-container { };
+
   norwester-font = callPackage ../data/fonts/norwester  {};
 
   nut = callPackage ../applications/misc/nut { };
@@ -32324,6 +32347,8 @@ with pkgs;
   throttled = callPackage ../tools/system/throttled { };
 
   thinkfan = callPackage ../tools/system/thinkfan { };
+
+  tp-auto-kbbl = callPackage ../tools/system/tp-auto-kbbl { };
 
   tup = callPackage ../development/tools/build-managers/tup { };
 
