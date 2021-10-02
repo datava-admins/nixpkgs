@@ -75,6 +75,7 @@ chriskempson/base16-vim
 ChristianChiarulli/nvcode-color-schemes.vim
 christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
+ciaranm/inkpot
 ckarnell/antonys-macro-repeater
 clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
@@ -172,7 +173,6 @@ frigoeu/psc-ide-vim
 fruit-in/brainfuck-vim
 fruit-in/vim-nong-theme
 fsharp/vim-fsharp
-fszymanski/deoplete-emoji
 garbas/vim-snipmate
 gcmt/taboo.vim
 gcmt/wildfire.vim

@@ -4384,6 +4384,8 @@ in {
 
   lupa = callPackage ../development/python-modules/lupa { };
 
+  lupupy = callPackage ../development/python-modules/lupupy { };
+
   lxml = callPackage ../development/python-modules/lxml {
     inherit (pkgs) libxml2 libxslt zlib;
   };
@@ -8857,7 +8859,6 @@ in {
 
   tensorflow-bin_2 = callPackage ../development/python-modules/tensorflow/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
-    inherit (pkgs.linuxPackages) nvidia_x11;
     cudatoolkit = pkgs.cudatoolkit_11_0;
     cudnn = pkgs.cudnn_cudatoolkit_11_0;
   };
