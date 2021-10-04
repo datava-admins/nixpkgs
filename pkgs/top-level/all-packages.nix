@@ -32916,4 +32916,6 @@ with pkgs;
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  gamescope = callPackage ../applications/misc/gamescope {};
 }
