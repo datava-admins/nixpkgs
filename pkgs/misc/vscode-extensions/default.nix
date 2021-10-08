@@ -406,6 +406,22 @@ let
         };
       };
 
+      davidlday.languagetool-linter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "languagetool-linter";
+          publisher = "davidlday";
+          version = "0.18.0";
+          sha256 = "sha256-AYINgq1BMfh7p4xhwSC2Www6dQvyQAGTA45HJsmMGDg=";
+        };
+        meta = with lib; {
+          description = "LanguageTool integration for VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=davidlday.languagetool-linter";
+          homepage = "https://github.com/davidlday/vscode-languagetool-linter";
+          license = licenses.asl20;
+          maintainers = with maintainers; [ ebbertd ];
+        };
+      };
+
       denoland.vscode-deno = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-deno";
@@ -928,6 +944,18 @@ let
         };
       };
 
+      influxdata.flux = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "influxdata";
+          name = "flux";
+          version = "0.6.5";
+          sha256 = "sha256-rKkZ7Sg8buryFtbIuKsrf3V3Rf7PP8hnbEIRFf4FvSM=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       james-yu.latex-workshop = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "latex-workshop";
@@ -1441,6 +1469,18 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      takayama.vscode-qq = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "takayama";
+          name = "vscode-qq";
+          version = "1.4.0";
+          sha256 = "sha256-DYjNWSKOrDYvdiV7G24uKz6w4ggeYUMkQIiOGZAbMSI=";
+        };
+        meta = {
+          license = lib.licenses.mpl20;
         };
       };
 
