@@ -429,6 +429,7 @@ in
   systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
   systemd-boot = handleTest ./systemd-boot.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
+  systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-networkd-dhcpserver = handleTest ./systemd-networkd-dhcpserver.nix {};
@@ -478,6 +479,7 @@ in
   wasabibackend = handleTest ./wasabibackend.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wireguard = handleTest ./wireguard {};
+  without-nix = handleTest ./without-nix.nix {};
   wmderland = handleTest ./wmderland.nix {};
   wpa_supplicant = handleTest ./wpa_supplicant.nix {};
   wordpress = handleTest ./wordpress.nix {};
