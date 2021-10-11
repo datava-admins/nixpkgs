@@ -4317,6 +4317,8 @@ in {
 
   lima = callPackage ../development/python-modules/lima { };
 
+  limiter= callPackage ../development/python-modules/limiter { };
+
   limitlessled = callPackage ../development/python-modules/limitlessled { };
 
   limits = callPackage ../development/python-modules/limits { };
@@ -4656,7 +4658,7 @@ in {
   minimock = callPackage ../development/python-modules/minimock { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override {
-    inherit python;
+    python3 = python;
   })).py;
 
   minio = callPackage ../development/python-modules/minio { };
@@ -5339,6 +5341,8 @@ in {
   papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
 
   param = callPackage ../development/python-modules/param { };
+
+  parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
 
   parameterized = callPackage ../development/python-modules/parameterized { };
 
@@ -6325,6 +6329,8 @@ in {
   pyglet = callPackage ../development/python-modules/pyglet { };
 
   pygls = callPackage ../development/python-modules/pygls { };
+
+  pygmars = callPackage ../development/python-modules/pygmars { };
 
   pygments-better-html = callPackage ../development/python-modules/pygments-better-html { };
 
@@ -8459,6 +8465,8 @@ in {
 
   smbus-cffi = callPackage ../development/python-modules/smbus-cffi { };
 
+  smbus2 = callPackage ../development/python-modules/smbus2 { };
+
   smdebug-rulesconfig = callPackage ../development/python-modules/smdebug-rulesconfig { };
 
   smhi-pkg = callPackage ../development/python-modules/smhi-pkg { };
@@ -8668,6 +8676,8 @@ in {
   spyder = callPackage ../development/python-modules/spyder { };
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels { };
+
+  spyse-python = callPackage ../development/python-modules/spyse-python { };
 
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
