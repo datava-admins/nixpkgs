@@ -4538,6 +4538,12 @@ in {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
+  
+  matplotlib-qt = callPackage ../development/python-modules/matplotlib/default.nix {
+    stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+    enableQt = true;
+  };
 
   matplotlib-inline = callPackage ../development/python-modules/matplotlib-inline { };
 
