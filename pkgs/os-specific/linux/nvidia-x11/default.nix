@@ -29,8 +29,8 @@ rec {
   beta = generic {
     version = "495.29.05";
     sha256_64bit = "sha256-9yVLl9QAxpJQR5ZJb059j2TpOx4xxCeGCk8hmhhvEl4=";
-    settingsSha256 = "";
-    persistencedSha256 = "";
+    settingsSha256 = "sha256-dcEI+3bxSTwVbHcR6IgvIUFt4vWtK5T4NMGVhmmeVJ0=";
+    persistencedSha256 = "sha256-OT/hOXEPatc6pAKrxDe0jsmaDFCtVXAbdW4elKe6xE8=";
   };
 
   # Vulkan developer beta driver
