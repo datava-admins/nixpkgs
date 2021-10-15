@@ -124,7 +124,7 @@ self = stdenv.mkDerivation {
     "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
 
     # To enable non-mesa gdm backends to be found (e.g. Nvidia)
-    "-Dgbm-backends-path=/run/opengl-driver/lib:${placeholder "drivers"}/lib"
+    "-Dgbm-backends-path=/run/opengl-driver/lib:${placeholder "out"}/lib"
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
   ];
