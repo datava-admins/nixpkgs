@@ -1,0 +1,12 @@
+diff --git a/Makefile.am b/Makefile.am.2
+index 97035de..f2eb87d 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -23,6 +23,7 @@ EXTRA_DIST =					\
+ 	build-aux/git-version-gen		\
+ 	build-aux/meson/check-spice-common	\
+ 	CHANGELOG.md				\
++	doxygen.sh				\
+ 	.version				\
+ 	$(NULL)
+ 

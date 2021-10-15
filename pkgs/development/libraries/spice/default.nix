@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
     sha256 = "1xd0xffw0g5vvwbq4ksmm3jjfq45f9dw20xpmi82g1fj9f7wy85k";
   };
+  patches = [
+    ./fix-doxygen-error.patch
+    ./missing-doxygen-sh.patch
+  ];
 
   postPatch = ''
     patchShebangs build-aux

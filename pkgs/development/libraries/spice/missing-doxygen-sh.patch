@@ -1,0 +1,18 @@
+diff --git a/doxygen.sh b/doxygen.sh
+new file mode 100644
+index 0000000..46f47ff
+--- /dev/null
++++ b/doxygen.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++
++set -e # exit on errors
++
++SRCDIR=`dirname $0`
++test -z "$SRCDIR" && SRCDIR=.
++cd "$SRCDIR"
++
++export SRCDIR
++rm -rf doxygen_doc
++doxygen doxygen.cfg
++echo Timestamp > doxygen_doc/spice.tag
