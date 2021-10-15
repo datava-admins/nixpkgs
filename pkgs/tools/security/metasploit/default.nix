@@ -14,13 +14,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
-  version = "6.1.7";
+  version = "6.1.9";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "sha256-UzWNQnDo/o296GGd+C1ImHccOMAXfE55dJDB9hw9B8s=";
+    sha256 = "sha256-ZhNy6rp3Jdrua1dZr3dTQxLOVAflWiI0lc/f38d0kqc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,6 +40,11 @@ in stdenv.mkDerivation rec {
       done
     )
 
+    makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_create \
+      --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_create.rb"
+
+    makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_offset \
+      --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_offset.rb"
   '';
 
   # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit
@@ -50,7 +55,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/rapid7/metasploit-framework/wiki";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = [ maintainers.makefu ];
+    maintainers = with maintainers; [ fab makefu ];
     mainProgram = "msfconsole";
   };
 }
