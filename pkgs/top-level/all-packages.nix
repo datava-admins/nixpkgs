@@ -33275,4 +33275,6 @@ with pkgs;
   zktree = callPackage ../applications/misc/zktree {};
 
   gamescope = callPackage ../applications/misc/gamescope {};
+
+  openseachest = callPackage ../tools/system/openseachest {};
 }
