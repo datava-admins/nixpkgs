@@ -185,6 +185,21 @@ in {
       defaultText = literalExpression "pkgs.tailscale";
       description = "The package to use for tailscale";
     };
+    user = mkOption {
+      type = types.str;
+      default = "headscale";
+      description = ''
+        User account under which headscale runs.
+      '';
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = "headscale";
+      description = ''
+        Group under which headscale runs.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
