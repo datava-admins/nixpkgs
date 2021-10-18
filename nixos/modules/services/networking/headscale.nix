@@ -218,8 +218,8 @@ in {
         isSystemUser = true;
       };
     };
-    environment.etc."headscale/config.json" = builtins.toJSON cfg.config;
-    environment.etc."headscale/derp.json" = mkIf (cfg.derp != null) builtins.toJSON cfg.derp;
+    environment.etc."headscale/config.json" = (builtins.toJSON cfg.config);
+    environment.etc."headscale/derp.json" = mkIf (cfg.derp != null) (builtins.toJSON cfg.derp);
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.headscaled = {
