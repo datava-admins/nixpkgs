@@ -65,6 +65,7 @@ let
       };
       domains = mkOption {
         type = types.listOf types.str;
+        default = [];
       };
       magic_dns = mkOption {
         type = types.bool;
@@ -72,7 +73,7 @@ let
       };
       base_domain = mkOption {
         type = types.str;
-        default = config.networking.domain;
+        default = "";
       };
     };
   };
