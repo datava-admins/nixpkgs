@@ -9,7 +9,7 @@ let
     } ''
       tr -d "'" "$value" "$out"
     '';
-    type = types.path;
+    type = derpFormat.type;
   };
   derpFormat = pkgs.formats.yaml {};
   cfg = config.services.headscale;
