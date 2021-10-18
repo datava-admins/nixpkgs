@@ -365,6 +365,8 @@ in {
 
   aioresponses = callPackage ../development/python-modules/aioresponses { };
 
+  aioridwell = callPackage ../development/python-modules/aioridwell { };
+
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
   aiorun = callPackage ../development/python-modules/aiorun { };
@@ -1235,6 +1237,8 @@ in {
   bottleneck = callPackage ../development/python-modules/bottleneck { };
 
   bpython = callPackage ../development/python-modules/bpython { };
+
+  braceexpand = callPackage ../development/python-modules/braceexpand { };
 
   bracex = callPackage ../development/python-modules/bracex { };
 
@@ -2261,6 +2265,8 @@ in {
 
   dpkt = callPackage ../development/python-modules/dpkt { };
 
+  dragonfly = callPackage ../development/python-modules/dragonfly { };
+
   drf-jwt = callPackage ../development/python-modules/drf-jwt { };
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
@@ -3018,6 +3024,8 @@ in {
 
   git-annex-adapter =
     callPackage ../development/python-modules/git-annex-adapter { };
+
+  git-filter-repo = callPackage ../development/python-modules/git-filter-repo { };
 
   gitdb = callPackage ../development/python-modules/gitdb { };
 
@@ -4012,6 +4020,8 @@ in {
   kaitaistruct = callPackage ../development/python-modules/kaitaistruct { };
 
   Kajiki = callPackage ../development/python-modules/kajiki { };
+
+  kaldi-active-grammar = callPackage ../development/python-modules/kaldi-active-grammar { };
 
   kaptan = callPackage ../development/python-modules/kaptan { };
 
@@ -5165,6 +5175,8 @@ in {
   omnilogic = callPackage ../development/python-modules/omnilogic { };
 
   ondilo = callPackage ../development/python-modules/ondilo { };
+
+  onetimepass = callPackage ../development/python-modules/onetimepass { };
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
@@ -8853,6 +8865,8 @@ in {
 
   suseapi = callPackage ../development/python-modules/suseapi { };
 
+  svdtools = callPackage ../development/python-modules/svdtools { };
+
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
 
   svglib = callPackage ../development/python-modules/svglib { };
@@ -9103,6 +9117,8 @@ in {
   tilestache = callPackage ../development/python-modules/tilestache { };
 
   timeago = callPackage ../development/python-modules/timeago { };
+
+  timecop = callPackage ../development/python-modules/timecop { };
 
   timelib = callPackage ../development/python-modules/timelib { };
 
@@ -9474,6 +9490,8 @@ in {
 
   userpath = callPackage ../development/python-modules/userpath { };
 
+  ush = callPackage ../development/python-modules/ush { };
+
   utils = callPackage ../development/python-modules/utils { };
 
   uuid = callPackage ../development/python-modules/uuid { };
@@ -9519,6 +9537,8 @@ in {
   verboselogs = callPackage ../development/python-modules/verboselogs { };
 
   versioneer = callPackage ../development/python-modules/versioneer { };
+
+  versionfinder = callPackage ../development/python-modules/versionfinder { };
 
   versiontag = callPackage ../development/python-modules/versiontag { };
 

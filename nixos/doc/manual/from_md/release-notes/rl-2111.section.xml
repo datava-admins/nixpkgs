@@ -57,6 +57,11 @@
       </listitem>
       <listitem>
         <para>
+          KDE Plasma now finally works on Wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           bash now defaults to major version 5.
         </para>
       </listitem>
@@ -1106,6 +1111,23 @@ Superuser created successfully.
           functionality.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.xserver.displayManager.defaultSession = &quot;plasma5&quot;</literal>
+          does not work anymore, instead use either
+          <literal>&quot;plasma&quot;</literal> for the Plasma X11
+          session or <literal>&quot;plasmawayland&quot;</literal> for
+          the Plasma Wayland sesison.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>boot.kernelParams</literal> now only accepts one
+          command line parameter per string. This change is aimed to
+          reduce common mistakes like <quote>param = 12</quote>, which
+          would be parsed as 3 parameters.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -1511,6 +1533,25 @@ Superuser created successfully.
           Kopia was upgraded from 0.8.x to 0.9.x. Please read the
           <link xlink:href="https://github.com/kopia/kopia/releases/tag/v0.9.0">upstream
           release notes</link> for changes and upgrade instructions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>systemd.network</literal> module has gained
+          support for the FooOverUDP link type.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>networking</literal> module has a new
+          <literal>networking.fooOverUDP</literal> option to configure
+          Foo-over-UDP encapsulations.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>networking.sits</literal> now supports Foo-over-UDP
+          encapsulation.
         </para>
       </listitem>
     </itemizedlist>

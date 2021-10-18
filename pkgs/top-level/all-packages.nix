@@ -1269,6 +1269,8 @@ with pkgs;
 
   ashuffle = callPackage ../applications/audio/ashuffle {};
 
+  ashpd-demo = callPackage ../development/tools/ashpd-demo {};
+
   asls = callPackage ../development/tools/misc/asls { };
 
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
@@ -1614,6 +1616,8 @@ with pkgs;
 
   esbuild = callPackage ../development/tools/esbuild { };
 
+  esbuild_netlify = callPackage ../development/tools/esbuild/netlify.nix { };
+
   essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
 
   esh = callPackage ../tools/text/esh { };
@@ -1661,6 +1665,8 @@ with pkgs;
   gem = callPackage ../applications/audio/pd-plugins/gem { };
 
   git-fire = callPackage ../tools/misc/git-fire { };
+
+  git-privacy = callPackage ../development/tools/git-privacy { };
 
   git-repo-updater = python3Packages.callPackage ../development/tools/git-repo-updater { };
 
@@ -2844,6 +2850,8 @@ with pkgs;
   firestarter = callPackage ../applications/misc/firestarter { };
 
   fits-cloudctl = callPackage ../tools/admin/fits-cloudctl { };
+
+  flitter = callPackage ../tools/misc/flitter { };
 
   frangipanni = callPackage ../tools/text/frangipanni { };
 
@@ -6279,6 +6287,8 @@ with pkgs;
 
   imgurbash2 = callPackage ../tools/graphics/imgurbash2 { };
 
+  in-formant = callPackage ../applications/audio/in-formant { };
+
   inadyn = callPackage ../tools/networking/inadyn { };
 
   incron = callPackage ../tools/system/incron { };
@@ -6654,6 +6664,8 @@ with pkgs;
   last-resort = callPackage ../data/fonts/last-resort {};
 
   ldc = callPackage ../development/compilers/ldc { };
+
+  ligo = callPackage ../development/compilers/ligo { };
 
   ldgallery = callPackage ../tools/graphics/ldgallery {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -7403,8 +7415,6 @@ with pkgs;
   mimeo = callPackage ../tools/misc/mimeo { };
 
   mimetic = callPackage ../development/libraries/mimetic { };
-
-  minetime = callPackage ../applications/office/minetime { };
 
   minio-client = callPackage ../tools/networking/minio-client { };
 
@@ -9552,6 +9562,7 @@ with pkgs;
   storeBackup = callPackage ../tools/backup/store-backup { };
 
   stow = callPackage ../tools/misc/stow { };
+  xstow = callPackage ../tools/misc/xstow { };
 
   stun = callPackage ../tools/networking/stun { };
 
@@ -9586,8 +9597,6 @@ with pkgs;
   swagger-codegen3 = callPackage ../tools/networking/swagger-codegen3 { };
 
   swapview = callPackage ../os-specific/linux/swapview/default.nix { };
-
-  swec = callPackage ../tools/networking/swec { };
 
   swtpm = callPackage ../tools/security/swtpm { };
 
@@ -11278,8 +11287,9 @@ with pkgs;
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = llvmPackages_10;
   })
-    crystal_0_36
     crystal_1_0
+    crystal_1_1
+    crystal_1_2
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
@@ -12636,7 +12646,7 @@ with pkgs;
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-feature = callPackage ../development/tools/rust/cargo-feature { };
   cargo-flash = callPackage ../development/tools/rust/cargo-flash {
-    inherit (darwin.apple_sdk.frameworks) Security AppKit;
+    inherit (darwin.apple_sdk.frameworks) AppKit;
   };
   cargo-fund = callPackage ../development/tools/rust/cargo-fund {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -12815,6 +12825,8 @@ with pkgs;
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
   svd2rust = callPackage ../development/tools/rust/svd2rust { };
+
+  svdtools = with python3Packages; toPythonApplication svdtools;
 
   swift = callPackage ../development/compilers/swift { };
 
@@ -14946,6 +14958,7 @@ with pkgs;
 
   inherit (callPackage ../development/tools/build-managers/shards { })
     shards_0_15
+    shards_0_16
     shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {};
@@ -15381,19 +15394,31 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
   };
 
+  aws-c-auth = callPackage ../development/libraries/aws-c-auth { };
+
   aws-c-cal = callPackage ../development/libraries/aws-c-cal {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   aws-c-common = callPackage ../development/libraries/aws-c-common { };
 
+  aws-c-compression = callPackage ../development/libraries/aws-c-compression { };
+
   aws-c-event-stream = callPackage ../development/libraries/aws-c-event-stream { };
+
+  aws-c-http = callPackage ../development/libraries/aws-c-http { };
 
   aws-c-io = callPackage ../development/libraries/aws-c-io {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  aws-c-mqtt = callPackage ../development/libraries/aws-c-mqtt { };
+
+  aws-c-s3 = callPackage ../development/libraries/aws-c-s3 { };
+
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
+
+  aws-crt-cpp = callPackage ../development/libraries/aws-crt-cpp { };
 
   aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp {
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
@@ -18166,16 +18191,11 @@ with pkgs;
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
 
+  libyamlcpp_0_3 = callPackage ../development/libraries/libyaml-cpp/0.3.0.nix { };
+
   libcyaml = callPackage ../development/libraries/libcyaml { };
 
   rang = callPackage ../development/libraries/rang { };
-
-  libyamlcpp_0_3 = pkgs.libyamlcpp.overrideAttrs (oldAttrs: {
-    src = pkgs.fetchurl {
-      url = "https://github.com/jbeder/yaml-cpp/archive/release-0.3.0.tar.gz";
-      sha256 = "12aszqw6svwlnb6nzhsbqhz3c7vnd5ahd0k6xlj05w8lm83hx3db";
-      };
-  });
 
   libykclient = callPackage ../development/libraries/libykclient { };
 
@@ -20946,8 +20966,12 @@ with pkgs;
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
   OVMF = callPackage ../applications/virtualization/OVMF { };
-  OVMF-CSM = OVMF.override { csmSupport = true; };
-  OVMF-secureBoot = OVMF.override { secureBoot = true; };
+  OVMFFull = callPackage ../applications/virtualization/OVMF {
+    secureBoot = true;
+    csmSupport = true;
+    httpSupport = true;
+    tpmSupport = true;
+  };
 
   seabios = callPackage ../applications/virtualization/seabios { };
 
@@ -24006,9 +24030,7 @@ with pkgs;
 
   csa = callPackage ../applications/audio/csa { };
 
-  csound = callPackage ../applications/audio/csound {
-    fluidsynth = fluidsynth_1;
-  };
+  csound = callPackage ../applications/audio/csound { };
 
   csound-manual = callPackage ../applications/audio/csound/csound-manual {
     python = python27;
@@ -24191,6 +24213,7 @@ with pkgs;
   afterburn = callPackage ../tools/admin/afterburn {};
 
   docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
+  docker-compose_2 = callPackage ../applications/virtualization/docker/compose.nix { };
 
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
@@ -25810,6 +25833,8 @@ with pkgs;
 
   kmymoney = libsForQt5.callPackage ../applications/office/kmymoney { };
 
+  kn = callPackage ../applications/networking/cluster/kn { };
+
   kodestudio = callPackage ../applications/editors/kodestudio { };
 
   kondo = callPackage ../applications/misc/kondo { };
@@ -27189,6 +27214,7 @@ with pkgs;
   procmail = callPackage ../applications/misc/procmail { };
 
   profanity = callPackage ../applications/networking/instant-messengers/profanity ({
+    gtk = gtk3;
     python = python3;
   } // (config.profanity or {}));
 
@@ -27494,9 +27520,7 @@ with pkgs;
   rsclock = callPackage ../applications/misc/rsclock { };
 
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
-    boost = boost166;
-    llvmPackages = llvmPackages_7;
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jdk = jdk8;
   };
 
   rsync = callPackage ../applications/networking/sync/rsync (config.rsync or {});
@@ -29533,6 +29557,8 @@ with pkgs;
   inherit (import ../games/deliantra pkgs)
     deliantra-server deliantra-arch deliantra-maps deliantra-data;
 
+  ddnet = callPackage ../games/ddnet { };
+
   devilutionx = callPackage ../games/devilutionx {};
 
   dhewm3 = callPackage ../games/dhewm3 {};
@@ -29701,6 +29727,10 @@ with pkgs;
   };
 
   gltron = callPackage ../games/gltron { };
+
+  gl-gsync-demo = callPackage ../games/gl-gsync-demo {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
 
   gmad = callPackage ../games/gmad { };
 
@@ -31152,7 +31182,7 @@ with pkgs;
   mathlibtools = with python3Packages; toPythonApplication mathlibtools;
 
   leo2 = callPackage ../applications/science/logic/leo2
-    { ocaml = ocaml-ng.ocamlPackages_4_01_0.ocaml; };
+    { inherit (ocaml-ng.ocamlPackages_4_05) ocaml camlp4; };
 
   leo3-bin = callPackage ../applications/science/logic/leo3/binary.nix {};
 
