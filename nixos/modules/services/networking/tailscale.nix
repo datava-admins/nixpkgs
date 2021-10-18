@@ -4,9 +4,7 @@ with lib;
 
 let
   cfg = config.services.tailscale;
-  derpCfgOptions = { ... }:
-  {
-    options = {
+  derpCfgOptions = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -67,7 +65,6 @@ let
           Verify clients to this DERP server through a local tailscaled instance.
         '';
       };
-    };
   };
 in {
   meta.maintainers = with maintainers; [ danderson mbaillie ];
@@ -95,7 +92,7 @@ in {
     };
 
     derp = mkOption {
-      type = with types; attrsOf (types.submodule derpCfgOptions);
+      type = with types; attrsOf (submodule [ { options = derpCfgOptions; } ]);
     };
   };
 
