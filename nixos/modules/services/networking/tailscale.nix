@@ -43,6 +43,7 @@ let
       };
       meshServers = mkOption {
         type = types.listOf types.str;
+        default = [];
         description = ''
           Optional comma-separated list of hostnames to mesh with; the server's own hostname can be in the list
         '';
@@ -57,6 +58,7 @@ let
       # What is this? How?
       verifyClients = mkOption {
         type = types.bool;
+        default = false;
         description = ''
           Verify clients to this DERP server through a local tailscaled instance.
         '';
