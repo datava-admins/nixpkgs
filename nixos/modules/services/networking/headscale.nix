@@ -149,10 +149,10 @@ let
 in {
   meta.maintainers = with maintainers; [ danderson mbaillie ];
 
-  options.services.tailscale = {
+  options.services.headscale = {
     enable = mkEnableOption "Tailscale client daemon";
     dataDir = mkOption {
-      default = "/var/lib/tailscale";
+      default = "/var/lib/headscale";
       type = types.path;
     };
     config = mkOption {
