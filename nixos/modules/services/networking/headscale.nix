@@ -6,11 +6,14 @@ let
   fixYAML = {}: {
     generate = name: value: pkgs.runCommand name {
       nativeBuildInputs = [ pkgs.coreutils ];
+      value = value;
     } ''
       tr -d "'" "$value" "$out"
     '';
     type = derpFormat.type;
   };
+
+  fixedYAML = fixYAML {};
   derpFormat = pkgs.formats.yaml {};
   cfg = config.services.headscale;
   derpConfig = types.submodule {
@@ -102,7 +105,7 @@ let
       };
       derp_map_path = mkOption {
         type = types.path;
-        default = ((fixYAML {}) (derpFormat.generate "derp.yaml" cfg.derp));
+        default = (fixedYAML (derpFormat.generate "derp.yaml" cfg.derp));
       };
       ephemeral_node_inactivity_timeout = mkOption {
         type  = types.str;
