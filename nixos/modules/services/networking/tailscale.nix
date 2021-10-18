@@ -14,7 +14,7 @@ let
       # convert to comma delim. list
       bootstrapDNSNames = mkOption {
         type = types.listOf types.str;
-        default = null;
+        default = [];
       };
       # config file ?
       # only if listen port is 443?
@@ -28,6 +28,7 @@ let
       # default should be 'derp' + fqdn
       hostname = mkOption {
         type = types.str;
+        default = config.
         description = ''
           LetsEncrypt host name, if addr's port is :443
         '';
@@ -107,7 +108,7 @@ in {
           "-bootstrap-dns-names ${concatStringsSep "," cfg.derp.bootstrapDNSNames}" } \
           -certdir ${cfg.derp.certDir} \
           -hostname ${cfg.derp.hostname} \
-          ${optionalString (cfg.derp.meshPKSFile) "-mesh-psk-file-string ${cfg.derp.meshPKSFile}"} \
+          ${optionalString (cfg.derp.meshPSKFile) "-mesh-psk-file-string ${cfg.derp.meshPSKFile}"} \
           ${optionalString (cfg.derp.meshServers != []) "-mesh-with ${concatStringSep "," cfg.derp.meshServers}"} \
           ${optionalString cfg.derp.stun "-stun"} \
           ${optionalString cfg.derp.verifyClients "-verify-clients"}
