@@ -160,8 +160,8 @@ in {
       type = configFile;
     };
     derp = mkOption {
-      default = null;
-      type = types.nullOr derpConfig;
+      default = {};
+      type = derpConfig;
     };
 
     # SQLite or Postgresql?
