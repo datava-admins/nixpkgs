@@ -60,7 +60,6 @@ let
         '';
       };
     };
-  };
 in {
   meta.maintainers = with maintainers; [ danderson mbaillie ];
 
