@@ -47,7 +47,7 @@ let
           Optional comma-separated list of hostnames to mesh with; the server's own hostname can be in the list
         '';
       };
-      enableSTUN = mkOption {
+      stun = mkOption {
         type = types.bool;
         default = true;
         description = ''
@@ -108,7 +108,7 @@ in {
           "-bootstrap-dns-names ${concatStringsSep "," cfg.derp.bootstrapDNSNames}" } \
           -certdir ${cfg.derp.certDir} \
           -hostname ${cfg.derp.hostname} \
-          ${optionalString (cfg.derp.meshPSKFile) "-mesh-psk-file-string ${cfg.derp.meshPSKFile}"} \
+          ${optionalString (cfg.derp.meshPSKFile != null) "-mesh-psk-file-string ${cfg.derp.meshPSKFile}"} \
           ${optionalString (cfg.derp.meshServers != []) "-mesh-with ${concatStringSep "," cfg.derp.meshServers}"} \
           ${optionalString (cfg.derp.stun) "-stun"} \
           ${optionalString (cfg.derp.verifyClients) "-verify-clients"}
