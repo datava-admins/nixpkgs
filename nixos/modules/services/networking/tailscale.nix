@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.tailscale;
   derpCfgOptions = types.submodule {
-    options = 
+    options = {
       enable = mkEnableOption "Tailscale DERP Server daemon";
       listenAddress = mkOption {
         type = types.str;
