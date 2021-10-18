@@ -176,18 +176,6 @@ in {
     # Template SQLite DB?
     # other config options 
 
-    port = mkOption {
-      type = types.port;
-      default = 41641;
-      description = "The port to listen on for tunnel traffic (0=autoselect).";
-    };
-
-    interfaceName = mkOption {
-      type = types.str;
-      default = "tailscale0";
-      description = ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
-    };
-
     package = mkOption {
       type = types.package;
       default = pkgs.headscale;
