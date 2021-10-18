@@ -4,6 +4,56 @@ with lib;
 
 let
   cfg = config.services.headscale;
+  derpConfig = types.submodule {
+    options = {
+      regions = types.listOf (types.submodule {
+        options = {
+          regionid = mkOption {
+            type = types.int;
+          };
+          regioncode = mkOption {
+            type = types.str;
+          };
+          regionname = mkOption {
+            type = types.str;
+          };
+          nodes = mkOption {
+            type = types.listOf (types.submodule {
+              options = {
+                name = mkOption {
+                  type = types.str;
+                };
+                regionid = mkOption {
+                  type = types.int;
+                };
+                hostname = mkOption {
+                  type = types.str;
+                };
+                ipv4 = mkOption {
+                  type = types.str;
+                };
+                ipv6 = mkOption {
+                  type = types.nullOr types.str;
+                };
+                stunport = mkOption {
+                  type = types.int;
+                  default = 0;
+                };
+                stunonly = mkOption {
+                  type = types.bool;
+                  default = false;
+                };
+                derptestport = mkOption {
+                  type = types.port;
+                  default = 0;
+                };
+              };
+            });
+          };
+        };
+      });
+    };
+  };
   dnsConfig = types.submodule {
     options = {
       nameservers = mkOption {
@@ -38,15 +88,15 @@ let
         default = "private.key";
       };
       derp_map_path = mkOption {
-        type = types.str;
-        default = "derp.yaml";
+        type = types.path;
+        default = "/etc/headscale/derp.json";
       };
       ephemeral_node_inactivity_timeout = mkOption {
         type  = types.str;
         default = "30m";
       };
       db_type = mkOption {
-        type = types.enum;
+        type = types.enum [ "sqlite3" "postgres" ];
         default = "sqlite3";
       };
       db_path = mkOption {
@@ -66,7 +116,7 @@ let
         default = config.networking.fqdn;
       };
       tls_letsencrypt_listen = mkOption {
-        type = types.enum;
+        type = types.enum [ "http" "https" ];
         default = "http";
       };
       tls_letsencrypt_cache_dir = mkOption {
@@ -74,7 +124,7 @@ let
         default = ".cache";
       };
       tls_letsencrypt_challenge_type = mkOption {
-        type = types.enum;
+        type = types.enum [ "HTTP-01" "TLS-ALPN-01" ];
         default = "HTTP-01";
       };
       tls_cert_path = mkOption {
@@ -104,6 +154,10 @@ in {
     config = mkOption {
       default = {};
       type = configFile;
+    };
+    derp = mkOption {
+      default = null;
+      type = types.nullOr derpConfig;
     };
 
     # SQLite or Postgresql?
@@ -140,6 +194,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.etc."headscale/config.json" = builtins.toJSON cfg.config;
+    environment.etc."headscale/derp.json" = mkIf (cfg.derp != null) builtins.toJSON cfg.derp;
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.headscaled = {
