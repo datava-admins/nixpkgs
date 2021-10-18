@@ -7,7 +7,7 @@ let
   derpConfig = types.submodule {
     options = {
       regions = mkOption {
-        type = types.listOf (types.submodule {
+        type = types.attrsOf (types.submodule {
         options = {
           regionid = mkOption {
             type = types.int;
