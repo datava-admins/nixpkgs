@@ -110,8 +110,8 @@ in {
           -hostname ${cfg.derp.hostname} \
           ${optionalString (cfg.derp.meshPSKFile) "-mesh-psk-file-string ${cfg.derp.meshPSKFile}"} \
           ${optionalString (cfg.derp.meshServers != []) "-mesh-with ${concatStringSep "," cfg.derp.meshServers}"} \
-          ${optionalString cfg.derp.stun "-stun"} \
-          ${optionalString cfg.derp.verifyClients "-verify-clients"}
+          ${optionalString (cfg.derp.stun) "-stun"} \
+          ${optionalString (cfg.derp.verifyClients) "-verify-clients"}
       '';
     };
     systemd.services.tailscaled = {
