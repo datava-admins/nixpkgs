@@ -188,6 +188,19 @@ in {
   };
 
   config = mkIf cfg.enable {
+    users.groups = mkIf (cfg.group == "headscale") {
+      headscale = {};
+    };
+
+    users.users = mkIf (cfg.user == "headscale") {
+      headscale = {
+        group = cfg.group;
+        #shell = pkgs.bashInteractive;
+        home = cfg.dataDir;
+        description = "headscale daemon user";
+        isSystemUser = true;
+      };
+    };
     #environment.etc."headscale/config.json" = builtins.toJSON cfg.config;
     #environment.etc."headscale/derp.json" = mkIf (cfg.derp != null) builtins.toJSON cfg.derp;
     environment.systemPackages = [ cfg.package ]; # for the CLI
@@ -198,11 +211,14 @@ in {
     in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
         WorkingDirectory = cfg.dataDir;
         ExecStart = ''
           ${pkgs.headscale}/bin/headscale serve
         '';
      };
     };
+    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 0750 ${cfg.user} ${cfg.group} -" ];
   };
 }
