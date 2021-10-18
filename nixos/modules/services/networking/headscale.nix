@@ -131,15 +131,15 @@ let
         default = "HTTP-01";
       };
       tls_cert_path = mkOption {
-        type = types.path;
+        type = types.str;
         default = "";
       };
       tls_key_path = mkOption {
-        type = types.path;
+        type = types.str;
         default = "";
       };
       acl_policy_path = mkOption {
-        type = types.path;
+        type = types.str;
         default = "";
       };
       dns_config = mkOption {
