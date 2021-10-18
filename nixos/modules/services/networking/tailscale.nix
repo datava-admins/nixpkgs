@@ -13,6 +13,9 @@ let
       };
       # convert to comma delim. list
       bootstrapDNSNames = mkOption {
+        description = ''
+          Bootstrapped DNS names
+        '';
         type = types.listOf types.str;
         default = [];
       };
@@ -28,6 +31,7 @@ let
       # default should be 'derp' + fqdn
       hostname = mkOption {
         default = config.networking.fqdn;
+        defaultText = literalExpression "config.networking.fqdn";
         type = types.str;
         description = ''
           LetsEncrypt host name, if addr's port is :443
