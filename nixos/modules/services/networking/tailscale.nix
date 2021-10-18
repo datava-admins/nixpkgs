@@ -118,7 +118,6 @@ in {
           ${optionalString cfg.derp.verifyClients "-verify-clients"}
       '';
     };
-  };
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.openresolv pkgs.procps ];
