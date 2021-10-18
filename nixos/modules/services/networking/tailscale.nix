@@ -5,13 +5,7 @@ with lib;
 let
   cfg = config.services.tailscale;
   derpCfgOptions =
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable tailscale DERP server instance.
-        '';
-      };
+      enable = mkEnableOption "Tailscale DERP Server daemon";
       listenAddress = mkOption {
         type = types.str;
         default = ":443";
@@ -93,7 +87,7 @@ in {
 
     derp = mkOption {
       default = {};
-      type = with types; attrsOf (submodule { options = derpCfgOptions; } );
+      type = with types; attrsOf (submodule [ { options = derpCfgOptions; } ]);
       description = "Tailscale DERP server config";
     };
   };
