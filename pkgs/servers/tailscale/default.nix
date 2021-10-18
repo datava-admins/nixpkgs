@@ -19,7 +19,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
+  subPackages = [ "cmd/tailscale" "cmd/tailscaled" "cmd/derper" ];
 
   tags = [ "xversion" ];
 
