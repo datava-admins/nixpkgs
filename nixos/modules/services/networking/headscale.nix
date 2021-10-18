@@ -105,7 +105,7 @@ let
       };
       db_path = mkOption {
         type = types.str;
-        default = "db.sqlite";
+        default = "${config.services.headscale.dataDir}/db.sqlite";
       };
       acme_url = mkOption {
         type = types.str;
@@ -231,6 +231,8 @@ in {
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.headscaled = {
+      ## Should check if private.key exists
+      ## Should touch db.sqlite if it does not exist
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = cfg.user;
