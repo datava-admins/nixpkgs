@@ -10,7 +10,19 @@ let
     } ''
       tr -d "'" "$value" "$out"
     '';
-    type = derpFormat.type;
+    type = with lib.types; let
+      valueType = nullOr (oneOf [
+        bool
+        int
+        float
+        str
+        path
+        (attrsOf valueType)
+        (listOf valueType)
+      ]) // {
+        description = "YAML value";
+      };
+    in valueType;
   };
 
   fixedYAML = fixYAML {};
