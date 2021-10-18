@@ -87,7 +87,7 @@ in {
 
     derp = mkOption {
       default = {};
-      type = with types; attrsOf derpCfgOptions;
+      type = with types; derpCfgOptions;
       description = "Tailscale DERP server config";
     };
   };
