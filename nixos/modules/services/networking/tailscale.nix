@@ -35,7 +35,7 @@ let
       };
       # log collection?
       meshPSKFile = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
         default = null;
         description = ''
           If non-empty, path to file containing the mesh pre-shared key file. It should contain some hex string; whitespace is trimmed.
