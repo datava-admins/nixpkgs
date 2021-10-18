@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.tailscale;
-  derpCfgOptions =
+  derpCfgOptions = {
       enable = mkEnableOption "Tailscale DERP Server daemon";
       listenAddress = mkOption {
         type = types.str;
@@ -59,6 +59,7 @@ let
           Verify clients to this DERP server through a local tailscaled instance.
         '';
       };
+    };
   };
 in {
   meta.maintainers = with maintainers; [ danderson mbaillie ];
