@@ -85,11 +85,11 @@ let
       };
       private_key_path = mkOption {
         type = types.str;
-        default = "private.key";
+        default = "${config.services.headscale.dataDir}/private.key";
       };
       derp_map_path = mkOption {
         type = types.path;
-        default = "/etc/headscale/derp.json";
+        default = "${config.services.headscale.dataDir}/derp.json";
       };
       ephemeral_node_inactivity_timeout = mkOption {
         type  = types.str;
@@ -121,7 +121,7 @@ let
       };
       tls_letsencrypt_cache_dir = mkOption {
         type = types.str;
-        default = ".cache";
+        default = "${config.services.headscale.dataDir}/.cache";
       };
       tls_letsencrypt_challenge_type = mkOption {
         type = types.enum [ "HTTP-01" "TLS-ALPN-01" ];
@@ -151,6 +151,10 @@ in {
 
   options.services.tailscale = {
     enable = mkEnableOption "Tailscale client daemon";
+    dataDir = mkOption {
+      default = "/var/lib/tailscale";
+      type = types.path;
+    };
     config = mkOption {
       default = {};
       type = configFile;
@@ -193,13 +197,17 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.etc."headscale/config.json" = builtins.toJSON cfg.config;
-    environment.etc."headscale/derp.json" = mkIf (cfg.derp != null) builtins.toJSON cfg.derp;
+    #environment.etc."headscale/config.json" = builtins.toJSON cfg.config;
+    #environment.etc."headscale/derp.json" = mkIf (cfg.derp != null) builtins.toJSON cfg.derp;
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
-    systemd.services.headscaled = {
+    systemd.services.headscaled = let
+      configFile = pkgs.writeText "config.json" (builtins.toJSON cfg.config);
+      derpFile = pkgs.writeText "derp.json" (builtins.toJSON cfg.derp);
+    in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        WorkingDirectory = cfg.dataDir;
         ExecStart = ''
           ${pkgs.headscale}/bin/headscale serve
         '';
