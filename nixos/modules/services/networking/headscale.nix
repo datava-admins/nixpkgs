@@ -6,7 +6,8 @@ let
   cfg = config.services.headscale;
   derpConfig = types.submodule {
     options = {
-      regions = types.listOf (types.submodule {
+      regions = mkOption {
+        type = types.listOf (types.submodule {
         options = {
           regionid = mkOption {
             type = types.int;
@@ -18,40 +19,42 @@ let
             type = types.str;
           };
           nodes = mkOption {
+            default = [];
             type = types.listOf (types.submodule {
-              options = {
-                name = mkOption {
-                  type = types.str;
+                options = {
+                  name = mkOption {
+                    type = types.str;
+                  };
+                  regionid = mkOption {
+                    type = types.int;
+                  };
+                  hostname = mkOption {
+                    type = types.str;
+                  };
+                  ipv4 = mkOption {
+                    type = types.str;
+                  };
+                  ipv6 = mkOption {
+                    type = types.nullOr types.str;
+                  };
+                  stunport = mkOption {
+                    type = types.int;
+                    default = 0;
+                  };
+                  stunonly = mkOption {
+                    type = types.bool;
+                    default = false;
+                  };
+                  derptestport = mkOption {
+                    type = types.port;
+                    default = 0;
+                  };
                 };
-                regionid = mkOption {
-                  type = types.int;
-                };
-                hostname = mkOption {
-                  type = types.str;
-                };
-                ipv4 = mkOption {
-                  type = types.str;
-                };
-                ipv6 = mkOption {
-                  type = types.nullOr types.str;
-                };
-                stunport = mkOption {
-                  type = types.int;
-                  default = 0;
-                };
-                stunonly = mkOption {
-                  type = types.bool;
-                  default = false;
-                };
-                derptestport = mkOption {
-                  type = types.port;
-                  default = 0;
-                };
-              };
             });
+           };
           };
-        };
-      });
+        });
+      };
     };
   };
   dnsConfig = types.submodule {
