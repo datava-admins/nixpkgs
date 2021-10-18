@@ -27,7 +27,7 @@ let
       };
       # default should be 'derp' + fqdn
       hostname = mkOption {
-        default = config.networking.fqdn;
+        default = lib.literalExpression config.networking.fqdn;
         type = types.str;
         description = ''
           LetsEncrypt host name, if addr's port is :443
