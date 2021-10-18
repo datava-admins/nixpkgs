@@ -145,6 +145,7 @@ let
       };
       dns_config = mkOption {
         type = dnsConfig;
+        default = {};
       };
 
     };
