@@ -116,7 +116,7 @@ let
       };
       tls_letsencrypt_hostname = mkOption {
         type = types.str;
-        default = config.networking.fqdn;
+        default = "";
       };
       tls_letsencrypt_listen = mkOption {
         type = types.enum [ "http" "https" ];
