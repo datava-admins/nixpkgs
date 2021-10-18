@@ -92,7 +92,7 @@ let
       };
       derp_map_path = mkOption {
         type = types.path;
-        default = "${config.services.headscale.dataDir}/derp.json";
+        default = "/etc/headscale/derp.json";
       };
       ephemeral_node_inactivity_timeout = mkOption {
         type  = types.str;
@@ -216,14 +216,11 @@ in {
         isSystemUser = true;
       };
     };
-    #environment.etc."headscale/config.json" = builtins.toJSON cfg.config;
-    #environment.etc."headscale/derp.json" = mkIf (cfg.derp != null) builtins.toJSON cfg.derp;
+    environment.etc."headscale/config.json" = builtins.toJSON cfg.config;
+    environment.etc."headscale/derp.json" = mkIf (cfg.derp != null) builtins.toJSON cfg.derp;
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
-    systemd.services.headscaled = let
-      configFile = pkgs.writeText "config.json" (builtins.toJSON cfg.config);
-      derpFile = pkgs.writeText "derp.json" (builtins.toJSON cfg.derp);
-    in {
+    systemd.services.headscaled = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = cfg.user;
