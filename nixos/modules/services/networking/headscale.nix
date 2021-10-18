@@ -3,6 +3,7 @@
 with lib;
 
 let
+  derpFormat = pkgs.formats.yaml {};
   cfg = config.services.headscale;
   derpConfig = types.submodule {
     options = {
@@ -93,7 +94,7 @@ let
       };
       derp_map_path = mkOption {
         type = types.path;
-        default = "/etc/headscale/derp.json";
+        default = (derpFormat.generate "derp.yaml" cfg.derp);
       };
       ephemeral_node_inactivity_timeout = mkOption {
         type  = types.str;
@@ -223,11 +224,11 @@ in {
       group = cfg.group;
       text = (builtins.toJSON cfg.config);
     };
-    environment.etc."headscale/derp.json" = mkIf (cfg.derp != null) {
-      user = cfg.user;
-      group = cfg.group;
-      text = (builtins.toJSON cfg.derp);
-    };
+#    environment.etc."headscale/derp.json" = mkIf (cfg.derp != null) {
+#      user = cfg.user;
+#      group = cfg.group;
+#      text = (derpFormat.generate "derp.json" cfg.derp);
+#    };
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.headscaled = {
