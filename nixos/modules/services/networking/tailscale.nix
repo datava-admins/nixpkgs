@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.tailscale;
-  derpCfgOptions = {
+  derpCfgOptions =
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -92,7 +92,9 @@ in {
     };
 
     derp = mkOption {
-      type = with types; attrsOf (submodule [ { options = derpCfgOptions; } ]);
+      default = {};
+      type = with types; attrsOf (submodule { options = derpCfgOptions; } );
+      description = "Tailscale DERP server config";
     };
   };
 
