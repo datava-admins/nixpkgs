@@ -25,7 +25,7 @@ let
     in valueType;
   };
 
-  fixedYAML = fixYAML {};
+  fixedYAML = (fixYAML {});
   derpFormat = pkgs.formats.yaml {};
   cfg = config.services.headscale;
   derpConfig = types.submodule {
