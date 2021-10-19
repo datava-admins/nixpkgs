@@ -117,7 +117,7 @@ let
       };
       derp_map_path = mkOption {
         type = types.path;
-        default = fixedYAML (derpFormat.generate "derp.yaml" cfg.derp);
+        default = fixedYAML "derp.yaml" (derpFormat.generate "derp.yaml" cfg.derp);
       };
       ephemeral_node_inactivity_timeout = mkOption {
         type  = types.str;
