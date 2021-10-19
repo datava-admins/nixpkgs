@@ -100,7 +100,7 @@ let
             nativeBuildInputs = [ pkgs.coreutils ];
             value = value;
             } ''
-              tr -d "'" "$value" "$out"
+              cat "$value" | tr -d "'" >> "$out"
             '';
         in properYAML "derp.yaml" (derpFormat.generate "derp.yaml" cfg.derp);
       };
