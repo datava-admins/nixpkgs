@@ -166,6 +166,13 @@ in {
         kernelPatches.export-rt-sched-migrate
       ];
     };
+    
+    linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
 
     linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
       kernelPatches = [
@@ -182,7 +189,7 @@ in {
     };
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix rec {
-      kernel = linux_5_14;
+      kernel = linux_5_15;
       kernelPatches = kernel.kernelPatches;
    };
 
@@ -465,6 +472,7 @@ in {
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_14 = recurseIntoAttrs (packagesFor kernels.linux_5_14);
+    linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
   };
 
   rtPackages = {
@@ -510,7 +518,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_5_10;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_5_14;
+    linux_latest = packages.linux_5_15;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_5_11;
