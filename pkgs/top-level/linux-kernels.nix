@@ -167,7 +167,7 @@ in {
       ];
     };
 
-    linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
+    linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
