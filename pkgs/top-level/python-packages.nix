@@ -461,6 +461,10 @@ in {
 
   angr = callPackage ../development/python-modules/angr { };
 
+  angrcli = callPackage ../development/python-modules/angrcli {
+    inherit (pkgs) coreutils;
+  };
+
   angrop = callPackage ../development/python-modules/angrop { };
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 { };
@@ -691,7 +695,9 @@ in {
 
   audioread = callPackage ../development/python-modules/audioread { };
 
-  audiotools = callPackage ../development/python-modules/audiotools { };
+  audiotools = callPackage ../development/python-modules/audiotools {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreServices;
+  };
 
   augeas = callPackage ../development/python-modules/augeas {
     inherit (pkgs) augeas;
@@ -1314,6 +1320,8 @@ in {
 
   build = callPackage ../development/python-modules/build { };
 
+  buildcatrust = callPackage ../development/python-modules/buildcatrust { };
+
   bumps = callPackage ../development/python-modules/bumps { };
 
   bunch = callPackage ../development/python-modules/bunch { };
@@ -1422,6 +1430,8 @@ in {
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
 
   certbot-dns-rfc2136 = callPackage ../development/python-modules/certbot-dns-rfc2136 { };
+
+  certbot-dns-google = callPackage ../development/python-modules/certbot-dns-google { };
 
   certbot-dns-route53 = callPackage ../development/python-modules/certbot-dns-route53 { };
 
@@ -2102,6 +2112,8 @@ in {
 
   django-csp = callPackage ../development/python-modules/django-csp { };
 
+  django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
+
   django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
 
   django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
@@ -2257,9 +2269,9 @@ in {
 
   dodgy = callPackage ../development/python-modules/dodgy { };
 
-  dogpile_cache = callPackage ../development/python-modules/dogpile.cache { };
+  dogpile-cache = callPackage ../development/python-modules/dogpile-cache { };
 
-  dogpile_core = callPackage ../development/python-modules/dogpile.core { };
+  dogpile-core = callPackage ../development/python-modules/dogpile-core { };
 
   dogtail = callPackage ../development/python-modules/dogtail { };
 
@@ -2314,6 +2326,8 @@ in {
   };
 
   duecredit = callPackage ../development/python-modules/duecredit { };
+
+  duet = callPackage ../development/python-modules/duet { };
 
   dufte = callPackage ../development/python-modules/dufte { };
 
@@ -2425,6 +2439,8 @@ in {
   entrance-with-router-features = callPackage ../development/python-modules/entrance {
     routerFeatures = true;
   };
+
+  entry-points-txt = callPackage ../development/python-modules/entry-points-txt { };
 
   entrypoint2 = callPackage ../development/python-modules/entrypoint2 { };
 
@@ -2701,6 +2717,8 @@ in {
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
+  flashtext = callPackage ../development/python-modules/flashtext { };
+
   flask-admin = callPackage ../development/python-modules/flask-admin { };
 
   flask-api = callPackage ../development/python-modules/flask-api { };
@@ -2782,6 +2800,8 @@ in {
   flask-swagger = callPackage ../development/python-modules/flask-swagger { };
 
   flask-swagger-ui = callPackage ../development/python-modules/flask-swagger-ui { };
+
+  flask-talisman = callPackage ../development/python-modules/flask-talisman { };
 
   flask_testing = callPackage ../development/python-modules/flask-testing { };
 
@@ -3422,6 +3442,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  headerparser = callPackage ../development/python-modules/headerparser { };
+
   heapdict = callPackage ../development/python-modules/heapdict { };
 
   helpdev = callPackage ../development/python-modules/helpdev { };
@@ -3668,7 +3690,7 @@ in {
 
   imantics = callPackage ../development/python-modules/imantics { };
 
-  IMAPClient = callPackage ../development/python-modules/imapclient { };
+  imapclient = callPackage ../development/python-modules/imapclient { };
 
   imaplib2 = callPackage ../development/python-modules/imaplib2 { };
 
@@ -5950,7 +5972,11 @@ in {
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
+  proton-client = callPackage ../development/python-modules/proton-client { };
+
   protonup = callPackage ../development/python-modules/protonup { };
+
+  protonvpn-nm-lib = callPackage ../development/python-modules/protonvpn-nm-lib { };
 
   prov = callPackage ../development/python-modules/prov { };
 
@@ -6163,6 +6189,8 @@ in {
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
   pyclimacell = callPackage ../development/python-modules/pyclimacell { };
+
+  pyclip = callPackage ../development/python-modules/pyclip { };
 
   pyclipper = callPackage ../development/python-modules/pyclipper { };
 
@@ -7497,7 +7525,7 @@ in {
 
   python-miio = callPackage ../development/python-modules/python-miio { };
 
-  python_mimeparse = callPackage ../development/python-modules/python_mimeparse { };
+  python-mimeparse = callPackage ../development/python-modules/python-mimeparse { };
 
   python-mnist = callPackage ../development/python-modules/python-mnist { };
 
@@ -7877,6 +7905,8 @@ in {
   questionary = callPackage ../development/python-modules/questionary { };
 
   queuelib = callPackage ../development/python-modules/queuelib { };
+
+  qutip = callPackage ../development/python-modules/qutip { };
 
   qmk-dotty-dict = callPackage ../development/python-modules/qmk-dotty-dict { };
 
@@ -8780,7 +8810,7 @@ in {
 
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
-  sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
+  sqlalchemy-migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
@@ -8875,6 +8905,8 @@ in {
   stringcase = callPackage ../development/python-modules/stringcase { };
 
   stripe = callPackage ../development/python-modules/stripe { };
+
+  striprtf = callPackage ../development/python-modules/striprtf { };
 
   structlog = callPackage ../development/python-modules/structlog { };
 
@@ -9774,6 +9806,10 @@ in {
   wget = callPackage ../development/python-modules/wget { };
 
   wheel = callPackage ../development/python-modules/wheel { };
+
+  wheel-filename = callPackage ../development/python-modules/wheel-filename { };
+
+  wheel-inspect = callPackage ../development/python-modules/wheel-inspect { };
 
   whichcraft = callPackage ../development/python-modules/whichcraft { };
 

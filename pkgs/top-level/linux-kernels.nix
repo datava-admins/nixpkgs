@@ -181,6 +181,13 @@ in {
       ];
     };
 
+    linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
@@ -327,6 +334,7 @@ in {
 
     nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
     nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
+    nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
     nvidia_x11_beta        = nvidiaPackages.beta;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
     nvidia_x11             = nvidiaPackages.stable;
@@ -438,6 +446,8 @@ in {
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions {
       virtualbox = pkgs.virtualboxHardened;
     };
+
+    vm-tools = callPackage ../os-specific/linux/vm-tools { };
 
     wireguard = if lib.versionOlder kernel.version "5.6" then callPackage ../os-specific/linux/wireguard { } else null;
 
