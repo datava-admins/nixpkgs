@@ -181,13 +181,6 @@ in {
       ];
     };
 
-    linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
-
     linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
