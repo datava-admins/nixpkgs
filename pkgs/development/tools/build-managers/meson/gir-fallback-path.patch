@@ -4,10 +4,10 @@
          if fatal_warnings:
              scan_command.append('--warn-error')
  
-+        if len(set([girtarget.get_custom_install_dir()[0] for girtarget in girtargets])) > 1:
++        if len(set([girtarget.get_custom_install_dir() for girtarget in girtargets])) > 1:
 +            raise MesonException('generate_gir tries to build multiple libraries with different install_dir at once: {}'.format(','.join([str(girtarget) for girtarget in girtargets])))
 +
-+        fallback_libpath = girtargets[0].get_custom_install_dir()[0]
++        fallback_libpath = girtargets[0].get_custom_install_dir()
 +        if fallback_libpath is not None and isinstance(fallback_libpath, str) and len(fallback_libpath) > 0 and fallback_libpath[0] == "/":
 +            scan_command += ['--fallback-library-path=' + fallback_libpath]
 +
