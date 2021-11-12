@@ -414,7 +414,7 @@ stdenv.mkDerivation {
     "-Dnetworkd=${lib.boolToString withNetworkd}"
     "-Doomd=${lib.boolToString withOomd}"
     "-Dpolkit=${lib.boolToString withPolkit}"
-    "-Dcryptsetup=${lib.boolToString withCryptsetup}"
+    "-Dlibcryptsetup=${lib.boolToString withCryptsetup}"
     "-Dportabled=${lib.boolToString withPortabled}"
     "-Dhwdb=${lib.boolToString withHwdb}"
     "-Dremote=${lib.boolToString withRemote}"
@@ -452,7 +452,6 @@ stdenv.mkDerivation {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dkill-path=${coreutils}/bin/kill"
     "-Dkmod-path=${kmod}/bin/kmod"
     "-Dsulogin-path=${util-linux}/bin/sulogin"
     "-Dmount-path=${util-linux}/bin/mount"
@@ -470,7 +469,6 @@ stdenv.mkDerivation {
   ] ++ lib.optionals withEfi [
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
-    "-Defi-ldsdir=${toString gnu-efi}/lib"
   ] ++ lib.optionals (withShellCompletions == false) [
     "-Dbashcompletiondir=no"
     "-Dzshcompletiondir=no"
