@@ -178,6 +178,10 @@ self: super: {
     '';
   });
 
+  crates-nvim = super.crates-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   ctrlp-cmatcher = super.ctrlp-cmatcher.overrideAttrs (old: {
     buildInputs = [ python ];
     buildPhase = ''
@@ -372,6 +376,10 @@ self: super: {
           --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
       '';
     };
+
+  lean-nvim = super.lean-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-lspconfig plenary-nvim ];
+  });
 
   lens-vim = super.lens-vim.overrideAttrs (old: {
     # remove duplicate g:lens#animate in doc/lens.txt
@@ -768,6 +776,10 @@ self: super: {
     ];
   });
 
+  vim-fzf-coauthorship = super.vim-fzf-coauthorship.overrideAttrs (old: {
+    dependencies = with self; [ fzf-vim ];
+  });
+
   # change the go_bin_path to point to a path in the nix store. See the code in
   # fatih/vim-go here
   # https://github.com/fatih/vim-go/blob/155836d47052ea9c9bac81ba3e937f6f22c8e384/autoload/go/path.vim#L154-L159
@@ -1025,6 +1037,7 @@ self: super: {
       "coc-tslint"
       "coc-tslint-plugin"
       "coc-tsserver"
+      "coc-ultisnips"
       "coc-vetur"
       "coc-vimlsp"
       "coc-vimtex"

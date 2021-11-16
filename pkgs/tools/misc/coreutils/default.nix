@@ -33,10 +33,7 @@ stdenv.mkDerivation (rec {
     ./fix-chmod-exit-code.patch
     # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
     ./disable-seek-hole.patch
-  ] ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
-    # fix gnulib tests on 32-bit ARM. Included on coreutils master.
-    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
-    ++ optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
+  ] ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -124,9 +121,7 @@ stdenv.mkDerivation (rec {
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
 
-  # Saw random failures like ‘help2man: can't get '--help' info from
-  # man/sha512sum.td/sha512sum’.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
