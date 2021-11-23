@@ -10866,6 +10866,8 @@ with pkgs;
 
   wbox = callPackage ../tools/networking/wbox {};
 
+  vue-cli = nodePackages."@vue/cli";
+
   webassemblyjs-cli = nodePackages."@webassemblyjs/cli";
   webassemblyjs-repl = nodePackages."@webassemblyjs/repl";
   wasm-strip = nodePackages."@webassemblyjs/wasm-strip";
