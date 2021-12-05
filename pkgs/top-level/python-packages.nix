@@ -9223,6 +9223,8 @@ in {
   snakebite = callPackage ../development/python-modules/snakebite { };
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
+  
+  lolviz = callPackage ../development/python-modules/lolviz{ };
 
   snapcast = callPackage ../development/python-modules/snapcast { };
 
