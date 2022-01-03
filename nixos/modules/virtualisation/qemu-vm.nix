@@ -213,7 +213,7 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
-              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "60M"
+              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "120M"
               ${if cfg.useEFIBoot then ''
                 efiVars=$out/efi-vars.fd
                 cp ${cfg.efi.variables} $efiVars
