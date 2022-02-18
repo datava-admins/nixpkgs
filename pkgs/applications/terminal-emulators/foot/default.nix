@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.11.0";
+  version = "master";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
