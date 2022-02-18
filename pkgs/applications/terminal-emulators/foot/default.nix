@@ -39,8 +39,8 @@ let
     name = "foot-generate-alt-random-writes";
 
     src = fetchurl {
-      url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      sha256 = "0w4d0rxi54p8lvbynypcywqqwbbzmyyzc0svjab27ngmdj1034ii";
+      url = "https://codeberg.org/dnkl/foot/raw/branch/${version}/scripts/generate-alt-random-writes.py";
+      sha256 = "sha256-MZIBgmz12SOWklsD9r2vfy2OMffseuvXpuiSEnsGjXA=";
     };
 
     dontUnpack = true;
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = pname;
     rev = version;
-    sha256 = "1d9bk8lhmw5lc8k0mw80g0vbwgxyh3gw5c7ppy3sir07s9y0y0fn";
+    sha256 = "sha256-3SBJrBejNb2EB6ar26jwyeyEuX9d8bei3auWU/UTMgs=";
   };
 
   depsBuildBuild = [
