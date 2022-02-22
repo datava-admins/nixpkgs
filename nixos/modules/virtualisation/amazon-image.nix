@@ -43,8 +43,8 @@ in
 
     fileSystems."/" = mkIf (!cfg.zfs.enable) {
       device = "/dev/disk/by-label/nixos";
-      fsType = "ext4";
-      autoResize = true;
+      fsType = cfg.fsType;
+      autoResize = cfg.fsType == "ext4" || cfg.fsType == "f2fs";
     };
 
     fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {

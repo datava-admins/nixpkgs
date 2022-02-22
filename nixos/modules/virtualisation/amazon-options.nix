@@ -55,6 +55,13 @@ in {
           Whether the EC2 instance is using EFI.
         '';
       };
+      fsType = lib.mkOption {
+        default = "ext4";
+        internal = true;
+        description = ''
+          Root filesystem format when not using ZFS.
+        '';
+      };
     };
   };
 

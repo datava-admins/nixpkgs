@@ -48,10 +48,29 @@ in {
       description = "The size in MB of the image";
     };
 
+    bootSizeMB = mkOption {
+      type = with types; either (enum [ "auto" ]) int;
+      default = 1024; 
+      example = 1024;
+      description = "The size in MB of the boot partition";
+    };
+
     format = mkOption {
       type = types.enum [ "raw" "qcow2" "vpc" ];
       default = "vpc";
       description = "The image format to output";
+    };
+
+    fsType = mkOption {
+      type = types.enum [ "ext4" "btrfs" ];
+      default = "ext4";
+      description = "The root partition filesystem format";
+    };
+
+    btrfsSubvolumes = mkOption {
+      type = with types; listOf path; 
+      default = [];
+      description = "Btrfs subvolumes to create. fsType must be btrfs";
     };
   };
 
@@ -80,7 +99,7 @@ in {
 
       includeChannel = true;
 
-      bootSize = 1000; # 1G is the minimum EBS volume
+      bootSize = cfg.bootSizeMB; # 1G is the minimum EBS volume
 
       rootSize = cfg.sizeMB;
       rootPoolProperties = {
@@ -125,10 +144,9 @@ in {
     extBuilder = import ../../../lib/make-disk-image.nix {
       inherit lib config configFile;
 
-      inherit (cfg) contents format name;
+      inherit (cfg) contents format name fsType btrfsSubvolumes;
       pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
 
-      fsType = "ext4";
       partitionTableType = if config.ec2.efi then "efi"
                            else if config.ec2.hvm then "legacy+gpt"
                            else "none";
