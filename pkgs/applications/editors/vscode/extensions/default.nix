@@ -536,6 +536,19 @@ let
         };
       };
 
+      daohong-emilio.yash = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "daohong-emilio";
+          name = "yash";
+          version = "0.2.8";
+          sha256 = "ummOEBSXUI78hBb1AUh+x339T7ocB/evOVaz79geHRM=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
       davidanson.vscode-markdownlint = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-markdownlint";
@@ -684,8 +697,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "11.7.0";
-          sha256 = "0apjjlfdwljqih394ggz2d8m599pyyjrb0b4cfcz83601b7hk3x6";
+          version = "12.0.1";
+          sha256 = "1xv1vzx643qa8jhjpnpv2wrymz38w130vm0idkcl77lh209r5i8x";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1007,8 +1020,8 @@ let
           mktplcRef = {
             name = "vscode-pull-request-github";
             publisher = "github";
-            version = "0.35.2022010609";
-            sha256 = "06ryx8b605fd1q2zz8jps7j8r506qwym93x1ra1kc0h9g8a8r7sa";
+            version = "0.37.2022030309";
+            sha256 = "1icmg2ssdkxvwp8mn8zzakwn42hrdglsdgfnaf8va4vd9mqixl1v";
           };
           meta = { license = lib.licenses.mit; };
         };
@@ -1167,10 +1180,14 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "8.2.0";
-          sha256 = "1ai16aam4v5jzhxgms589q0l24kyk1a9in6z4i7g05b3sahyxab2";
+          version = "8.23.0";
+          sha256 = "sha256-IHLsAuTi+GBZViL2KozudebNY745RiOYNATzabQfnOY=";
         };
         meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
+          description = "LaTeX Workshop Extension";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop";
+          homepage = "https://github.com/James-Yu/LaTeX-Workshop";
           license = licenses.mit;
         };
       };
@@ -1783,6 +1800,23 @@ let
         };
       };
 
+      skellock.just = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "just";
+          publisher = "skellock";
+          version = "2.0.0";
+          sha256 = "sha256-FOp/dcW0+07rADEpUMzx+SGYjhvE4IhcCOqUQ38yCN4=";
+        };
+        meta = with lib; {
+          changelog = "https://github.com/skellock/vscode-just/blob/master/CHANGELOG.md";
+          description = "Provides syntax and recipe launcher for Just scripts";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=skellock.just";
+          homepage = "https://github.com/skellock/vscode-just";
+          license = licenses.mit;
+          maintainers = with maintainers; [ maximsmol ];
+        };
+      };
+
       skyapps.fish-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "fish-vscode";
@@ -2067,11 +2101,12 @@ let
         mktplcRef = {
           name = "vscode-pitch-black-theme";
           publisher = "ViktorQvarfordt";
-          version = "1.2.4";
-          sha256 = "sha256-HTXToZv0WWFjuQiofEJuaZNSDTmCUcZ0B3KOn+CVALw=";
+          version = "1.3.0";
+          sha256 = "sha256-1JDm/cWNWwxa1gNsHIM/DIvqjXsO++hAf0mkjvKyi4g=";
         };
-        meta = {
-          license = lib.licenses.mit;
+        meta = with lib; {
+          license = licenses.mit;
+          maintainers = with maintainers; [ wolfangaukang ];
         };
       };
 

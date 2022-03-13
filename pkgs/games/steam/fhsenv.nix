@@ -15,7 +15,6 @@
 let
   commonTargetPkgs = pkgs: with pkgs;
     [
-      steamPackages.steam-fonts
       # Needed for operating system detection until
       # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
       lsb-release
@@ -170,7 +169,6 @@ in buildFHSUserEnv rec {
     ffmpeg
     # Only libraries are needed from those two
     libudev0-shim
-    networkmanager098
 
     # Verified games requirements
     xorg.libXt

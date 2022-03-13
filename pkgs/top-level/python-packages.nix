@@ -1519,6 +1519,8 @@ in {
 
   coqpit = callPackage ../development/python-modules/coqpit { };
 
+  coqui-trainer = callPackage ../development/python-modules/coqui-trainer {};
+
   cepa = callPackage ../development/python-modules/cepa { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
@@ -4478,6 +4480,8 @@ in {
 
   kinparse = callPackage ../development/python-modules/kinparse { };
 
+  kiss-headers = callPackage ../development/python-modules/kiss-headers { };
+
   kitchen = callPackage ../development/python-modules/kitchen { };
 
   kivy = callPackage ../development/python-modules/kivy {
@@ -6719,6 +6723,8 @@ in {
 
   pycec = callPackage ../development/python-modules/pycec { };
 
+  pycep-parser = callPackage ../development/python-modules/pycep-parser { };
+
   pycfdns = callPackage ../development/python-modules/pycfdns { };
 
   pycflow2dot = callPackage ../development/python-modules/pycflow2dot {
@@ -8277,6 +8283,8 @@ in {
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
+  python-zbar = callPackage ../development/python-modules/python-zbar { };
+
   pythran = callPackage ../development/python-modules/pythran {
     inherit (pkgs.llvmPackages) openmp;
   };
@@ -8342,8 +8350,6 @@ in {
   pyturbojpeg = callPackage ../development/python-modules/pyturbojpeg { };
 
   pytweening = callPackage ../development/python-modules/pytweening { };
-
-  pytwitchapi = callPackage ../development/python-modules/pytwitchapi { };
 
   pytz = callPackage ../development/python-modules/pytz { };
 
@@ -9198,6 +9204,8 @@ in {
 
   simpy = callPackage ../development/python-modules/simpy { };
 
+  single-version = callPackage ../development/python-modules/single-version { };
+
   signify = callPackage ../development/python-modules/signify { };
 
   siosocks = callPackage ../development/python-modules/siosocks { };
@@ -9901,6 +9909,8 @@ in {
   tflearn = callPackage ../development/python-modules/tflearn { };
 
   tgcrypto = callPackage ../development/python-modules/tgcrypto { };
+
+  theano-pymc = callPackage ../development/python-modules/theano-pymc { };
 
   Theano = callPackage ../development/python-modules/Theano rec {
     cudaSupport = pkgs.config.cudaSupport or false;
