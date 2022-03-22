@@ -1,8 +1,8 @@
 {
   "stable": {
-    "version": "99.0.4844.51",
-    "sha256": "1qxsn8zvvvsnn0k7nn606rhaial8ikrlfh175msqpp50xibjxicp",
-    "sha256bin64": "04kqfppa88g2q54vp53avyyhqzrxljz49p4wqk76kq7fz2rm94x1",
+    "version": "99.0.4844.74",
+    "sha256": "165vzxv3xi4r9ia3qnqsr4p9ai0344w1pnq03c6jdq7x613lcprd",
+    "sha256bin64": "1xzr7qv4rcardl3apr8w22dn81lzqkklhp26qqlbdcylacqqji04",
     "deps": {
       "gn": {
         "version": "2022-01-10",
@@ -12,10 +12,10 @@
       }
     },
     "chromedriver": {
-      "version": "99.0.4844.35",
-      "sha256_linux": "1q10mn34s03zy0nqcgrjd7ry53g4paxpwcki1bgicpcrwnjlzc3y",
-      "sha256_darwin": "0mcfry8vqqc8n1sgyn2azr8pc4lgjnkpnhz0ggjqm12njq0lfjfx",
-      "sha256_darwin_aarch64": "19wpqd5mq2vrgma899vbbdqhg660x47v4ppbz1r8dcg5r5y93x3s"
+      "version": "99.0.4844.51",
+      "sha256_linux": "1r5wbcfbj9s216jyjasmiscsrsix9ap3pplp12rznrwn4898p51y",
+      "sha256_darwin": "1nak8p5hdrw94lx73m9c110zrwag4qr6487dhplm3qfrnrkdh8wp",
+      "sha256_darwin_aarch64": "0hkcx6a8bcjlbmp6z3ld23mi1kpyjn2g7m3ns9qw6ns4x3rn5i3r"
     }
   },
   "beta": {
@@ -45,19 +45,19 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "98.0.4758.102",
-    "sha256": "0gpk13k8pfk65vinlmkg3p7mm0qb8z35psajkxzx0v3n2bllfns1",
-    "sha256bin64": "0pfrakkfqw6ni96s2d0z50mpd63maic9rsc64zd85vh2jkmzskw6",
+    "version": "99.0.4844.74",
+    "sha256": "165vzxv3xi4r9ia3qnqsr4p9ai0344w1pnq03c6jdq7x613lcprd",
+    "sha256bin64": "1xzr7qv4rcardl3apr8w22dn81lzqkklhp26qqlbdcylacqqji04",
     "deps": {
       "gn": {
-        "version": "2021-12-07",
+        "version": "2022-01-10",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "fc295f3ac7ca4fe7acc6cb5fb052d22909ef3a8f",
-        "sha256": "02bx3bp85kkis704gndb6jvjph7gv3ij746bq4anl30kfrkpcifh"
+        "rev": "80a40b07305373617eba2d5878d353532af77da3",
+        "sha256": "1103lf38h7412949j6nrk48m2vv2rrxacn42sjg33lg88nyv7skv"
       },
       "ungoogled-patches": {
-        "rev": "98.0.4758.102-1",
-        "sha256": "0baz90fnzpldw0wwibhmh4pmki7vlpci9b9vvifa0rj5cwckl8a0"
+        "rev": "99.0.4844.74-1",
+        "sha256": "1ki517fi55rz7ib2sq0q6gw1w1m2j4yakkpcgpmgvapg05s3zg7m"
       }
     }
   }
