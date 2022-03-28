@@ -57,7 +57,7 @@ rec {
       version = "470.103.01";
       sha256_64bit = "sha256-VsIwn4nCE0Y7DEY2D3siddc3HTxyevP+3IjElu3Ih6U=";
       settingsSha256 = "sha256-Roc2OFSNEnIGLVwP0D9f8vFTf5v3KkL99S0mZBWN7s0=";
-      persistencedSha256 = lib.fakeSha256;
+      persistencedSha256 = "sha256-AVI0j2bpfMCMBTKuQp+BoCewaXIW3Xt4NnV1fjAHOr0=";
   };
 
   # Last one supporting x86
