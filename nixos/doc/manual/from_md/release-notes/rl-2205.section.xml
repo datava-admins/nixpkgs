@@ -62,6 +62,14 @@
           notes</link> for details.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Module authors can use
+          <literal>mkRenamedOptionModuleWith</literal> to automate the
+          deprecation cycle without annoying out-of-tree module authors
+          and their users.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
@@ -272,6 +280,13 @@
           <link xlink:href="https://nbd.sourceforge.io/">nbd</link>, a
           Network Block Device server. Available as
           <link xlink:href="options.html#opt-services.nbd.server.enable">services.nbd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/Mic92/nix-ld">nix-ld</link>,
+          Run unpatched dynamic binaries on NixOS. Available as
+          <link xlink:href="options.html#opt-programs.nix-ld.enable">programs.nix-ld</link>.
         </para>
       </listitem>
       <listitem>
@@ -813,6 +828,16 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>miller</literal> package has been upgraded from
+          5.10.3 to
+          <link xlink:href="https://github.com/johnkerl/miller/releases/tag/v6.2.0">6.2.0</link>.
+          See
+          <link xlink:href="https://miller.readthedocs.io/en/latest/new-in-miller-6">What’s
+          new in Miller 6</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           MultiMC has been replaced with the fork PolyMC due to upstream
           developers being hostile to 3rd party package maintainers.
           PolyMC removes all MultiMC branding and is aimed at providing
@@ -834,6 +859,16 @@
           now activated by default. If you want to keep running nspawn
           containers without user namespaces you need to set
           <literal>systemd.nspawn.&lt;name&gt;.execConfig.PrivateUsers = false</literal>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Tor SOCKS proxy is now actually disabled if
+          <literal>services.tor.client.enable</literal> is set to
+          <literal>false</literal> (the default). If you are using this
+          functionality but didn’t change the setting or set it to
+          <literal>false</literal>, you now need to set it to
+          <literal>true</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1190,7 +1225,8 @@
               Legacy options have been mapped to the corresponding
               options under under
               <link xlink:href="options.html#opt-nix.settings">nix.settings</link>
-              but may be deprecated in the future.
+              and will be deprecated when NixOS 21.11 reaches end of
+              life.
             </para>
           </listitem>
           <listitem>

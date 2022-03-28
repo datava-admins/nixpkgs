@@ -134,7 +134,6 @@ in buildFHSUserEnv rec {
     rtmpdump
 
     # dependencies for mesa drivers, needed inside pressure-vessel
-    mesa.drivers
     mesa.llvmPackages.llvm.lib
     vulkan-loader
     expat
