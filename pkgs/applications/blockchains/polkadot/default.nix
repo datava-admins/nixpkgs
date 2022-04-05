@@ -4,7 +4,9 @@
 , llvmPackages
 , protobuf
 , rustPlatform
+, stdenv
 , writeShellScriptBin
+, Security
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
@@ -32,6 +34,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-Gc5WbayQUlsl7Fk8NyLPh2Zg2yrLl3WJqKorNZMLi94=";
 
+  buildInputs = lib.optional stdenv.isDarwin [ Security ];
+
   nativeBuildInputs = [ clang ];
 
   preBuild = ''
@@ -56,6 +60,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://polkadot.network";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ akru andresilva asymmetric FlorianFranzen RaghavSood ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

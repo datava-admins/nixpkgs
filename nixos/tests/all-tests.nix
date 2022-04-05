@@ -132,6 +132,7 @@ in
   domination = handleTest ./domination.nix {};
   dovecot = handleTest ./dovecot.nix {};
   drbd = handleTest ./drbd.nix {};
+  earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
   ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
   ecryptfs = handleTest ./ecryptfs.nix {};
@@ -280,6 +281,7 @@ in
   #logstash = handleTest ./logstash.nix {};
   lorri = handleTest ./lorri/default.nix {};
   maddy = handleTest ./maddy.nix {};
+  maestral = handleTest ./maestral.nix {};
   magic-wormhole-mailbox-server = handleTest ./magic-wormhole-mailbox-server.nix {};
   magnetico = handleTest ./magnetico.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
@@ -314,6 +316,7 @@ in
   moosefs = handleTest ./moosefs.nix {};
   mpd = handleTest ./mpd.nix {};
   mpv = handleTest ./mpv.nix {};
+  mtp = handleTest ./mtp.nix {};
   mumble = handleTest ./mumble.nix {};
   musescore = handleTest ./musescore.nix {};
   munin = handleTest ./munin.nix {};
@@ -340,6 +343,7 @@ in
   networking.networkd = handleTest ./networking.nix { networkd = true; };
   networking.scripted = handleTest ./networking.nix { networkd = false; };
   specialisation = handleTest ./specialisation.nix {};
+  netbox = handleTest ./web-apps/netbox.nix {};
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};
   nextcloud = handleTest ./nextcloud {};
@@ -471,6 +475,7 @@ in
   seafile = handleTest ./seafile.nix {};
   searx = handleTest ./searx.nix {};
   service-runner = handleTest ./service-runner.nix {};
+  sfxr-qt = handleTest ./sfxr-qt.nix {};
   shadow = handleTest ./shadow.nix {};
   shadowsocks = handleTest ./shadowsocks {};
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix {};
@@ -509,6 +514,7 @@ in
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
   systemd-escaping = handleTest ./systemd-escaping.nix {};
+  systemd-initrd-simple = handleTest ./systemd-initrd-simple.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
   systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
@@ -518,7 +524,7 @@ in
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
-  systemd-unit-path = handleTest ./systemd-unit-path.nix {};
+  systemd-misc = handleTest ./systemd-misc.nix {};
   taskserver = handleTest ./taskserver.nix {};
   teeworlds = handleTest ./teeworlds.nix {};
   telegraf = handleTest ./telegraf.nix {};
@@ -588,5 +594,6 @@ in
   zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};
   zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
+  zrepl = handleTest ./zrepl.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
 }

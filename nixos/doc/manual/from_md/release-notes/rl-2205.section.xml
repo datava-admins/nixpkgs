@@ -17,12 +17,30 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>firefox</literal> browser on
+          <literal>x86_64-linux</literal> is now making use of
+          profile-guided optimization resulting in a much more
+          responsive browsing experience.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>security.acme.defaults</literal> has been added to
           simplify configuring settings for many certificates at once.
           This also opens up the the option to use DNS-01 validation
           when using <literal>enableACME</literal> on web server virtual
           hosts (e.g.
           <literal>services.nginx.virtualHosts.*.enableACME</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GNOME has been upgraded to 42. Please take a look at their
+          <link xlink:href="https://release.gnome.org/42/">Release
+          Notes</link> for details. Notably, it replaces gedit with
+          GNOME Text Editor, GNOME Terminal with GNOME Console (formerly
+          King’s Cross), and GNOME Screenshot with a tool built into the
+          Shell.
         </para>
       </listitem>
       <listitem>
@@ -68,6 +86,14 @@
           <literal>mkRenamedOptionModuleWith</literal> to automate the
           deprecation cycle without annoying out-of-tree module authors
           and their users.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The default GHC version has been updated from 8.10.7 to 9.0.2.
+          <literal>pkgs.haskellPackages</literal> and
+          <literal>pkgs.ghc</literal> will now use this version by
+          default.
         </para>
       </listitem>
     </itemizedlist>
@@ -117,7 +143,7 @@
         <para>
           <link xlink:href="https://frrouting.org/">FRRouting</link>, a
           popular suite of Internet routing protocol daemons (BGP, BFD,
-          OSPF, IS-IS, VVRP and others). Available as
+          OSPF, IS-IS, VRRP and others). Available as
           <link linkend="opt-services.frr.babel.enable">services.frr</link>
         </para>
       </listitem>
@@ -201,6 +227,13 @@
           a tool that exposes information from the Proxmox VE API for
           use by Prometheus. Available as
           <link xlink:href="options.html#opt-services.prometheus.exporters.pve">services.prometheus.exporters.pve</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/netbox-community/netbox">netbox</link>,
+          infrastructure resource modeling (IRM) tool. Available as
+          <link xlink:href="options.html#opt-services.netbox.enable">services.netbox</link>.
         </para>
       </listitem>
       <listitem>
@@ -469,6 +502,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.ipfs.extraFlags</literal> is now escaped
+          with <literal>utils.escapeSystemdExecArgs</literal>. If you
+          rely on systemd interpolating <literal>extraFlags</literal> in
+          the service <literal>ExecStart</literal>, this will no longer
+          work.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>matrix-synapse</literal> service
           (<literal>services.matrix-synapse</literal>) has been
           converted to use the <literal>settings</literal> option
@@ -663,6 +705,23 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.gnome.experimental-features.realtime-scheduling</literal>
+          option has been removed, as GNOME Shell now
+          <link xlink:href="https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2060">uses
+          rtkit</link>. Use
+          <literal>security.rtkit.enable = true;</literal> instead. As
+          before, you will need to have it enabled using GSettings.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.telepathy</literal> will no longer be
+          enabled by default for GNOME desktops, one should enable it in
+          their configs if using Empathy or Polari.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           If you previously used
           <literal>/etc/docker/daemon.json</literal>, you need to
           incorporate the changes into the new option
@@ -796,6 +855,54 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>vim.customize</literal> function produced by
+          <literal>vimUtils.makeCustomizable</literal> now has a
+          slightly different interface:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The wrapper now includes everything in the given Vim
+              derivation if <literal>name</literal> is
+              <literal>&quot;vim&quot;</literal> (the default). This
+              makes the <literal>wrapManual</literal> argument obsolete,
+              but this behavior can be overriden by setting the
+              <literal>standalone</literal> argument.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              All the executables present in the given derivation (or,
+              in <literal>standalone</literal> mode, only the
+              <literal>*vim</literal> ones) are wrapped. This makes the
+              <literal>wrapGui</literal> argument obsolete.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The <literal>vimExecutableName</literal> and
+              <literal>gvimExecutableName</literal> arguments were
+              replaced by a single <literal>executableName</literal>
+              argument in which the shell variable
+              <literal>$exe</literal> can be used to refer to the
+              wrapped executable’s name.
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          See the comments in
+          <literal>pkgs/applications/editors/vim/plugins/vim-utils.nix</literal>
+          for more details.
+        </para>
+        <para>
+          <literal>vimUtils.vimWithRC</literal> was removed. You should
+          instead use <literal>customize</literal> on a Vim derivation,
+          which now accepts <literal>vimrcFile</literal> and
+          <literal>gvimrcFile</literal> arguments.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>tilp2</literal> was removed together with its module
         </para>
       </listitem>
@@ -918,8 +1025,8 @@
       <listitem>
         <para>
           <literal>pkgs.pgadmin</literal> now refers to
-          <literal>pkgs.pgadmin4</literal>. If you still need pgadmin3,
-          use <literal>pkgs.pgadmin3</literal>.
+          <literal>pkgs.pgadmin4</literal>. <literal>pgadmin3</literal>
+          has been removed.
         </para>
       </listitem>
       <listitem>
@@ -1161,6 +1268,13 @@
           example.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.cosmopolitan</literal> no longer provides the
+          <literal>cosmoc</literal> command. It has been moved to
+          <literal>pkgs.cosmoc</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
@@ -1289,6 +1403,35 @@
       </listitem>
       <listitem>
         <para>
+          A new option group
+          <literal>systemd.network.wait-online</literal> was added, with
+          options to configure
+          <literal>systemd-networkd-wait-online.service</literal>:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>anyInterface</literal> allows specifying that the
+              network should be considered online when <emphasis>at
+              least one</emphasis> interface is online (useful on
+              laptops)
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>timeout</literal> defines how long to wait for
+              the network to come online
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>extraArgs</literal> for everything else
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>influxdb2</literal> package was split into
           <literal>influxdb2-server</literal> and
           <literal>influxdb2-cli</literal>, matching the split that took
@@ -1317,6 +1460,15 @@
           value of <literal>true</literal> is now deprecated and will be
           changed to <literal>false</literal> in 22.11. Configurations
           using this default will print a warning when rebuilt.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.unifi-video.openPorts</literal> option
+          default value of <literal>true</literal> is now deprecated and
+          will be changed to <literal>false</literal> in 22.11.
+          Configurations using this default will print a warning when
+          rebuilt.
         </para>
       </listitem>
       <listitem>
@@ -1532,9 +1684,20 @@
       </listitem>
       <listitem>
         <para>
-          <literal>services.logrotate.enable</literal> now defaults to
-          true if any rotate path has been defined, and some paths have
-          been added by default.
+          <link linkend="opt-services.logrotate.enable">services.logrotate.enable</link>
+          now defaults to true if any rotate path has been defined, and
+          some paths have been added by default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The logrotate module also has been updated to freeform syntax:
+          <link linkend="opt-services.logrotate.paths">services.logrotate.paths</link>
+          and
+          <link linkend="opt-services.logrotate.extraConfig">services.logrotate.extraConfig</link>
+          will work, but issue deprecation warnings and
+          <link linkend="opt-services.logrotate.settings">services.logrotate.settings</link>
+          should now be used instead.
         </para>
       </listitem>
       <listitem>
@@ -1571,6 +1734,12 @@
           Reason is that the old name has been deprecated upstream.
           Using the old option name will still work, but produce a
           warning.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.autorandr</literal> now allows for adding
+          hooks and profiles declaratively.
         </para>
       </listitem>
       <listitem>
@@ -1613,6 +1782,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.xserver.desktopManager.xfce</literal> now
+          includes Xfce’s screen locker,
+          <literal>xfce4-screensaver</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>hadoop</literal> package has added support for
           <literal>aarch64-linux</literal> and
           <literal>aarch64-darwin</literal> as of 3.3.1
@@ -1650,6 +1826,12 @@
             </para>
           </listitem>
         </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>programs.nncp</literal> options were added for
+          generating host-global NNCP configuration.
+        </para>
       </listitem>
     </itemizedlist>
   </section>

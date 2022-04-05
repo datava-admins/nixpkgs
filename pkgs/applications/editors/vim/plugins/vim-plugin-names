@@ -13,6 +13,7 @@ akinsho/bufferline.nvim
 akinsho/toggleterm.nvim
 aklt/plantuml-syntax
 allendang/nvim-expand-expr
+AlphaTechnolog/pywal.nvim
 altercation/vim-colors-solarized
 alvan/vim-closetag
 alvarosevilla95/luatab.nvim
@@ -42,6 +43,7 @@ arthurxavierx/vim-unicoder
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
 axelf4/vim-strip-trailing-whitespace
+axieax/urlview.nvim
 ayu-theme/ayu-vim
 b0o/SchemaStore.nvim
 b3nj5m1n/kommentary
@@ -91,6 +93,7 @@ ckarnell/antonys-macro-repeater
 clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
+coc-extensions/coc-svelte
 cocopon/iceberg.vim
 codota/tabnine-vim
 cohama/lexima.vim
@@ -158,6 +161,7 @@ ervandew/supertab
 esneider/YUNOcommit.vim
 euclidianAce/BetterLua.vim
 euclio/vim-markdown-composer
+evanleck/vim-svelte
 f-person/git-blame.nvim
 f3fora/cmp-spell
 famiu/bufdelete.nvim
@@ -261,6 +265,7 @@ hsitz/VimOrganizer
 https://git.sr.ht/~whynothugo/lsp_lines.nvim
 hura/vim-asymptote
 iamcco/coc-spell-checker
+iamcco/coc-tailwindcss
 iamcco/markdown-preview.nvim
 ianks/vim-tsx
 idanarye/vim-merginal
@@ -597,6 +602,7 @@ nvim-telescope/telescope-fzy-native.nvim
 nvim-telescope/telescope-github.nvim
 nvim-telescope/telescope-project.nvim
 nvim-telescope/telescope-symbols.nvim
+nvim-telescope/telescope-ui-select.nvim
 nvim-telescope/telescope-z.nvim
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
@@ -693,6 +699,7 @@ rhysd/vim-operator-surround
 RishabhRD/nvim-lsputils
 RishabhRD/popfix
 rktjmp/fwatch.nvim
+rktjmp/hotpot.nvim
 rktjmp/lush.nvim
 rmagatti/auto-session
 rmagatti/goto-preview
@@ -726,7 +733,6 @@ sainnhe/everforest
 sainnhe/gruvbox-material
 sainnhe/sonokai
 sakhnik/nvim-gdb
-saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
 sblumentritt/bitbake.vim
@@ -957,6 +963,7 @@ vimwiki/vimwiki
 vito-c/jq.vim
 vmchale/ats-vim
 vmchale/dhall-vim
+vmware-archive/salt-vim
 vn-ki/coc-clap
 voldikss/vim-floaterm
 vuki656/package-info.nvim

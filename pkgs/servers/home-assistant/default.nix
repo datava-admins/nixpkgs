@@ -30,6 +30,7 @@ let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=")
+    (mkOverride "voluptuous" "0.12.2" "sha256-TbGsUHnbkkmCDUnIkctGYKb4yuNQSRIQq850H6v1ZRM=")
 
     # pytest-aiohttp>0.3.0 breaks home-assistant tests
     (self: super: {
@@ -164,7 +165,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.3.5";
+  hassVersion = "2022.3.8";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -182,7 +183,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-VXE2zQH/HHhogo5qjneC0zlo9892wgGN1qd3ZFKfyqw=";
+    hash = "sha256-FGsMFt/EEokaast81iiwKHqSsB1E4Si5ejTw+MV1MnQ=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling

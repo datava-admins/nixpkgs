@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "janet";
-  version = "1.20.0";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mCeOaTbOQej4Uza9fg+xop77z31SQ3sO09dZK8SVAyU=";
+    sha256 = "sha256-wJwlGliXoj0XmC9qb6SCo8mUy4aqHvJtFiigUB7PFLE=";
   };
 
   # This release fails the test suite on darwin, remove when debugged.

@@ -55,7 +55,7 @@ in
 , changelog ? null
 , mainProgram ? null
 , doCoverage ? false
-, doHaddock ? !(ghc.isHaLVM or false)
+, doHaddock ? !(ghc.isHaLVM or false) && (ghc.hasHaddock or true)
 , doHaddockInterfaces ? doHaddock && lib.versionAtLeast ghc.version "9.0.1"
 , passthru ? {}
 , pkg-configDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
@@ -181,7 +181,8 @@ let
   ] ++ optionals (!isHaLVM) [
     "--hsc2hs-option=--cross-compile"
     (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
-  ];
+  ] ++ optional (allPkgconfigDepends != [])
+    "--with-pkg-config=${pkg-config.targetPrefix}pkg-config";
 
   parallelBuildingFlags = "-j$NIX_BUILD_CORES" + optionalString stdenv.isLinux " +RTS -A64M -RTS";
 

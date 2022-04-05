@@ -198,6 +198,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+  add-trailing-comma = callPackage ../development/python-modules/add-trailing-comma { };
+
   addict = callPackage ../development/python-modules/addict { };
 
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
@@ -470,6 +472,8 @@ in {
 
   altair = callPackage ../development/python-modules/altair { };
 
+  amazon-ion = callPackage ../development/python-modules/amazon-ion { };
+
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
 
   ambee = callPackage ../development/python-modules/ambee { };
@@ -518,9 +522,15 @@ in {
 
   ansible-base = callPackage ../development/python-modules/ansible/base.nix { };
 
+  ansible-compat = callPackage ../development/python-modules/ansible-compat { };
+
   ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
 
+  ansible-doctor = callPackage ../development/python-modules/ansible-doctor { };
+
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
+
+  ansible-later = callPackage ../development/python-modules/ansible-later { };
 
   ansible-lint = callPackage ../development/python-modules/ansible-lint { };
 
@@ -545,6 +555,8 @@ in {
   anyascii = callPackage ../development/python-modules/anyascii { };
 
   anybadge = callPackage ../development/python-modules/anybadge { };
+
+  anyconfig = callPackage ../development/python-modules/anyconfig { };
 
   anyio = callPackage ../development/python-modules/anyio { };
 
@@ -657,6 +669,8 @@ in {
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
   aspell-python = callPackage ../development/python-modules/aspell-python { };
+
+  aspy-refactor-imports = callPackage ../development/python-modules/aspy-refactor-imports { };
 
   aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
 
@@ -1445,6 +1459,11 @@ in {
     inherit (self) python numpy boost;
   });
 
+  caffeWithCuda = toPythonModule (pkgs.caffeWithCuda.override {
+    pythonSupport = true;
+    inherit (self) python numpy boost;
+  });
+
   cairocffi = callPackage ../development/python-modules/cairocffi { };
 
   cairosvg = callPackage ../development/python-modules/cairosvg { };
@@ -1947,7 +1966,7 @@ in {
 
   cupy = callPackage ../development/python-modules/cupy {
     cudatoolkit = pkgs.cudatoolkit_11;
-    cudnn = pkgs.cudnn_8_1_cudatoolkit_11;
+    cudnn = pkgs.cudnn_8_3_cudatoolkit_11;
     nccl = pkgs.nccl_cudatoolkit_11;
     cutensor = pkgs.cutensor_cudatoolkit_11;
   };
@@ -3738,6 +3757,8 @@ in {
     inherit python;
   });
 
+  hepunits = callPackage ../development/python-modules/hepunits { };
+
   herepy = callPackage ../development/python-modules/herepy { };
 
   hetzner = callPackage ../development/python-modules/hetzner { };
@@ -4084,11 +4105,15 @@ in {
 
   intreehooks = callPackage ../development/python-modules/intreehooks { };
 
+  invocations = callPackage ../development/python-modules/invocations { };
+
   invoke = callPackage ../development/python-modules/invoke { };
 
   iodata = callPackage ../development/python-modules/iodata { };
 
   iocapture = callPackage ../development/python-modules/iocapture { };
+
+  ionhash = callPackage ../development/python-modules/ionhash { };
 
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
@@ -4297,6 +4322,8 @@ in {
   jsmin = callPackage ../development/python-modules/jsmin { };
 
   json5 = callPackage ../development/python-modules/json5 { };
+
+  jsonconversion = callPackage ../development/python-modules/jsonconversion { };
 
   jsondate = callPackage ../development/python-modules/jsondate { };
 
@@ -4668,6 +4695,13 @@ in {
   libpyfoscam = callPackage ../development/python-modules/libpyfoscam { };
 
   libpyvivotek = callPackage ../development/python-modules/libpyvivotek { };
+
+  libpwquality = pipe pkgs.libpwquality [
+    toPythonModule
+    (p: p.overrideAttrs (super: { meta = super.meta // { outputsToInstall = [ "py" ]; }; }))
+    (p: p.override { enablePython = true; inherit python; })
+    (p: p.py)
+  ];
 
   libredwg = toPythonModule (pkgs.libredwg.override {
     enablePython = true;
@@ -5462,6 +5496,8 @@ in {
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
+  nested-lookup = callPackage ../development/python-modules/nested-lookup { };
+
   nestedtext = callPackage ../development/python-modules/nestedtext { };
 
   net2grid = callPackage ../development/python-modules/net2grid { };
@@ -5608,7 +5644,13 @@ in {
 
   notify2 = callPackage ../development/python-modules/notify2 { };
 
+  notifymuch = callPackage ../development/python-modules/notifymuch {};
+
   notmuch = callPackage ../development/python-modules/notmuch {
+    inherit (pkgs) notmuch;
+  };
+
+  notmuch2 = callPackage ../development/python-modules/notmuch2 {
     inherit (pkgs) notmuch;
   };
 
@@ -5957,6 +5999,8 @@ in {
 
   parts = callPackage ../development/python-modules/parts { };
 
+  particle = callPackage ../development/python-modules/particle { };
+
   parver = callPackage ../development/python-modules/parver { };
   arpeggio = callPackage ../development/python-modules/arpeggio { };
 
@@ -5977,6 +6021,8 @@ in {
   patch-ng = callPackage ../development/python-modules/patch-ng { };
 
   path-and-address = callPackage ../development/python-modules/path-and-address { };
+
+  pathable = callPackage ../development/python-modules/pathable { };
 
   pathlib2 = callPackage ../development/python-modules/pathlib2 { };
 
@@ -7465,6 +7511,8 @@ in {
 
   pypytools = callPackage ../development/python-modules/pypytools { };
 
+  pyqldb = callPackage ../development/python-modules/pyqldb { };
+
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
@@ -8325,6 +8373,24 @@ in {
 
   pytorch = callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
+
+    # TODO: next time pytorch is updated (to 1.11.0, currently in staging as of
+    # 2022-03-31), make the following changes:
+
+    # -> cudatoolk_11
+    cudatoolkit = pkgs.cudatoolkit_10;
+
+    # -> cudnn_8_3_cudatoolkit_11
+    cudnn = pkgs.cudnn_8_1_cudatoolkit_10;
+
+    # -> cutensor_cudatoolkit_11 (cutensor is a new dependency in v1.11.0)
+    # cutensor = pkgs.cutensor_cudatoolkit_11;
+
+    # -> setting a custom magma should be unnecessary with v1.11.0
+    magma = pkgs.magma.override { cudatoolkit = pkgs.cudatoolkit_10; };
+
+    # -> nccl_cudatoolkit_11
+    nccl = pkgs.nccl.override { cudatoolkit = pkgs.cudatoolkit_10; };
   };
 
   pytorch-bin = callPackage ../development/python-modules/pytorch/bin.nix { };
@@ -8385,7 +8451,7 @@ in {
     };
 
   pyudev = callPackage ../development/python-modules/pyudev {
-    inherit (pkgs) systemd;
+    inherit (pkgs) udev;
   };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
@@ -8685,11 +8751,15 @@ in {
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
+  releases = callPackage ../development/python-modules/releases { };
+
   remarshal = callPackage ../development/python-modules/remarshal { };
 
   renault-api = callPackage ../development/python-modules/renault-api { };
 
   rencode = callPackage ../development/python-modules/rencode { };
+
+  reorder-python-imports = callPackage ../development/python-modules/reorder-python-imports { };
 
   reolink = callPackage ../development/python-modules/reolink { };
 
@@ -8930,6 +9000,8 @@ in {
   s3fs = callPackage ../development/python-modules/s3fs { };
 
   s3transfer = callPackage ../development/python-modules/s3transfer { };
+
+  s3-credentials = callPackage ../development/python-modules/s3-credentials { };
 
   sabyenc3 = callPackage ../development/python-modules/sabyenc3 { };
 
@@ -9345,6 +9417,10 @@ in {
   });
 
   socketio-client = callPackage ../development/python-modules/socketio-client { };
+
+  social-auth-app-django = callPackage ../development/python-modules/social-auth-app-django { };
+
+  social-auth-core = callPackage ../development/python-modules/social-auth-core { };
 
   socialscan = callPackage ../development/python-modules/socialscan { };
 
@@ -10329,6 +10405,8 @@ in {
     unicorn-emu = pkgs.unicorn;
   };
 
+  unicrypto = callPackage ../development/python-modules/unicrypto { };
+
   unidecode = callPackage ../development/python-modules/unidecode { };
 
   unidic-lite = callPackage ../development/python-modules/unidic-lite { };
@@ -10848,6 +10926,8 @@ in {
   xxh = callPackage ../tools/networking/xxh { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
+
+  yabadaba = callPackage ../development/python-modules/yabadaba { };
 
   yahooweather = callPackage ../development/python-modules/yahooweather { };
 

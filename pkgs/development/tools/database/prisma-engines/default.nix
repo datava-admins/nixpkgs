@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
-    export OPENSSL_LIB_DIR=${openssl.out}/lib
+    export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
 
     export PROTOC=${protobuf}/bin/protoc
     export PROTOC_INCLUDE="${protobuf}/include";
@@ -56,6 +56,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pamplemousse pimeys ];
+    maintainers = with maintainers; [ pamplemousse pimeys superherointj ];
   };
 }
