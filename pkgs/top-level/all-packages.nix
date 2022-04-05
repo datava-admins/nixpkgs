@@ -3445,6 +3445,8 @@ with pkgs;
 
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter {};
 
+  oil-buku = callPackage ../applications/misc/oil-buku { };
+
   ossutil = callPackage ../tools/admin/ossutil {};
 
   pastel = callPackage ../applications/misc/pastel {
@@ -13923,6 +13925,7 @@ with pkgs;
   })
     alloy4
     alloy5
+    alloy6
     alloy;
 
   altair = callPackage ../development/tools/altair-graphql-client { };
@@ -32508,6 +32511,7 @@ with pkgs;
     nixStable
     nix_2_3
     nix_2_4
+    nix_2_7
     nixUnstable;
 
   nixStatic = pkgsStatic.nix;
