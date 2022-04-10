@@ -96,6 +96,7 @@ let
 
   enabledUpstreamUnits = filter (n: ! elem n cfg.suppressedUnits) upstreamUnits;
   enabledUnits = filterAttrs (n: v: ! elem n cfg.suppressedUnits) cfg.units;
+  jobScripts = concatLists (mapAttrsToList (_: unit: unit.jobScripts or []) (filterAttrs (_: v: v.enable) cfg.services));
 
   stage1Units = generateUnits {
     type = "initrd";
@@ -107,7 +108,7 @@ let
 
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
-  fstab = pkgs.writeText "fstab" (lib.concatMapStringsSep "\n"
+  fstab = pkgs.writeText "initrd-fstab" (lib.concatMapStringsSep "\n"
     ({ fsType, mountPoint, device, options, autoFormat, autoResize, ... }@fs: let
         opts = options ++ optional autoFormat "x-systemd.makefs" ++ optional autoResize "x-systemd.growfs";
       in "${device} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," opts}") fileSystems);
@@ -127,11 +128,7 @@ let
     name = "initrd-emergency-env";
     paths = map getBin cfg.initrdBin;
     pathsToLink = ["/bin" "/sbin"];
-    # Make recovery easier
-    postBuild = ''
-      ln -s ${cfg.package.util-linux}/bin/mount $out/bin/
-      ln -s ${cfg.package.util-linux}/bin/umount $out/bin/
-    '';
+    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -s '${v}' $out/bin/'${n}'") cfg.extraBin);
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
@@ -149,7 +146,7 @@ in {
     '';
 
     package = (mkPackageOption pkgs "systemd" {
-      default = "systemdMinimal";
+      default = "systemdStage1";
     }) // {
       visible = false;
     };
@@ -202,6 +199,19 @@ in {
       '';
       type = types.listOf types.singleLineStr;
       default = [];
+    };
+
+    extraBin = mkOption {
+      description = ''
+        Tools to add to /bin
+      '';
+      example = literalExpression ''
+        {
+          umount = ''${pkgs.util-linux}/bin/umount;
+        }
+      '';
+      type = types.attrsOf types.path;
+      default = {};
     };
 
     suppressedStorePaths = mkOption {
@@ -341,8 +351,15 @@ in {
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
     system.build = { inherit initialRamdisk; };
+
+    boot.initrd.availableKernelModules = [ "autofs4" ]; # systemd needs this for some features
+
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils pkgs.kmod cfg.package] ++ config.system.fsPackages;
+      extraBin = {
+        mount = "${cfg.package.util-linux}/bin/mount";
+        umount = "${cfg.package.util-linux}/bin/umount";
+      };
 
       contents = {
         "/init".source = "${cfg.package}/lib/systemd/systemd";
@@ -366,19 +383,35 @@ in {
         "/sbin".source = "${initrdBinEnv}/sbin";
 
         "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
+        "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
       };
 
       storePaths = [
-        # TODO: Limit this to the bare necessities
-        "${cfg.package}/lib"
+        # systemd tooling
+        "${cfg.package}/lib/systemd/systemd-fsck"
+        "${cfg.package}/lib/systemd/systemd-growfs"
+        "${cfg.package}/lib/systemd/systemd-hibernate-resume"
+        "${cfg.package}/lib/systemd/systemd-journald"
+        "${cfg.package}/lib/systemd/systemd-makefs"
+        "${cfg.package}/lib/systemd/systemd-modules-load"
+        "${cfg.package}/lib/systemd/systemd-remount-fs"
+        "${cfg.package}/lib/systemd/systemd-sulogin-shell"
+        "${cfg.package}/lib/systemd/systemd-sysctl"
+        "${cfg.package}/lib/systemd/systemd-udevd"
+        "${cfg.package}/lib/systemd/systemd-vconsole-setup"
 
+        # additional systemd directories
+        "${cfg.package}/lib/systemd/system-generators"
+        "${cfg.package}/lib/udev"
+
+        # utilities needed by systemd
         "${cfg.package.util-linux}/bin/mount"
         "${cfg.package.util-linux}/bin/umount"
         "${cfg.package.util-linux}/bin/sulogin"
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so"
-      ];
+      ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
       units =

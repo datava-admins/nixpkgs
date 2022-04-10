@@ -70,6 +70,11 @@
       </listitem>
       <listitem>
         <para>
+          Systemd has been upgraded to the version 250.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://kops.sigs.k8s.io"><literal>kops</literal></link>
           defaults to 1.22.4, which will enable
           <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html">Instance
@@ -442,6 +447,12 @@
           since the former have been deprecated and are no longer
           functional in kubernetes&gt;=1.23. Ensure that you are not
           relying on the insecure behaviour before upgrading.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>openssh</literal> has been update to 8.9p1, changing
+          the FIDO security key middleware interface.
         </para>
       </listitem>
       <listitem>
@@ -1456,6 +1467,15 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>asterisk</literal> and
+          <literal>asterisk-stable</literal> packages were switched from
+          <literal>asterisk_18</literal> to the newly-packaged
+          <literal>asterisk_19</literal>. Asterisk 13 and 17 have been
+          removed as they have reached their end of life.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.unifi.openPorts</literal> option default
           value of <literal>true</literal> is now deprecated and will be
           changed to <literal>false</literal> in 22.11. Configurations
@@ -1512,9 +1532,11 @@
         <para>
           <link linkend="opt-programs.ssh.knownHosts">programs.ssh.knownHosts</link>
           has gained an <literal>extraHostNames</literal> option to
-          replace <literal>hostNames</literal>.
-          <literal>hostNames</literal> is deprecated, but still
-          available for now.
+          augment <literal>hostNames</literal>. It is now possible to
+          use the attribute name of a <literal>knownHosts</literal>
+          entry as the primary host name and specify secondary host
+          names using <literal>extraHostNames</literal> without having
+          to duplicate the primary host name.
         </para>
       </listitem>
       <listitem>
@@ -1523,6 +1545,13 @@
           a
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
           configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A new module was added for the Envoy reverse proxy, providing
+          the options <literal>services.envoy.enable</literal> and
+          <literal>services.envoy.settings</literal>.
         </para>
       </listitem>
       <listitem>

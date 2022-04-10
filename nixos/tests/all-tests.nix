@@ -142,6 +142,7 @@ in
   engelsystem = handleTest ./engelsystem.nix {};
   enlightenment = handleTest ./enlightenment.nix {};
   env = handleTest ./env.nix {};
+  envoy = handleTest ./envoy.nix {};
   ergo = handleTest ./ergo.nix {};
   ergochat = handleTest ./ergochat.nix {};
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
@@ -274,6 +275,7 @@ in
   login = handleTest ./login.nix {};
   logrotate = handleTest ./logrotate.nix {};
   loki = handleTest ./loki.nix {};
+  lvm2 = handleTest ./lvm2 {};
   lxd = handleTest ./lxd.nix {};
   lxd-image = handleTest ./lxd-image.nix {};
   lxd-nftables = handleTest ./lxd-nftables.nix {};
