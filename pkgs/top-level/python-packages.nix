@@ -94,12 +94,6 @@ let
 
   disabledIf = x: drv: if x then disabled drv else drv;
 
-  # CUDA-related packages that are compatible with the currently packaged version
-  # of TensorFlow, used to keep these versions in sync in related packages like `jaxlib`.
-  tensorflow_compat_cudatoolkit = pkgs.cudatoolkit_11_2;
-  tensorflow_compat_cudnn = pkgs.cudnn_8_1_cudatoolkit_11_2;
-  tensorflow_compat_nccl = pkgs.nccl_cudatoolkit_11;
-
 in {
 
   inherit pkgs stdenv;
@@ -215,6 +209,8 @@ in {
 
   aesara = callPackage ../development/python-modules/aesara { };
 
+  aesedb = callPackage ../development/python-modules/aesedb { };
+
   afdko = callPackage ../development/python-modules/afdko { };
 
   affine = callPackage ../development/python-modules/affine { };
@@ -232,6 +228,8 @@ in {
   agent-py = callPackage ../development/python-modules/agent-py { };
 
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
+
+  aio-geojson-generic-client = callPackage ../development/python-modules/aio-geojson-generic-client { };
 
   aio-geojson-geonetnz-quakes = callPackage ../development/python-modules/aio-geojson-geonetnz-quakes { };
 
@@ -294,8 +292,6 @@ in {
   aioguardian = callPackage ../development/python-modules/aioguardian { };
 
   aiogithubapi = callPackage ../development/python-modules/aiogithubapi { };
-
-  aioh2 = callPackage ../development/python-modules/aioh2 { };
 
   aioharmony = callPackage ../development/python-modules/aioharmony { };
 
@@ -648,6 +644,10 @@ in {
   asciitree = callPackage ../development/python-modules/asciitree { };
 
   asdf = callPackage ../development/python-modules/asdf { };
+
+  asdf-standard = callPackage ../development/python-modules/asdf-standard { };
+
+  asdf-transform-schemas = callPackage ../development/python-modules/asdf-transform-schemas { };
 
   ase = callPackage ../development/python-modules/ase { };
 
@@ -1959,12 +1959,7 @@ in {
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
-  cupy = callPackage ../development/python-modules/cupy {
-    cudatoolkit = pkgs.cudatoolkit_11;
-    cudnn = pkgs.cudnn_8_3_cudatoolkit_11;
-    nccl = pkgs.nccl_cudatoolkit_11;
-    cutensor = pkgs.cutensor_cudatoolkit_11;
-  };
+  cupy = callPackage ../development/python-modules/cupy { };
 
   curio = callPackage ../development/python-modules/curio { };
 
@@ -1991,6 +1986,8 @@ in {
   cymem = callPackage ../development/python-modules/cymem { };
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
+
+  cypherpunkpay = callPackage ../development/python-modules/cypherpunkpay { };
 
   cysignals = callPackage ../development/python-modules/cysignals { };
 
@@ -2862,6 +2859,7 @@ in {
 
   fenics = callPackage ../development/libraries/science/math/fenics {
     hdf5 = pkgs.hdf5_1_10;
+    boost = pkgs.boost169;
   };
 
   ffcv = callPackage ../development/python-modules/ffcv { };
@@ -3210,6 +3208,8 @@ in {
   gattlib = callPackage ../development/python-modules/gattlib {
     inherit (pkgs) bluez glib pkg-config;
   };
+
+  gb-io = callPackage ../development/python-modules/gb-io { };
 
   gbinder-python = callPackage ../development/python-modules/gbinder-python { };
 
@@ -4233,22 +4233,20 @@ in {
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit_11 = tensorflow_compat_cudatoolkit;
-    cudnn = tensorflow_compat_cudnn;
+    inherit (self.tensorflow) cudaPackages;
   };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib {
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit = tensorflow_compat_cudatoolkit;
-    cudnn = tensorflow_compat_cudnn;
-    nccl = tensorflow_compat_nccl;
+    inherit (self.tensorflow) cudaPackages;
   };
 
   jaxlib = self.jaxlib-build;
 
   jaxlibWithCuda = self.jaxlib-build.override {
     cudaSupport = true;
+
   };
 
   jaxlibWithoutCuda = self.jaxlib-build.override {
@@ -4909,6 +4907,8 @@ in {
 
   lupupy = callPackage ../development/python-modules/lupupy { };
 
+  lxmf= callPackage ../development/python-modules/lxmf { };
+
   lxml = callPackage ../development/python-modules/lxml {
     inherit (pkgs) libxml2 libxslt zlib;
   };
@@ -5144,6 +5144,8 @@ in {
 
   meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
 
+  meteofrance-api = callPackage ../development/python-modules/meteofrance-api { };
+
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
   micawber = callPackage ../development/python-modules/micawber { };
@@ -5252,6 +5254,8 @@ in {
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 
   mohawk = callPackage ../development/python-modules/mohawk { };
+
+  monero = callPackage ../development/python-modules/monero { };
 
   mongomock = callPackage ../development/python-modules/mongomock { };
 
@@ -5426,6 +5430,8 @@ in {
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
+  nomadnet = callPackage ../development/python-modules/nomadnet { };
+
   nanomsg-python = callPackage ../development/python-modules/nanomsg-python {
     inherit (pkgs) nanomsg;
   };
@@ -5441,6 +5447,8 @@ in {
   };
 
   napari-console = callPackage ../development/python-modules/napari-console { };
+
+  napari-npe2 = callPackage ../development/python-modules/napari-npe2 { };
 
   napari-plugin-engine = callPackage ../development/python-modules/napari-plugin-engine { };
 
@@ -5683,7 +5691,6 @@ in {
 
   numba = callPackage ../development/python-modules/numba {
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit = tensorflow_compat_cudatoolkit;
   };
 
   numbaWithCuda = self.numba.override {
@@ -5711,6 +5718,8 @@ in {
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
+
+  oasatelematics = callPackage ../development/python-modules/oasatelematics { };
 
   oath = callPackage ../development/python-modules/oath { };
 
@@ -6441,6 +6450,8 @@ in {
 
   poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
+  polars = callPackage ../development/python-modules/polars { };
+
   polarizationsolver = callPackage ../development/python-modules/polarizationsolver { };
 
   polib = callPackage ../development/python-modules/polib { };
@@ -6691,6 +6702,8 @@ in {
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
+  py3rijndael = callPackage ../development/python-modules/py3rijndael { };
+
   py3status = callPackage ../development/python-modules/py3status { };
 
   py3to2 = callPackage ../development/python-modules/3to2 { };
@@ -6878,7 +6891,6 @@ in {
   pyctr = callPackage ../development/python-modules/pyctr { };
 
   pycuda = callPackage ../development/python-modules/pycuda {
-    inherit (pkgs) cudatoolkit;
     inherit (pkgs.stdenv) mkDerivation;
   };
 
@@ -7430,6 +7442,8 @@ in {
     inherit (pkgs) jq;
   };
 
+  pypng = callPackage ../development/python-modules/pypng { };
+
   phonemizer = callPackage ../development/python-modules/phonemizer { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl {
@@ -7598,6 +7612,7 @@ in {
   });
 
   pyrealsense2WithCuda = toPythonModule (pkgs.librealsenseWithCuda.override {
+    cudaSupport = true;
     enablePython = true;
     pythonPackages = self;
   });
@@ -7733,9 +7748,13 @@ in {
 
   pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
 
+  pysigma-backend-insightidr = callPackage ../development/python-modules/pysigma-backend-insightidr { };
+
   pysigma-pipeline-crowdstrike = callPackage ../development/python-modules/pysigma-pipeline-crowdstrike { };
 
   pysigma-pipeline-sysmon = callPackage ../development/python-modules/pysigma-pipeline-sysmon { };
+
+  pysigma-pipeline-windows = callPackage ../development/python-modules/pysigma-pipeline-windows { };
 
   pysignalclirestapi = callPackage ../development/python-modules/pysignalclirestapi { };
 
@@ -7772,6 +7791,12 @@ in {
   pysmt = callPackage ../development/python-modules/pysmt { };
 
   pysnmp = callPackage ../development/python-modules/pysnmp { };
+
+  pysnmp-pyasn1 = callPackage ../development/python-modules/pysnmp-pyasn1 { };
+
+  pysnmp-pysmi = callPackage ../development/python-modules/pysnmp-pysmi { };
+
+  pysnmplib = callPackage ../development/python-modules/pysnmplib { };
 
   pysnooper = callPackage ../development/python-modules/pysnooper { };
 
@@ -8126,6 +8151,8 @@ in {
   python-dotenv = callPackage ../development/python-modules/python-dotenv { };
 
   python-editor = callPackage ../development/python-modules/python-editor { };
+
+  python-family-hub-local = callPackage ../development/python-modules/python-family-hub-local { };
 
   python-fsutil = callPackage ../development/python-modules/python-fsutil { };
 
@@ -8506,6 +8533,8 @@ in {
 
   pyvmomi = callPackage ../development/python-modules/pyvmomi { };
 
+  pyvo = callPackage ../development/python-modules/pyvo { };
+
   pyvolumio = callPackage ../development/python-modules/pyvolumio { };
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
@@ -8885,6 +8914,8 @@ in {
 
   rnginline = callPackage ../development/python-modules/rnginline { };
 
+  rns = callPackage ../development/python-modules/rns { };
+
   robomachine = callPackage ../development/python-modules/robomachine { };
 
   robot-detection = callPackage ../development/python-modules/robot-detection { };
@@ -8930,6 +8961,8 @@ in {
   ropper = callPackage ../development/python-modules/ropper { };
 
   routes = callPackage ../development/python-modules/routes { };
+
+  rova = callPackage ../development/python-modules/rova { };
 
   rpcq = callPackage ../development/python-modules/rpcq { };
 
@@ -9139,6 +9172,8 @@ in {
 
   secure = callPackage ../development/python-modules/secure { };
 
+  securetar = callPackage ../development/python-modules/securetar { };
+
   seekpath = callPackage ../development/python-modules/seekpath { };
 
   segments = callPackage ../development/python-modules/segments { };
@@ -9181,6 +9216,8 @@ in {
   serpent = callPackage ../development/python-modules/serpent { };
 
   serpy = callPackage ../development/python-modules/serpy { };
+
+  servefile = callPackage ../development/python-modules/servefile { };
 
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
@@ -9231,6 +9268,8 @@ in {
   });
 
   shippai = callPackage ../development/python-modules/shippai { };
+
+  shiv = callPackage ../development/python-modules/shiv { };
 
   shodan = callPackage ../development/python-modules/shodan { };
 
@@ -9898,18 +9937,21 @@ in {
 
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
-  tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
+  tensorflow-bin = let
+    # CUDA-related packages that are compatible with the currently packaged version
+    # of TensorFlow, used to keep these versions in sync in related packages like `jaxlib`.
+    cudaPackages = pkgs.cudaPackages_11_2.overrideScope' (final: prev: {
+      cudnn = prev.cudnn_8_1_1;
+    });
+  in callPackage ../development/python-modules/tensorflow/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit = tensorflow_compat_cudatoolkit;
-    cudnn = tensorflow_compat_cudnn;
+    inherit cudaPackages;
   };
 
   tensorflow-build = callPackage ../development/python-modules/tensorflow {
     inherit (pkgs.darwin) cctools;
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit = tensorflow_compat_cudatoolkit;
-    cudnn = tensorflow_compat_cudnn;
-    nccl = tensorflow_compat_nccl;
+    inherit (self.tensorflow-bin) cudaPackages;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
     flatbuffers-core = pkgs.flatbuffers;
     flatbuffers-python = self.flatbuffers;
@@ -10989,6 +11031,8 @@ in {
     ffmpegSupport = false;
     phantomjsSupport = false;
   };
+
+  yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
 
   yt-dlp = callPackage ../tools/misc/yt-dlp { };
 
