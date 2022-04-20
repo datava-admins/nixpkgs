@@ -12075,6 +12075,8 @@ with pkgs;
 
   dbmate = callPackage ../development/tools/database/dbmate { };
 
+  db2-odbc-cli = callPackage ../development/tools/database/db2-odbc-cli { };
+
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
 
   devpi-server = callPackage ../development/tools/devpi-server {};
