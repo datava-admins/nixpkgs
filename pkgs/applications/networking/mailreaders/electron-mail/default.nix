@@ -2,12 +2,12 @@
 
 let
   pname = "electron-mail";
-  version = "4.12.9";
+  version = "4.14.0";
   name = "ElectronMail-${version}";
 
   src = fetchurl {
     url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-HQudRztcCE7lvGkgeTNPlrS9Ycrf2fldhAZd9izhY5k=";
+    sha256 = "sha256-sahMEj9m10gsceTBnYk8wkWcQoM5s6s1ek1U6u3PTgw=";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
@@ -24,6 +24,7 @@ in appimageTools.wrapType2 {
 
   extraPkgs = pkgs: with pkgs; [
     libsecret
+    libappindicator-gtk3
   ];
 
   meta = with lib; {
