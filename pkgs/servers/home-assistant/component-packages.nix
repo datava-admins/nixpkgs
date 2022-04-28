@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.4.5";
+  version = "2022.4.7";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -162,7 +162,8 @@
       pyarlo
     ];
     "arris_tg2492lg" = ps: with ps; [
-    ]; # missing inputs: arris-tg2492lg
+      arris-tg2492lg
+    ];
     "aruba" = ps: with ps; [
       pexpect
     ];
@@ -382,7 +383,8 @@
     ];
     "climacell" = ps: with ps; [
       pyclimacell
-    ]; # missing inputs: pytomorrowio
+      pytomorrowio
+    ];
     "climate" = ps: with ps; [
     ];
     "cloud" = ps: with ps; [
@@ -821,7 +823,8 @@
       fitbit
     ];
     "fivem" = ps: with ps; [
-    ]; # missing inputs: fivem-api
+      fivem-api
+    ];
     "fixer" = ps: with ps; [
       fixerio
     ];
@@ -1052,7 +1055,8 @@
       hangups
     ];
     "harman_kardon_avr" = ps: with ps; [
-    ]; # missing inputs: hkavr
+      hkavr
+    ];
     "harmony" = ps: with ps; [
       aioharmony
     ];
@@ -1243,7 +1247,10 @@
     "input_text" = ps: with ps; [
     ];
     "insteon" = ps: with ps; [
+      aiohttp-cors
       pyinsteon
+      pyserial
+      pyudev
     ];
     "integration" = ps: with ps; [
     ];
@@ -1901,7 +1908,8 @@
       pyopnsense
     ];
     "opple" = ps: with ps; [
-    ]; # missing inputs: pyoppleio
+      pyoppleio
+    ];
     "oru" = ps: with ps; [
     ]; # missing inputs: oru
     "orvibo" = ps: with ps; [
@@ -1953,9 +1961,11 @@
       sqlalchemy
     ];
     "peco" = ps: with ps; [
-    ]; # missing inputs: peco
+      peco
+    ];
     "pencom" = ps: with ps; [
-    ]; # missing inputs: pencompy
+      pencompy
+    ];
     "persistent_notification" = ps: with ps; [
     ];
     "person" = ps: with ps; [
@@ -2136,7 +2146,8 @@
       praw
     ];
     "rejseplanen" = ps: with ps; [
-    ]; # missing inputs: rjpl
+      rjpl
+    ];
     "remember_the_milk" = ps: with ps; [
       httplib2
     ]; # missing inputs: RtmAPI
@@ -2237,7 +2248,8 @@
       sqlalchemy
     ];
     "saj" = ps: with ps; [
-    ]; # missing inputs: pysaj
+      pysaj
+    ];
     "samsungtv" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
@@ -2287,7 +2299,8 @@
       aiosenseme
     ];
     "sensibo" = ps: with ps; [
-    ]; # missing inputs: pysensibo
+      pysensibo
+    ];
     "sensor" = ps: with ps; [
       fnvhash
       lru-dict
@@ -2518,7 +2531,8 @@
       pymodbus
     ]; # missing inputs: pystiebeleltron
     "stookalert" = ps: with ps; [
-    ]; # missing inputs: stookalert
+      stookalert
+    ];
     "stream" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
@@ -2696,7 +2710,8 @@
     "tomato" = ps: with ps; [
     ];
     "tomorrowio" = ps: with ps; [
-    ]; # missing inputs: pytomorrowio
+      pytomorrowio
+    ];
     "toon" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
@@ -3116,7 +3131,8 @@
       ifaddr
       url-normalize
       zeroconf
-    ]; # missing inputs: zwave_me_ws
+      zwave-me-ws
+    ];
   };
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
@@ -3191,6 +3207,7 @@
     "canary"
     "cast"
     "cert_expiry"
+    "climacell"
     "climate"
     "cloud"
     "cloudflare"
@@ -3274,6 +3291,7 @@
     "filter"
     "fireservicerota"
     "firmata"
+    "fivem"
     "fjaraskupan"
     "flic"
     "flick_electric"
@@ -3498,6 +3516,7 @@
     "p1_monitor"
     "panel_custom"
     "panel_iframe"
+    "peco"
     "persistent_notification"
     "person"
     "philips_js"
@@ -3560,6 +3579,7 @@
     "select"
     "sense"
     "senseme"
+    "sensibo"
     "sensor"
     "sentry"
     "seventeentrack"
@@ -3607,6 +3627,7 @@
     "statistics"
     "statsd"
     "steamist"
+    "stookalert"
     "stream"
     "stt"
     "subaru"
@@ -3642,6 +3663,7 @@
     "todoist"
     "tolo"
     "tomato"
+    "tomorrowio"
     "toon"
     "totalconnect"
     "tplink"
@@ -3726,5 +3748,6 @@
     "zodiac"
     "zone"
     "zwave_js"
+    "zwave_me"
   ];
 }

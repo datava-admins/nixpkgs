@@ -205,7 +205,6 @@
   ./programs/spacefm.nix
   ./programs/singularity.nix
   ./programs/ssh.nix
-  ./programs/ssmtp.nix
   ./programs/sysdig.nix
   ./programs/systemtap.nix
   ./programs/starship.nix
@@ -460,6 +459,7 @@
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
   ./services/hardware/usbmuxd.nix
+  ./services/hardware/usbrelayd.nix
   ./services/hardware/thermald.nix
   ./services/hardware/undervolt.nix
   ./services/hardware/vdr.nix
@@ -741,6 +741,7 @@
   ./services/networking/coredns.nix
   ./services/networking/corerad.nix
   ./services/networking/coturn.nix
+  ./services/networking/create_ap.nix
   ./services/networking/croc.nix
   ./services/networking/dante.nix
   ./services/networking/ddclient.nix
@@ -1184,6 +1185,7 @@
   ./system/boot/systemd/journald.nix
   ./system/boot/systemd/logind.nix
   ./system/boot/systemd/nspawn.nix
+  ./system/boot/systemd/shutdown.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
   ./system/boot/systemd/initrd.nix
