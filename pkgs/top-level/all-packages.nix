@@ -7926,7 +7926,7 @@ with pkgs;
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
   nomad_1_0 = callPackage ../applications/networking/cluster/nomad/1.0.nix {
-    buildGoPackage = buildGo115Package;
+    buildGoPackage = buildGo116Package;
     inherit (linuxPackages) nvidia_x11;
     nvidiaGpuSupport = config.cudaSupport or false;
   };
@@ -20982,7 +20982,9 @@ with pkgs;
 
   micronaut = callPackage ../development/tools/micronaut {};
 
-  minio = callPackage ../servers/minio { };
+  minio = callPackage ../servers/minio {
+    buildGoModule = buildGo117Module;
+  };
 
   mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
 
