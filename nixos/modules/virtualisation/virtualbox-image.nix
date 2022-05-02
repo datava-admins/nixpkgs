@@ -207,7 +207,7 @@ in {
       "/" = {
         device = "/dev/disk/by-label/nixos";
         autoResize = true;
-        fsType = "ext4";
+        fsType = baseImageFsType;
       };
     } // (lib.optionalAttrs (cfg.extraDisk != null) {
       ${cfg.extraDisk.mountPoint} = {
