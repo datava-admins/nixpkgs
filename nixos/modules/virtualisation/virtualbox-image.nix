@@ -148,8 +148,8 @@ in {
       name = cfg.vmDerivationName;
 
       inherit pkgs lib config;
-      fsType = baseImageFsType;
-      btrfsSubvolumes = baseImageVolumes;
+      fsType = cfg.baseImageFsType;
+      btrfsSubvolumes = cfg.baseImageVolumes;
       partitionTableType = "hybrid";
       diskSize = cfg.baseImageSize;
       additionalSpace = "${toString cfg.baseImageFreeSpace}M";
@@ -207,7 +207,7 @@ in {
       "/" = {
         device = "/dev/disk/by-label/nixos";
         autoResize = true;
-        fsType = baseImageFsType;
+        fsType = cfg.baseImageFsType;
       };
     } // (lib.optionalAttrs (cfg.extraDisk != null) {
       ${cfg.extraDisk.mountPoint} = {
