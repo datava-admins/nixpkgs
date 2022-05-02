@@ -17,7 +17,7 @@
   # either "efi" or "hybrid"
   # This will be undersized slightly, as this is actually the offset of
   # the end of the partition. Generally it will be 1MiB smaller.
-  bootSize ? "256M"
+  bootSize ? "1G"
 
 , # The files and directories to be placed in the target file system.
   # This is a list of attribute sets {source, target, mode, user, group} where
@@ -49,6 +49,9 @@
 
 , # The root file system type.
   fsType ? "ext4"
+
+, # Subvolumes to create if using Btrfs
+  btrfsSubvolumes ? []
 
 , # Filesystem label
   label ? if onlyNixStore then "nix-store" else "nixos"
@@ -82,13 +85,15 @@
 
 assert partitionTableType == "legacy" || partitionTableType == "legacy+gpt" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
 # We use -E offset=X below, which is only supported by e2fsprogs
-assert partitionTableType != "none" -> fsType == "ext4";
+# assert partitionTableType != "none" -> fsType == "ext4";
 # Either both or none of {user,group} need to be set
 assert lib.all
          (attrs: ((attrs.user  or null) == null)
               == ((attrs.group or null) == null))
          contents;
 assert onlyNixStore -> contents == [] && configFile == null && !installBootLoader;
+
+assert (btrfsSubvolumes != []) -> fsType == "btrfs";
 
 with lib;
 
@@ -116,7 +121,7 @@ let format' = format; in let
     legacy = ''
       parted --script $diskImage -- \
         mklabel msdos \
-        mkpart primary ext4 1MiB -1
+        mkpart primary ${fsType} 1MiB -1
     '';
     "legacy+gpt" = ''
       parted --script $diskImage -- \
@@ -124,7 +129,7 @@ let format' = format; in let
         mkpart no-fs 1MB 2MB \
         set 1 bios_grub on \
         align-check optimal 1 \
-        mkpart primary ext4 2MB -1 \
+        mkpart primary ${fsType} 2MB -1 \
         align-check optimal 2 \
         print
     '';
@@ -133,7 +138,7 @@ let format' = format; in let
         mklabel gpt \
         mkpart ESP fat32 8MiB ${bootSize} \
         set 1 boot on \
-        mkpart primary ext4 ${bootSize} -1
+        mkpart primary ${fsType} ${bootSize} -1
     '';
     hybrid = ''
       parted --script $diskImage -- \
@@ -142,7 +147,7 @@ let format' = format; in let
         set 1 boot on \
         mkpart no-fs 0 1024KiB \
         set 2 bios_grub on \
-        mkpart primary ext4 ${bootSize} -1
+        mkpart primary ${fsType }${bootSize} -1
     '';
     none = "";
   }.${partitionTableType};
@@ -167,6 +172,8 @@ let format' = format; in let
       parted
       e2fsprogs
       lkl
+      btrfs-progs
+      multipath-tools
       config.system.build.nixos-install
       config.system.build.nixos-enter
       nix
@@ -225,7 +232,12 @@ let format' = format; in let
 
     mkdir $out
 
-    root="$PWD/root"
+    realroot="$PWD/root"
+    ${ if fsType == "btrfs" then ''
+      root="$PWD/root/roottmp"
+    '' else ''
+      root="$PWD/root"
+    ''}
     mkdir -p $root
 
     # Copy arbitrary other files into the image
@@ -342,21 +354,40 @@ let format' = format; in let
 
     ${partitionDiskScript}
 
-    ${if partitionTableType != "none" then ''
-      # Get start & length of the root partition in sectors to $START and $SECTORS.
-      eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
-
+    # Get start & length of the root partition in sectors to $START and $SECTORS.
+    eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
+    rootDir=$root${optionalString onlyNixStore builtins.storeDir}
+    realrootDir=$realroot${optionalString onlyNixStore builtins.storeDir}
+    ${if partitionTableType != "none" && fsType == "ext4" then ''
       mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+    '' else if fsType == "btrfs" then ''
+      SECTORS=$(($SECTORS-1))
+      fdisk -l ./$diskImage
+      truncate -s $(sectorsToBytes $SECTORS) btrfs.img
+      mkfs.${fsType} -f --rootdir=$realrootDir --shrink -L ${label} btrfs.img
+      dd if=./btrfs.img of=./$diskImage seek=$START count=$SECTORS bs=512 conv=notrunc
+      rm btrfs.img
+      fdisk -l ./$diskImage
     '' else ''
       mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
     ''}
 
+    echo "partitionTableType ${partitionTableType}"
+    echo "partitionTableType ${rootPartition}"
+    echo "fsType ${fsType}"
+    echo "diskImage " $diskImage
+    echo "root " $root
+    echo "rootDir " $rootDir
+    echo "realrootDir " $realrootDir
+
+    ${optionalString (fsType != "btrfs") ''
     echo "copying staging root to image..."
     cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
            -t ${fsType} \
            -i $diskImage \
            $root${optionalString onlyNixStore builtins.storeDir}/* / ||
       (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
+    ''}
   '';
 
   moveOrConvertImage = ''
@@ -368,10 +399,12 @@ let format' = format; in let
     diskImage=$out/${filename}
   '';
 
+  createSubvolumes = map (vol: "mkdir -p $(dirname /mnt${vol}) && btrfs subvolume create /mnt${vol}") btrfsSubvolumes;
+
   buildImage = pkgs.vmTools.runInLinuxVM (
     pkgs.runCommand name {
       preVM = prepareImage;
-      buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
+      buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools btrfs-progs ];
       postVM = moveOrConvertImage + postVM;
       memSize = 1024;
     } ''
@@ -397,8 +430,17 @@ let format' = format; in let
         mkfs.vfat -n ESP /dev/vda1
         mount /dev/vda1 /mnt/boot
       ''}
+      ${optionalString (fsType == "btrfs") ''
+        echo "Creating Btrfs subvolumes and moving files..."
+        ${concatStringsSep "\n" createSubvolumes}
+        #mv -u /mnt/roottmp/* /mnt/
+        cp --reflink=always --archive /mnt/roottmp/* /mnt/
+        btrfs subvolume list /mnt
+        rm -rf /mnt/roottmp
+        btrfs filesystem resize max /mnt
+      ''}
 
-      # Install a configuration.nix
+      echo "Install a configuration.nix"
       mkdir -p /mnt/etc/nixos
       ${optionalString (configFile != null) ''
         cp ${configFile} /mnt/etc/nixos/configuration.nix
