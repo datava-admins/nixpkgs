@@ -9,7 +9,7 @@ in {
     enable = mkEnableOption "sccache";
     cacheBackend = mkOption {
       type = types.enum [ "local" "s3" "redis" "memcached" "gcs" "azure" ];
-      description = "cache backend for sscache";
+      description = "cache backend for sccache";
       default = "local";
     };
     cacheUrl = mkOption {
@@ -70,6 +70,7 @@ in {
               export RUSTC_WRAPPER="${pkgs.sccache}/bin/sccache"
               export SCCACHE_DIR="${cfg.cacheUrl}"
               export SCCACHE_CACHE_SIZE="${cfg.cacheSize}"
+              export SCCACHE_MAX_FRAME_LENGTH=104857600
               if [ ! -d "$SCCACHE_DIR" ]; then
                 echo "====="
                 echo "Directory '$SCCACHE_DIR' does not exist"
