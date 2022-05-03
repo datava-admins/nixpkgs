@@ -2,14 +2,14 @@
 
 let
   pname = "platformsh";
-  version = "v3.78.0";
+  version = "3.79.0";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/platformsh/platformsh-cli/releases/download/${version}/platform.phar";
-    sha256 = "sha256-2EasMsZIwplkl1S5PH0Y3gRymAIdpiFgVc3pNPiFg1o=";
+    url = "https://github.com/platformsh/platformsh-cli/releases/download/v${version}/platform.phar";
+    sha256 = "sha256-gTh1VS/b+D8E67w6Q4u9h0EhpFZiA2gBGe4mo49+9KY=";
   };
 
   dontUnpack = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
         export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
         NEW_VERSION=$(curl -s https://api.github.com/repos/platformsh/platformsh-cli/releases/latest | jq .tag_name --raw-output)
 
-        if [[ "${version}" = "$NEW_VERSION" ]]; then
+        if [[ "v${version}" = "$NEW_VERSION" ]]; then
             echo "The new version same as the old version."
             exit 0
         fi

@@ -82,6 +82,22 @@
       </listitem>
       <listitem>
         <para>
+          Pulseaudio has been upgraded to version 15.0 and now
+          optionally
+          <link xlink:href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/15.0/#supportforldacandaptxbluetoothcodecsplussbcxqsbcwithhigher-qualityparameters">supports
+          additional Bluetooth audio codecs</link> like aptX or LDAC,
+          with codec switching support being available in
+          <literal>pavucontrol</literal>. This feature is disabled by
+          default but can be enabled by using
+          <literal>hardware.pulseaudio.package = pkgs.pulseaudioFull;</literal>.
+          Existing 3rd party modules that provided similar
+          functionality, like <literal>pulseaudio-modules-bt</literal>
+          or <literal>pulseaudio-hsphfpd</literal> are deprecated and
+          have been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The new
           <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook"><literal>postgresqlTestHook</literal></link>
           runs a PostgreSQL server for the duration of package checks.
@@ -476,6 +492,28 @@
           <literal>pkgs.emacsPackages.elpaPackages</literal> and
           <literal>pkgs.emacsPackages.nongnuPackages</literal> where the
           new versions will release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The configuration and state directories used by
+          <literal>nixos-containers</literal> have been moved from
+          <literal>/etc/containers</literal> and
+          <literal>/var/lib/containers</literal> to
+          <literal>/etc/nixos-containers</literal> and
+          <literal>/var/lib/nixos-containers</literal>.
+        </para>
+        <para>
+          If you are changing <literal>system.stateVersion</literal> to
+          <literal>&quot;22.05&quot;</literal> manually on an existing
+          system you are responsible for migrating these directories
+          yourself.
+        </para>
+        <para>
+          This is to improve compatibility with
+          <literal>libcontainer</literal> based software such as Podman
+          and Skopeo which assumes they have ownership over
+          <literal>/etc/containers</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1273,7 +1311,7 @@
           <literal>systemd-shutdown</literal> is now properly linked on
           shutdown to unmount all filesystems and device mapper devices
           cleanly. This can be disabled using
-          <literal>boot.systemd.shutdown.enable</literal>.
+          <literal>systemd.shutdownRamfs.enable</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1337,6 +1375,16 @@
           you refer to. If you don’t need them update your commands from
           <literal>otelcontribcol</literal> to
           <literal>otelcorecol</literal> and enjoy a 7x smaller binary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.zookeeper</literal> has a new option
+          <literal>jre</literal> for specifying the JRE to start
+          zookeeper with. It defaults to the JRE that
+          <literal>pkgs.zookeeper</literal> was wrapped with, instead of
+          <literal>pkgs.jre</literal>. This changes the JRE to
+          <literal>pkgs.jdk11_headless</literal> by default.
         </para>
       </listitem>
       <listitem>

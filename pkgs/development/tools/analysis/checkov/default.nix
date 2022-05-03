@@ -32,13 +32,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.1084";
+  version = "2.0.1102";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-bzmXLqjtl742UcjBpYQdtiTKO6Oe/x7lGoJZh+uJzUo=";
+    hash = "sha256-OPYlgj8jdgCQJddy9UUXMjHJtQcoMrZbghgPUdyUV5Y=";
   };
 
   nativeBuildInputs = with py.pkgs; [

@@ -173,6 +173,7 @@
   ./programs/java.nix
   ./programs/k40-whisperer.nix
   ./programs/kclock.nix
+  ./programs/k3b.nix
   ./programs/kdeconnect.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
@@ -663,6 +664,7 @@
   ./services/monitoring/longview.nix
   ./services/monitoring/mackerel-agent.nix
   ./services/monitoring/metricbeat.nix
+  ./services/monitoring/mimir.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
@@ -736,6 +738,7 @@
   ./services/networking/blocky.nix
   ./services/networking/charybdis.nix
   ./services/networking/cjdns.nix
+  ./services/networking/cloudflare-dyndns.nix
   ./services/networking/cntlm.nix
   ./services/networking/connman.nix
   ./services/networking/consul.nix
@@ -1183,13 +1186,14 @@
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
   ./system/boot/systemd/coredump.nix
+  ./system/boot/systemd/initrd-secrets.nix
+  ./system/boot/systemd/initrd.nix
   ./system/boot/systemd/journald.nix
   ./system/boot/systemd/logind.nix
   ./system/boot/systemd/nspawn.nix
   ./system/boot/systemd/shutdown.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
-  ./system/boot/systemd/initrd.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc-activation.nix
