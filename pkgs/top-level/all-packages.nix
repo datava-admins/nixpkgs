@@ -19520,6 +19520,10 @@ with pkgs;
 
   mesa = callPackage ../development/libraries/mesa {
     llvmPackages = llvmPackages_latest;
+    galliumDrivers = if stdenv.targetPlatform.isx86_64 then
+      [ "r300" "r600" "radeonsi" "nouveau" "virgl" "svga" "swrast" "iris" "crocus" "i915" "zink" ]
+    else
+      [ "auto" ];
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
