@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security
 , runtimeShell
+, makeWrapper
 }:
 let
   sccache = rustPlatform.buildRustPackage rec {
