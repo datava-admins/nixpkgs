@@ -68,9 +68,7 @@ in {
           sccacheWrapper = super.sccacheWrapper.override {
             extraConfig = ''
               export RUSTC_WRAPPER="${pkgs.sccache}/bin/sccache"
-            '' + optional
-            (cfg.cacheBackend == "local")
-            ''export SCCACHE_DIR="${cfg.cacheUrl}"
+              export SCCACHE_DIR="${cfg.cacheUrl}"
               export SCCACHE_CACHE_SIZE="${cfg.cacheSize}"
               if [ ! -d "$SCCACHE_DIR" ]; then
                 echo "====="
