@@ -72,6 +72,7 @@ in {
               export SCCACHE_CACHE_SIZE="${cfg.cacheSize}"
               export SCCACHE_MAX_FRAME_LENGTH=104857600
               export SCCACHE_IGNORE_SERVER_IO_ERROR=1
+              export SCCACHE_START_SERVER=1
               export SCCACHE_ERROR_LOG=/tmp/sccache_log.txt
               export SCCACHE_LOG=debug
               if [ ! -d "$SCCACHE_DIR" ]; then
