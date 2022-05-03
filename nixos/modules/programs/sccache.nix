@@ -46,7 +46,7 @@ in {
         source = pkgs.writeScript "nix-sccache.pl" ''
           #!${pkgs.perl}/bin/perl
 
-          %ENV=( SCCACHE_DIR => '${cfg.cacheDir}' );
+          %ENV=( SCCACHE_DIR => '${cfg.cacheUrl}' );
           sub untaint {
             my $v = shift;
             return '-V' if $v eq '-V' || $v eq '--version';
@@ -70,7 +70,7 @@ in {
               export RUSTC_WRAPPER="${pkgs.sccache}/bin/sccache"
             '' + optional
             (cfg.cacheBackend == "local")
-            ''export SCCACHE_DIR="${cfg.cacheDir}"
+            ''export SCCACHE_DIR="${cfg.cacheUrl}"
               export SCCACHE_CACHE_SIZE="${cfg.cacheSize}"
               if [ ! -d "$SCCACHE_DIR" ]; then
                 echo "====="
