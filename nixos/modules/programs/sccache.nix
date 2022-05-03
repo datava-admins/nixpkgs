@@ -36,7 +36,7 @@ in {
     # host configuration
     (mkIf cfg.enable {
       systemd.tmpfiles.rules = mkIf (cfg.cacheBackend == "local")
-        [ "d ${cfg.cacheDir} 0770 root nixbld -" ];
+        [ "d ${cfg.cacheUrl} 0770 root nixbld -" ];
 
       security.wrappers.nix-sccache = {
         owner = "root";
