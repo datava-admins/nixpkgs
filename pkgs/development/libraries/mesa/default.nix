@@ -15,6 +15,7 @@
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , libclc
 , jdupes
+, vulkan-loader
 }:
 
 /** Packaging design:
@@ -153,6 +154,7 @@ self = stdenv.mkDerivation {
     intltool bison flex file
     python3Packages.python python3Packages.Mako
     jdupes
+    vulkan-loader
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
     wayland-scanner
   ];
