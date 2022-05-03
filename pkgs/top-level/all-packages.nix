@@ -15025,6 +15025,26 @@ with pkgs;
     }))) {
       inherit stdenv;
     });
+    
+  sccacheWrapper = makeOverridable ({ extraConfig, cc }:
+    cc.override {
+      cc = sccache.links {
+        inherit extraConfig;
+        unwrappedCC = cc.cc;
+      };
+    }) {
+      extraConfig = "";
+      inherit (stdenv) cc;
+    };
+
+  sccacheStdenv = lowPrio (makeOverridable ({ stdenv, ... } @ extraArgs:
+    overrideCC stdenv (buildPackages.sccacheWrapper.override ({
+      inherit (stdenv) cc;
+    } // lib.optionalAttrs (builtins.hasAttr "extraConfig" extraArgs) {
+      extraConfig = extraArgs.extraConfig;
+    }))) {
+      inherit stdenv;
+    });
 
   cccc = callPackage ../development/tools/analysis/cccc { };
 

@@ -135,6 +135,7 @@
   ./programs/calls.nix
   ./programs/captive-browser.nix
   ./programs/ccache.nix
+  ./programs/sccache.nix
   ./programs/cdemu.nix
   ./programs/chromium.nix
   ./programs/clickshare.nix
