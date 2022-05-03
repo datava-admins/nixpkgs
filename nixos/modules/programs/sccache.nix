@@ -75,6 +75,7 @@ in {
               export SCCACHE_START_SERVER=1
               export SCCACHE_ERROR_LOG=/tmp/sccache_log.txt
               export SCCACHE_LOG=debug
+              export SCCACHE_NO_DAEMON=1
               if [ ! -d "$SCCACHE_DIR" ]; then
                 echo "====="
                 echo "Directory '$SCCACHE_DIR' does not exist"
