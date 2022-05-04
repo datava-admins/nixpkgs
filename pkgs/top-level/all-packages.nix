@@ -19597,7 +19597,7 @@ with pkgs;
 
   mesa = callPackage ../development/libraries/mesa {
     llvmPackages = llvmPackages_latest;
-    galliumDrivers = if stdenv.targetPlatform.isx86_64 then
+    galliumDrivers = if stdenv.targetPlatform.isx86 then
       [ "r300" "r600" "radeonsi" "nouveau" "virgl" "svga" "swrast" "iris" "crocus" "i915" "zink" ]
     else
       [ "auto" ];
@@ -22361,6 +22361,8 @@ with pkgs;
   timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
   timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
+
+  mssql = recurseIntoAttrs (callPackages ../servers/sql/mssql/15.x.nix {});
 
   inherit (import ../servers/sql/postgresql pkgs)
     postgresql_10
