@@ -26,7 +26,7 @@
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.4.4";
+  version = "3.5.0";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +34,7 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-e4me4mpK0N3UyM5MuJP3jxwM5h1dGBd+JzAr5f3BOGQ=";
+    sha256 = "sha256-eFtBdnwHaLirzZaHDw6SRfmsqO3dmBB8Y9csJuiTf1A=";
   };
 
   patches = [
@@ -50,15 +50,18 @@ mkDerivation rec {
     done
   '';
 
+  # required to not include inkscape in the wrapper
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
     inkscape
     sphinx
   ];
 
   buildInputs = [
+    extra-cmake-modules
     inotify-tools
     libcloudproviders
     libsecret
@@ -95,7 +98,7 @@ mkDerivation rec {
     description = "Nextcloud themed desktop client";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ kranzes SuperSandro2000 ];
     platforms = platforms.linux;
   };
 }
