@@ -22836,6 +22836,8 @@ with pkgs;
 
   beefi = callPackage ../os-specific/linux/beefi { };
 
+  below = callPackage ../os-specific/linux/below { };
+
   blktrace = callPackage ../os-specific/linux/blktrace { };
 
   bluez5 = callPackage ../os-specific/linux/bluez { };
