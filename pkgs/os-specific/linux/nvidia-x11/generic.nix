@@ -2,6 +2,7 @@
 , url ? null
 , sha256_32bit ? null
 , sha256_64bit
+, openSha256 ? null
 , settingsSha256
 , settingsVersion ? version
 , persistencedSha256
@@ -100,6 +101,7 @@ let
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 
     passthru = {
+      open = mapNullable (hash: callPackage (import ./open.nix self hash) { }) openSha256;
       settings = (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
         withGtk2 = preferGtk2;
         withGtk3 = !preferGtk2;
