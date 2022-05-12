@@ -346,6 +346,8 @@ in {
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
     nvidia_x11             = nvidiaPackages.stable;
 
+    nvidia_x11_beta_open   = nvidiaPackages.beta.open;
+
     openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
 
     ply = callPackage ../os-specific/linux/ply { };
