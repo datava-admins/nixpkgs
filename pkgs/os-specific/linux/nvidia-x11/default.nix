@@ -3,9 +3,7 @@
 let
   generic = args: let
     imported = import ./generic.nix args;
-  in if lib.versionAtLeast args.version "391"
-    && stdenv.hostPlatform.system != "x86_64-linux" then null
-  else callPackage imported {
+  in callPackage imported {
     lib32 = (pkgsi686Linux.callPackage imported {
       libsOnly = true;
       kernel = null;

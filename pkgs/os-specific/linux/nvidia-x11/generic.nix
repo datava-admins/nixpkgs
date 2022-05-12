@@ -36,7 +36,6 @@ with lib;
 
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;
-assert versionAtLeast version "391" -> stdenv.hostPlatform.system == "x86_64-linux";
 
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
