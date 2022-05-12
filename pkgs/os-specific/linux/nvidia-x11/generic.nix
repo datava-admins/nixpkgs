@@ -76,7 +76,7 @@ let
     outputs = [ "out" ]
         ++ optional i686bundled "lib32"
         ++ optional (!libsOnly) "bin"
-        ++ optional firmware "firmware";
+        ++ optional (!libsOnly && firmware) "firmware";
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
