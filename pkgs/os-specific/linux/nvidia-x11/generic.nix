@@ -28,6 +28,8 @@
   disable32Bit ? false
   # 32 bit libs only version of this package
 , lib32 ? null
+  # Whether to extract the GSP firmware
+, firmware ? openSha256 != null
 }:
 
 with lib;
@@ -73,7 +75,8 @@ let
 
     outputs = [ "out" ]
         ++ optional i686bundled "lib32"
-        ++ optional (!libsOnly) "bin";
+        ++ optional (!libsOnly) "bin"
+        ++ optional firmware "firmware";
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
