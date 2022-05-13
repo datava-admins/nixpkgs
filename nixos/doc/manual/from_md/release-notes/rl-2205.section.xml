@@ -2393,7 +2393,10 @@
           <literal>open</literal> that can be used to opt in the
           opensource version of NVIDIA kernel driver. Note that the
           driver’s support for GeForce and Workstation GPUs is still
-          alpha quality.
+          alpha quality, see
+          <link xlink:href="https://developer.nvidia.com/blog/nvidia-releases-open-source-gpu-kernel-modules/">NVIDIA
+          Releases Open-Source GPU Kernel Modules</link> for the
+          official announcement.
         </para>
       </listitem>
       <listitem>
