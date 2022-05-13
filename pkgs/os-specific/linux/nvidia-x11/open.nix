@@ -1,4 +1,4 @@
-nvidia_x11: sha256:
+nvidia_x11: hash:
 { stdenv
 , lib
 , fetchFromGitHub
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "NVIDIA";
     repo = "open-gpu-kernel-modules";
     rev = nvidia_x11.version;
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
