@@ -271,8 +271,6 @@ in {
       });
     };
 
-    anbox = callPackage ../os-specific/linux/anbox/kmod.nix { };
-
     apfs = callPackage ../os-specific/linux/apfs { };
 
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
@@ -464,6 +462,8 @@ in {
 
     vmm_clock = callPackage ../os-specific/linux/vmm_clock { };
 
+    vmware = callPackage ../os-specific/linux/vmware { };
+
     wireguard = if lib.versionOlder kernel.version "5.6" then callPackage ../os-specific/linux/wireguard { } else null;
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
@@ -539,6 +539,7 @@ in {
     });
     linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
     linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
+    linux_5_17_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_17 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

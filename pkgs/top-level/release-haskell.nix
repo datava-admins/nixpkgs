@@ -4,7 +4,7 @@
   https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
 
   To debug this expression you can use `hydra-eval-jobs` from
-  `pkgs.hydra-unstable` which prints the jobset description
+  `pkgs.hydra_unstable` which prints the jobset description
   to `stdout`:
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
@@ -203,6 +203,7 @@ let
         koka
         krank
         lambdabot
+        lhs2tex
         madlang
         matterhorn
         mueval
@@ -317,6 +318,7 @@ let
                 random
                 QuickCheck
                 cabal2nix
+                xhtml # isn't bundled for cross
               ;
             };
 
@@ -327,6 +329,7 @@ let
                 random
                 QuickCheck
                 cabal2nix
+                xhtml # isn't bundled for cross
               ;
             };
           };

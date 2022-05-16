@@ -89,12 +89,12 @@ in lib.makeExtensible (self: {
 
   unstable = lib.lowPrio (common rec {
     version = "2.8";
-    suffix = "pre20220428_${lib.substring 0 7 src.rev}";
+    suffix = "pre20220512_${lib.substring 0 7 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "4bb111c8d4c5692db2f735c2803f632f8c30b6ab";
-      sha256 = "sha256-AmxyCgpd53JBvvj6jPoGMP3eEisgu58YjaZEmhoTlGw=";
+      rev = "d354fc30b9768ea3dc737a88b57bf5e26d98135b";
+      sha256 = "sha256-wwhezwy3HKeHKJX48ps2qD46f6bL9GDxsFE2QJ+qPHQ=";
     };
   });
 })
