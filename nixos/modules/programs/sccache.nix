@@ -77,7 +77,7 @@ in {
             SCCACHE_LOG = "debug";
             SCCACHE_NO_DAEMON = "1";
             SCCACHE_START_SERVER = "1";
-            SCCACHE_DIR = ${cfg.cacheUrl};
+            SCCACHE_DIR = cfg.cacheUrl;
           };
           User = "root";
           Group = "nixbld";
