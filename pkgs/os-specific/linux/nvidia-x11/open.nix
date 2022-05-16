@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     rev = nvidia_x11.version;
     inherit hash;
   };
-
+  patches = [ ./ryzen_detection_patch.diff ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = kernel.makeFlags ++ [

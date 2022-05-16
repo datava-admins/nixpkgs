@@ -3,10 +3,12 @@
 with lib;
 let
   cfg = config.programs.sccache;
+  port = 4226;
 in {
   options.programs.sccache = {
     # host configuration
     enable = mkEnableOption "sccache";
+    service = mkEnableOption "sccache service";
     cacheBackend = mkOption {
       type = types.enum [ "local" "s3" "redis" "memcached" "gcs" "azure" ];
       description = "cache backend for sccache";
@@ -54,8 +56,35 @@ in {
             return '-z' if $v eq '-z' || $v eq '--zero-stats';
             exec('${pkgs.sccache}/bin/sccache', '-h');
           }
+          ''+
+          # Open TCP socket if it isn't open already.
+          ''
+          system("${pkgs.socat} TCP-LISTEN:${port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock || : & ");
+          ''+''
           exec('${pkgs.sccache}/bin/sccache', map { untaint $_ } @ARGV);
         '';
+      };
+    })
+
+    (mkIf cfg.service {
+      systemd.services.sccache = {
+        after = [ "network-online.target" ];
+        description = "sccache single instance server.";
+        wantedBy = [ "multi-user.target" ];
+
+        serviceConfig = {
+          environment = {
+            SCCACHE_LOG = "debug";
+            SCCACHE_NO_DAEMON = "1";
+            SCCACHE_START_SERVER = "1";
+            SCCACHE_DIR = ${cfg.cacheUrl};
+          };
+          User = "root";
+          Group = "nixbld";
+          # Create UNIX socket for use inside of nix sandbox.
+          ExecStartPre = "${pkgs.socat} TCP-LISTEN:${port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock";
+          ExecStart = "${pkgs.sccache}/bin/sccache";
+        };
       };
     })
 
