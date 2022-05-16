@@ -111,10 +111,6 @@ let
       meta.broken = since "10";
     };
 
-    jshint = super.jshint.override {
-      buildInputs = [ pkgs.phantomjs2 ];
-    };
-
     dat = super.dat.override {
       buildInputs = [ self.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
       meta.broken = since "12";
@@ -123,6 +119,7 @@ let
     # NOTE: this is a stub package to fetch npm dependencies for
     # ../../applications/video/epgstation
     epgstation = super."epgstation-../../applications/video/epgstation".override (drv: {
+      buildInputs = [ self.node-pre-gyp self.node-gyp-build ];
       meta = drv.meta // {
         platforms = pkgs.lib.platforms.none;
       };
@@ -333,7 +330,7 @@ let
 
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-oO1auBnBtieGdiN+57IgsA9Vr7Sy4HkILi1KSaUG4mpKfEbnkTGnLOxAqjLed+K2nsG/GtE1tJBtB7JxN1a78Q==";
+        sha512 = "sha512-l9MOgNCn/paDE+i1K2fp9NZ+Du4trzPTJsGkaQHVBufTGqzoYHuNk8JfzXuIn0Gte6/ZjyKj652Jq/Lc1tp2yw==";
       };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
@@ -343,6 +340,12 @@ let
           --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
           --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
       '';
+
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/prisma.nix {
+          inherit (self) prisma;
+        };
+      };
     };
 
     pulp = super.pulp.override {
