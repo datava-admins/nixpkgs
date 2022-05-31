@@ -159,7 +159,7 @@ in buildFHSUserEnv rec {
     xorg.libSM
     xorg.libICE
     gnome2.GConf
-    curl
+    curlWithGnuTls
     nspr
     nss
     cups

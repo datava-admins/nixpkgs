@@ -3,19 +3,18 @@
 
 buildDotnetModule rec {
   pname = "btcpayserver";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DcxRrVUen+JxMpiLDPfknpwCe962ifaekBeBnxJ0y88=";
+    sha256 = "sha256-jPR996MEBCTT3k12qOdW1AO8LxA/pvQnw0qiW6//lcs=";
   };
 
   projectFile = "BTCPayServer/BTCPayServer.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
   buildType = if altcoinSupport then "Altcoins-Release" else "Release";

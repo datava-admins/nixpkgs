@@ -1147,8 +1147,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "6.0.1";
-          sha256 = "sha256-1W1qKnjmyK80np+J6S/nku3QJGypxYnuE0BPw8Onzas=";
+          version = "6.0.4";
+          sha256 = "sha256-gdM7mG5ykBiwLHodZ2VyF4uYYuAPhXP2MturNvfQ5iM=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -1700,7 +1700,8 @@ let
         };
       };
 
-      matklad.rust-analyzer = callPackage ./rust-analyzer { };
+      rust-lang.rust-analyzer = callPackage ./rust-analyzer { };
+      matklad.rust-analyzer = self.rust-lang.rust-analyzer; # Previous publisher
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = with lib; {

@@ -14,20 +14,22 @@
 , nghttp2
 , libgit2
 , withExtraFeatures ? true
+, testers
+, nushell
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.61.0";
+  version = "0.63.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-1wTMXlFViJh/x+W7WqZ9uf1SV6X4er6SWO6qTjf9C94=";
+    sha256 = "sha256-4thvUSOSvH/bv0aW7hGGQMvtXdS+yDfZzPRLZmPZQMQ=";
   };
 
-  cargoSha256 = "sha256-aG5otxeVGBAi8uZd7xRnvwapfKT3kToBiYhFUTYIgHM=";
+  cargoSha256 = "sha256-ALUp6sPcmnJy/A078umyKg8KBv23P0vv8mwoO9OU+DQ=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ python3 ];
@@ -74,5 +76,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     shellPath = "/bin/nu";
+    tests.version = testers.testVersion {
+      package = nushell;
+    };
   };
 }

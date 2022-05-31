@@ -31,7 +31,7 @@
   # compatible with or current architecture.
   getCompatibleTools = lib.foldl (v: system:
     if v != null then v
-    else if localSystem.isCompatible (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
+    else if localSystem.canExecute (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
     else null) null (lib.attrNames archLookupTable);
 
   archLookupTable = table.${localSystem.libc}
@@ -398,8 +398,11 @@ in
       inherit (prevStage.stdenv) fetchurlBoot;
 
       extraAttrs = {
-        # TODO: remove this!
-        inherit (prevStage) glibc;
+        # remove before 22.11
+        glibc = lib.warn
+          ( "`stdenv.glibc` is deprecated and will be removed in release 22.11."
+           + " Please use `pkgs.glibc` instead.")
+          prevStage.glibc;
 
         inherit bootstrapTools;
         shellPackage = prevStage.bash;

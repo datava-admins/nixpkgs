@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.5.4";
+  version = "2022.5.5";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -118,9 +118,9 @@
       androidtv
       pure-python-adb
     ]
-    ++ adb-shell.extras-require.async
-    ++ androidtv.extras-require.async
-    ++ pure-python-adb.extras-require.async;
+    ++ adb-shell.optional-dependencies.async
+    ++ androidtv.optional-dependencies.async
+    ++ pure-python-adb.optional-dependencies.async;
     "anel_pwrctrl" = ps: with ps; [
     ]; # missing inputs: anel_pwrctrl-homeassistant
     "anthemav" = ps: with ps; [
@@ -279,7 +279,7 @@
     "bluetooth_le_tracker" = ps: with ps; [
       pygatt
     ]
-    ++ pygatt.extras-require.GATTTOOL;
+    ++ pygatt.optional-dependencies.GATTTOOL;
     "bluetooth_tracker" = ps: with ps; [
       bt-proximity
       pybluez
@@ -1026,7 +1026,8 @@
       greeclimate
     ];
     "greeneye_monitor" = ps: with ps; [
-    ]; # missing inputs: greeneye_monitor
+      greeneye-monitor
+    ];
     "greenwave" = ps: with ps; [
     ]; # missing inputs: greenwavereality
     "group" = ps: with ps; [
@@ -1449,7 +1450,8 @@
     "logi_circle" = ps: with ps; [
       aiohttp-cors
       ha-ffmpeg
-    ]; # missing inputs: logi_circle
+      logi-circle
+    ];
     "london_air" = ps: with ps; [
     ];
     "london_underground" = ps: with ps; [
@@ -1948,7 +1950,8 @@
       panacotta
     ];
     "panasonic_viera" = ps: with ps; [
-    ]; # missing inputs: panasonic_viera
+      panasonic-viera
+    ];
     "pandora" = ps: with ps; [
       pexpect
     ];
@@ -2032,7 +2035,8 @@
       poolsense
     ];
     "powerwall" = ps: with ps; [
-    ]; # missing inputs: tesla-powerwall
+      tesla-powerwall
+    ];
     "profiler" = ps: with ps; [
       guppy3
       objgraph
@@ -2271,9 +2275,9 @@
       wakeonlan
       zeroconf
     ]
-    ++ samsungctl.extras-require.websocket
-    ++ samsungtvws.extras-require.async
-    ++ samsungtvws.extras-require.encrypted;
+    ++ samsungctl.optional-dependencies.websocket
+    ++ samsungtvws.optional-dependencies.async
+    ++ samsungtvws.optional-dependencies.encrypted;
     "satel_integra" = ps: with ps; [
     ]; # missing inputs: satel_integra
     "scene" = ps: with ps; [
@@ -2339,7 +2343,8 @@
       py17track
     ];
     "sharkiq" = ps: with ps; [
-    ]; # missing inputs: sharkiq
+      sharkiq
+    ];
     "shell_command" = ps: with ps; [
     ];
     "shelly" = ps: with ps; [
@@ -2385,7 +2390,7 @@
     "skybeacon" = ps: with ps; [
       pygatt
     ]
-    ++ pygatt.extras-require.GATTTOOL;
+    ++ pygatt.optional-dependencies.GATTTOOL;
     "skybell" = ps: with ps; [
       skybellpy
     ];
@@ -2439,7 +2444,7 @@
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
-      pysnmplib
+      pysnmp
     ];
     "solaredge" = ps: with ps; [
       solaredge
@@ -2539,7 +2544,8 @@
       statsd
     ];
     "steam_online" = ps: with ps; [
-    ]; # missing inputs: steamodd
+      steamodd
+    ];
     "steamist" = ps: with ps; [
       aiohttp-cors
       aiosteamist
@@ -2765,7 +2771,7 @@
     "tradfri" = ps: with ps; [
       pytradfri
     ]
-    ++ pytradfri.extras-require.async;
+    ++ pytradfri.optional-dependencies.async;
     "trafikverket_ferry" = ps: with ps; [
       pytrafikverket
     ];
@@ -2884,7 +2890,8 @@
     "vacuum" = ps: with ps; [
     ];
     "vallox" = ps: with ps; [
-    ]; # missing inputs: vallox-websocket-api
+      vallox-websocket-api
+    ];
     "vasttrafik" = ps: with ps; [
     ]; # missing inputs: vtjp
     "velbus" = ps: with ps; [
@@ -3365,6 +3372,7 @@
     "gpslogger"
     "graphite"
     "gree"
+    "greeneye_monitor"
     "group"
     "growatt_server"
     "guardian"
@@ -3449,6 +3457,7 @@
     "logbook"
     "logentries"
     "logger"
+    "logi_circle"
     "london_air"
     "lookin"
     "lovelace"
@@ -3542,6 +3551,7 @@
     "ovo_energy"
     "owntracks"
     "p1_monitor"
+    "panasonic_viera"
     "panel_custom"
     "panel_iframe"
     "peco"
@@ -3557,6 +3567,7 @@
     "plugwise"
     "point"
     "poolsense"
+    "powerwall"
     "profiler"
     "prometheus"
     "prosegur"
@@ -3614,6 +3625,7 @@
     "sentry"
     "senz"
     "seventeentrack"
+    "sharkiq"
     "shell_command"
     "shelly"
     "shopping_list"
@@ -3658,6 +3670,7 @@
     "startca"
     "statistics"
     "statsd"
+    "steam_online"
     "steamist"
     "stookalert"
     "stream"
@@ -3732,6 +3745,7 @@
     "utility_meter"
     "uvc"
     "vacuum"
+    "vallox"
     "velbus"
     "venstar"
     "vera"

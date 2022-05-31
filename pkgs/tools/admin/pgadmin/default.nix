@@ -11,11 +11,11 @@
 let
 
   pname = "pgadmin";
-  version = "6.8";
+  version = "6.9";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-kS9GV/j28zkXTJZkRrG2JDgas210rQqXOJrwwxzepbw=";
+    sha256 = "sha256-C/0UDbPUuKCF9BBrDdlETGl7ALpFOmGaaxHVHxrIPVo=";
   };
 
   yarnDeps = mkYarnModules {
@@ -34,7 +34,7 @@ let
     flask_mail
     flask_migrate
     flask_sqlalchemy
-    flask_wtf
+    flask-wtf
     flask-compress
     passlib
     pytz
@@ -69,7 +69,7 @@ let
     boto3
   ];
 
-  # override necessary on pgadmin4 6.8
+  # override necessary on pgadmin4 6.9
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
     flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
       version = "2.0.3";
@@ -197,5 +197,6 @@ pythonPackages.buildPythonApplication rec {
     license = licenses.mit;
     changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major version}_${lib.versions.minor version}.html";
     maintainers = with maintainers; [ gador ];
+    mainProgram = "pgadmin4";
   };
 }

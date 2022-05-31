@@ -92,7 +92,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     numpy
     ocrmypdf
     pathvalidate
-    pdfminer
+    pdfminer-six
     pikepdf
     pillow
     pluggy
@@ -122,7 +122,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     threadpoolctl
     tika
     tqdm
-    twisted.extras-require.tls
+    twisted.optional-dependencies.tls
     txaio
     tzlocal
     urllib3
