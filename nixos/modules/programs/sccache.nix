@@ -59,7 +59,7 @@ in {
           ''+
           # Open TCP socket if it isn't open already.
           ''
-          system("${pkgs.socat} TCP-LISTEN:${port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock || : & ");
+          system("${pkgs.socat} TCP-LISTEN:${toString port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock || : & ");
           ''+''
           exec('${pkgs.sccache}/bin/sccache', map { untaint $_ } @ARGV);
         '';
@@ -82,7 +82,7 @@ in {
           User = "root";
           Group = "nixbld";
           # Create UNIX socket for use inside of nix sandbox.
-          ExecStartPre = "${pkgs.socat} TCP-LISTEN:${port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock";
+          ExecStartPre = "${pkgs.socat} TCP-LISTEN:${toString port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock";
           ExecStart = "${pkgs.sccache}/bin/sccache";
         };
       };
@@ -95,6 +95,7 @@ in {
 
         (self: super: {
           sccacheWrapper = super.sccacheWrapper.override {
+            # How to set port via env variable?
             extraConfig = ''
               export RUSTC_WRAPPER="${pkgs.sccache}/bin/sccache"
               export SCCACHE_DIR="${cfg.cacheUrl}"
