@@ -16,7 +16,6 @@
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , libclc
 , jdupes
-, vulkan-loader
 }:
 
 /** Packaging design:
