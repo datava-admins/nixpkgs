@@ -37,8 +37,8 @@ in {
   config = mkMerge [
     # host configuration
     (mkIf cfg.enable {
-      systemd.tmpfiles.rules = mkIf (cfg.cacheBackend == "local")
-        [ "d ${cfg.cacheUrl} 0770 root nixbld -" ];
+      systemd.tmpfiles.rules = lib.optional (cfg.cacheBackend == "local")
+        "d ${cfg.cacheUrl} 0770 root nixbld -";
 
       security.wrappers.nix-sccache = {
         owner = "root";
