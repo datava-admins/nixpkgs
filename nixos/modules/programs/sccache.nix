@@ -77,12 +77,12 @@ in {
             SCCACHE_LOG = "debug";
             SCCACHE_NO_DAEMON = "1";
             SCCACHE_START_SERVER = "1";
-            SCCACHE_DIR = cfg.cacheUrl;
+            SCCACHE_DIR = "${cfg.cacheUrl}";
           };
           User = "root";
           Group = "nixbld";
           # Create UNIX socket for use inside of nix sandbox.
-          ExecStartPre = "${pkgs.socat} TCP-LISTEN:${toString port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock";
+          ExecStartPre = "${pkgs.socat}/bin/socat TCP-LISTEN:${toString port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock";
           ExecStart = "${pkgs.sccache}/bin/sccache";
         };
       };
