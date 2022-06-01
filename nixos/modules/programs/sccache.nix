@@ -71,14 +71,14 @@ in {
         after = [ "network-online.target" ];
         description = "sccache single instance server.";
         wantedBy = [ "multi-user.target" ];
+        environment = {
+          SCCACHE_LOG = "debug";
+          SCCACHE_NO_DAEMON = "1";
+          SCCACHE_START_SERVER = "1";
+          SCCACHE_DIR = cfg.cacheUrl;
+        };
 
         serviceConfig = {
-          environment = {
-            SCCACHE_LOG = "debug";
-            SCCACHE_NO_DAEMON = "1";
-            SCCACHE_START_SERVER = "1";
-            SCCACHE_DIR = "${cfg.cacheUrl}";
-          };
           User = "root";
           Group = "nixbld";
           # Create UNIX socket for use inside of nix sandbox.
