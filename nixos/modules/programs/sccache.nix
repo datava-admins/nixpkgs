@@ -89,6 +89,7 @@ in {
         serviceConfig = {
           User = "root";
           Group = "nixbld";
+          Type = "forking";
         };
       };
     })
