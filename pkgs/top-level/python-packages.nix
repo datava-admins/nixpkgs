@@ -2843,6 +2843,8 @@ in {
 
   expects = callPackage ../development/python-modules/expects { };
 
+  expecttest = callPackage ../development/python-modules/expecttest { };
+
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
   explorerscript = callPackage ../development/python-modules/explorerscript { };
@@ -2890,8 +2892,6 @@ in {
   face_recognition_models = callPackage ../development/python-modules/face_recognition_models { };
 
   factory_boy = callPackage ../development/python-modules/factory_boy { };
-
-  fake_factory = callPackage ../development/python-modules/fake_factory { };
 
   fake-useragent = callPackage ../development/python-modules/fake-useragent { };
 
@@ -3287,6 +3287,8 @@ in {
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
   functools32 = callPackage ../development/python-modules/functools32 { };
+
+  functorch = callPackage ../development/python-modules/functorch { };
 
   funcy = callPackage ../development/python-modules/funcy { };
 
@@ -4730,6 +4732,8 @@ in {
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
   launchpadlib = callPackage ../development/python-modules/launchpadlib { };
+
+  laundrify-aio = callPackage ../development/python-modules/laundrify-aio { };
 
   lazr_config = callPackage ../development/python-modules/lazr/config.nix { };
 
@@ -6718,8 +6722,6 @@ in {
 
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
 
-  poster3 = callPackage ../development/python-modules/poster3 { };
-
   pot = callPackage ../development/python-modules/pot { };
 
   potentials = callPackage ../development/python-modules/potentials { };
@@ -8076,8 +8078,6 @@ in {
   pyspinel = callPackage ../development/python-modules/pyspinel { };
 
   pyspnego = callPackage ../development/python-modules/pyspnego { };
-
-  pyspotify = callPackage ../development/python-modules/pyspotify { };
 
   pysptk = callPackage ../development/python-modules/pysptk { };
 
@@ -11044,8 +11044,6 @@ in {
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
   webargs = callPackage ../development/python-modules/webargs { };
-
-  webapp2 = callPackage ../development/python-modules/webapp2 { };
 
   webassets = callPackage ../development/python-modules/webassets { };
 

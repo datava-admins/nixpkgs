@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , billiard
 , boto3
 , buildPythonPackage
@@ -57,11 +58,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace requirements/default.txt \
-      --replace "setuptools>=59.1.1,<59.7.0" "setuptools"
-  '';
-
   disabledTestPaths = [
     # test_eventlet touches network
     "t/unit/concurrency/test_eventlet.py"
@@ -84,6 +80,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
     license = licenses.bsd3;
