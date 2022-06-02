@@ -79,8 +79,8 @@ in {
         };
         # Create UNIX socket for use inside of nix sandbox.
         script = ''
-          ${pkgs.socat}/bin/socat TCP-LISTEN:${toString port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock &
-          ${pkgs.sccache}/bin/sccache
+          ${pkgs.sccache}/bin/sccache &
+          ${pkgs.socat}/bin/socat TCP:127.0.0.1:${toString port},reuseaddr UNIX-CONNECT:/tmp/sccache.sock
         '';
 
         serviceConfig = {
