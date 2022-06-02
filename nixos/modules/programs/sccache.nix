@@ -77,13 +77,15 @@ in {
           SCCACHE_START_SERVER = "1";
           SCCACHE_DIR = cfg.cacheUrl;
         };
+        # Create UNIX socket for use inside of nix sandbox.
+        script = ''
+          ${pkgs.socat}/bin/socat TCP-LISTEN:${toString port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock &
+          ${pkgs.sccache}/bin/sccache
+        '';
 
         serviceConfig = {
           User = "root";
           Group = "nixbld";
-          # Create UNIX socket for use inside of nix sandbox.
-          ExecStartPre = "${pkgs.socat}/bin/socat TCP-LISTEN:${toString port},reuseaddr,fork UNIX-CONNECT:/tmp/sccache.sock";
-          ExecStart = "${pkgs.sccache}/bin/sccache";
         };
       };
     })
