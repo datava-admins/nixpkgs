@@ -1,5 +1,5 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.05">
-  <title>Release 22.05 (“Quokka”, 2022.05/??)</title>
+  <title>Release 22.05 (“Quokka”, 2022.05/30)</title>
   <itemizedlist spacing="compact">
     <listitem>
       <para>
@@ -622,7 +622,7 @@
           version of the <literal>xmonad</literal> module, which will
           break your configuration if you use <literal>launch</literal>
           as entrypoint. The example code the corresponding nixos module
-          was adjusted, you way want to have a look at it.
+          was adjusted, you may want to have a look at it.
         </para>
       </listitem>
       <listitem>
@@ -2105,6 +2105,28 @@
         <programlisting language="bash">
 redis-cli save
 cp /var/lib/redis/dump.rdb &quot;/var/lib/redis-mastodon/dump.rdb&quot;
+</programlisting>
+      </listitem>
+      <listitem>
+        <para>
+          Peertube now uses services.redis.servers to start a new redis
+          server, instead of using a global redis server. This improves
+          compatibility with other services that use redis.
+        </para>
+        <para>
+          Redis database is used for storage only cache and job queue.
+          More information can be found here -
+          <link xlink:href="https://docs.joinpeertube.org/contribute-architecture">Peertube
+          architecture</link>.
+        </para>
+        <para>
+          If you do want to save the redis database, you can use the
+          following commands before upgrade OS:
+        </para>
+        <programlisting language="bash">
+redis-cli save
+sudo mkdir /var/lib/redis-peertube
+sudo cp /var/lib/redis/dump.rdb /var/lib/redis-peertube/dump.rdb
 </programlisting>
       </listitem>
       <listitem>
