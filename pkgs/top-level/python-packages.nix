@@ -403,6 +403,10 @@ in {
 
   aioshelly = callPackage ../development/python-modules/aioshelly { };
 
+  aioshutil = callPackage ../development/python-modules/aioshutil { };
+
+  aioskybell = callPackage ../development/python-modules/aioskybell { };
+
   aiosignal = callPackage ../development/python-modules/aiosignal { };
 
   aioslimproto = callPackage ../development/python-modules/aioslimproto { };
@@ -410,6 +414,8 @@ in {
   aiosmb = callPackage ../development/python-modules/aiosmb { };
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
+
+  aiosmtplib = callPackage ../development/python-modules/aiosmtplib { };
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
 
@@ -674,6 +680,8 @@ in {
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
+
+  asn1tools = callPackage ../development/python-modules/asn1tools { };
 
   aspell-python = callPackage ../development/python-modules/aspell-python { };
 
@@ -1549,6 +1557,10 @@ in {
 
   censys = callPackage ../development/python-modules/censys { };
 
+  coincurve = callPackage ../development/python-modules/coincurve {
+    inherit (pkgs) secp256k1;
+  };
+
   connect-box = callPackage ../development/python-modules/connect_box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
@@ -1592,6 +1604,8 @@ in {
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
 
   cfn-lint = callPackage ../development/python-modules/cfn-lint { };
+
+  cfscrape = callPackage ../development/python-modules/cfscrape { };
 
   cftime = callPackage ../development/python-modules/cftime { };
 
@@ -2807,7 +2821,17 @@ in {
 
   etesync = callPackage ../development/python-modules/etesync { };
 
+  eth-abi = callPackage ../development/python-modules/eth-abi { };
+
+  eth-account = callPackage ../development/python-modules/eth-account { };
+
   eth-hash = callPackage ../development/python-modules/eth-hash { };
+
+  eth-keyfile = callPackage ../development/python-modules/eth-keyfile { };
+
+  eth-keys = callPackage ../development/python-modules/eth-keys { };
+
+  eth-rlp = callPackage ../development/python-modules/eth-rlp { };
 
   eth-typing = callPackage ../development/python-modules/eth-typing { };
 
@@ -2885,6 +2909,8 @@ in {
 
   ezdxf = callPackage ../development/python-modules/ezdxf { };
 
+  f90nml = callPackage ../development/python-modules/f90nml { };
+
   Fabric = callPackage ../development/python-modules/Fabric { };
 
   faadelays = callPackage ../development/python-modules/faadelays { };
@@ -2916,6 +2942,8 @@ in {
   faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
 
   fastapi = callPackage ../development/python-modules/fastapi { };
+
+  fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
 
   fastavro = callPackage ../development/python-modules/fastavro { };
 
@@ -3912,6 +3940,8 @@ in {
   hetzner = callPackage ../development/python-modules/hetzner { };
 
   heudiconv = callPackage ../development/python-modules/heudiconv { };
+
+  hexbytes = callPackage ../development/python-modules/hexbytes { };
 
   hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
 
@@ -5323,6 +5353,8 @@ in {
 
   mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
 
+  messagebird = callPackage ../development/python-modules/messagebird { };
+
   metakernel = callPackage ../development/python-modules/metakernel { };
 
   metar = callPackage ../development/python-modules/metar { };
@@ -5934,6 +5966,10 @@ in {
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
+
+  py-ecc = callPackage ../development/python-modules/py-ecc { };
+
+  py-eth-sig-utils = callPackage ../development/python-modules/py-eth-sig-utils { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
@@ -7414,7 +7450,7 @@ in {
 
   pyialarm = callPackage ../development/python-modules/pyialarm { };
 
-  pyialarmxr = callPackage ../development/python-modules/pyialarmxr { };
+  pyialarmxr-homeassistant = callPackage ../development/python-modules/pyialarmxr-homeassistant { };
 
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
@@ -7475,6 +7511,8 @@ in {
   pykulersky = callPackage ../development/python-modules/pykulersky { };
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
+
+  pykwb = callPackage ../development/python-modules/pykwb { };
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
 
@@ -7554,6 +7592,8 @@ in {
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
 
+  pymailgunner = callPackage ../development/python-modules/pymailgunner { };
+
   pymanopt = callPackage ../development/python-modules/pymanopt { };
 
   pymarshal = callPackage ../development/python-modules/pymarshal { };
@@ -7572,7 +7612,7 @@ in {
 
   pymbolic = callPackage ../development/python-modules/pymbolic { };
 
-  pymc3 = callPackage ../development/python-modules/pymc3 { };
+  pymc = callPackage ../development/python-modules/pymc { };
 
   pymdstat = callPackage ../development/python-modules/pymdstat { };
 
@@ -8045,6 +8085,8 @@ in {
   pysmart = callPackage ../development/python-modules/pysmart { };
 
   pysmartapp = callPackage ../development/python-modules/pysmartapp { };
+
+  pySmartDL = callPackage ../development/python-modules/pySmartDL { };
 
   pysmartthings = callPackage ../development/python-modules/pysmartthings { };
 
@@ -8760,6 +8802,8 @@ in {
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
+
+  pyunifiprotect = callPackage ../development/python-modules/pyunifiprotect { };
 
   pyupdate = callPackage ../development/python-modules/pyupdate { };
 
@@ -10779,6 +10823,8 @@ in {
   unidiff = callPackage ../development/python-modules/unidiff { };
 
   unifi = callPackage ../development/python-modules/unifi { };
+
+  unifi-discovery = callPackage ../development/python-modules/unifi-discovery { };
 
   unify = callPackage ../development/python-modules/unify { };
 

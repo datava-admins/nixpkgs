@@ -24,6 +24,8 @@ let
 
     alcotest-mirage = callPackage ../development/ocaml-modules/alcotest/mirage.nix {};
 
+    alsa = callPackage ../development/ocaml-modules/alsa { };
+
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
     angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
@@ -33,6 +35,8 @@ let
     angstrom-unix = callPackage ../development/ocaml-modules/angstrom-unix { };
 
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
+
+    ao = callPackage ../development/ocaml-modules/ao { };
 
     apron = callPackage ../development/ocaml-modules/apron { };
 
@@ -312,6 +316,8 @@ let
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
+    dtools = callPackage ../development/ocaml-modules/dtools { };
+
     duff = callPackage ../development/ocaml-modules/duff { };
 
     dum = callPackage ../development/ocaml-modules/dum { };
@@ -344,6 +350,8 @@ let
     dune-rpc = callPackage ../development/ocaml-modules/dune-rpc { };
 
     dune-site = callPackage ../development/ocaml-modules/dune-site { };
+
+    duppy = callPackage ../development/ocaml-modules/duppy { };
 
     duration =  callPackage ../development/ocaml-modules/duration { };
 
@@ -479,6 +487,8 @@ let
     gsl = callPackage ../development/ocaml-modules/gsl {
       inherit (pkgs) gsl;
     };
+
+    gstreamer = callPackage ../development/ocaml-modules/gstreamer { };
 
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
@@ -690,6 +700,8 @@ let
       libllvm = pkgs.llvmPackages_10.libllvm;
     };
 
+    lo = callPackage ../development/ocaml-modules/lo { };
+
     logs = callPackage ../development/ocaml-modules/logs { };
 
     lru = callPackage ../development/ocaml-modules/lru { };
@@ -733,6 +745,10 @@ let
     macaddr-sexp = callPackage ../development/ocaml-modules/macaddr/sexp.nix { };
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
+
+    mad = callPackage ../development/ocaml-modules/mad { };
+
+    magic = callPackage ../development/ocaml-modules/magic { };
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 
@@ -870,6 +886,8 @@ let
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
+
+    mm = callPackage ../development/ocaml-modules/mm { };
 
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
@@ -1111,6 +1129,8 @@ let
 
     posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
 
+    posix-time2 = callPackage ../development/ocaml-modules/posix/time2.nix { };
+
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
     postgresql = callPackage ../development/ocaml-modules/postgresql {
@@ -1130,6 +1150,10 @@ let
     psq = callPackage ../development/ocaml-modules/psq { };
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
+
+    pulseaudio = callPackage ../development/ocaml-modules/pulseaudio {
+      inherit (pkgs) pulseaudio;
+    };
 
     pure-splitmix = callPackage ../development/ocaml-modules/pure-splitmix { };
 
@@ -1204,6 +1228,10 @@ let
     parany = callPackage ../development/ocaml-modules/parany { };
 
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
+
+    portaudio = callPackage ../development/ocaml-modules/portaudio {
+      inherit (pkgs) portaudio;
+    };
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
@@ -1378,6 +1406,8 @@ let
     uchar = callPackage ../development/ocaml-modules/uchar { };
 
     uecc = callPackage ../development/ocaml-modules/uecc { };
+
+    unix-errno = callPackage ../development/ocaml-modules/unix-errno { };
 
     utop = callPackage ../development/tools/ocaml/utop { };
 

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.6.0";
+  version = "2022.6.3";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -1207,7 +1207,7 @@
       pyialarm
     ];
     "ialarm_xr" = ps: with ps; [
-      pyialarmxr
+      pyialarmxr-homeassistant
     ];
     "iammeter" = ps: with ps; [
     ]; # missing inputs: iammeter
@@ -1386,7 +1386,8 @@
       pykulersky
     ];
     "kwb" = ps: with ps; [
-    ]; # missing inputs: pykwb
+      pykwb
+    ];
     "lacrosse" = ps: with ps; [
       pylacrosse
     ];
@@ -1514,7 +1515,8 @@
     ];
     "mailgun" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: pymailgunner
+      pymailgunner
+    ];
     "manual" = ps: with ps; [
     ];
     "manual_mqtt" = ps: with ps; [
@@ -1568,7 +1570,8 @@
       aiohttp-cors
     ];
     "message_bird" = ps: with ps; [
-    ]; # missing inputs: messagebird
+      messagebird
+    ];
     "met" = ps: with ps; [
       pymetno
     ];
@@ -2876,7 +2879,9 @@
     ];
     "unifiprotect" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: pyunifiprotect unifi-discovery
+      pyunifiprotect
+      unifi-discovery
+    ];
     "universal" = ps: with ps; [
     ];
     "upb" = ps: with ps; [
@@ -3510,6 +3515,7 @@
     "lutron_caseta"
     "lyric"
     "mailbox"
+    "mailgun"
     "manual"
     "manual_mqtt"
     "maxcube"
@@ -3779,6 +3785,7 @@
     "ukraine_alarm"
     "unifi"
     "unifi_direct"
+    "unifiprotect"
     "universal"
     "upb"
     "upcloud"
