@@ -160,7 +160,6 @@ self = stdenv.mkDerivation {
     intltool bison flex file
     python3Packages.python python3Packages.Mako
     jdupes
-    vulkan-loader
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
     wayland-scanner
   ];
