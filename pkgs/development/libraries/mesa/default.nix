@@ -5,7 +5,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind
-, vulkan-loader
+#, vulkan-loader
 , galliumDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
