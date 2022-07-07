@@ -231,6 +231,7 @@
   ./programs/weylus.nix
   ./programs/wireshark.nix
   ./programs/wshowkeys.nix
+  ./programs/xfconf.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/xss-lock.nix
@@ -352,6 +353,7 @@
   ./services/databases/cockroachdb.nix
   ./services/databases/couchdb.nix
   ./services/databases/dragonflydb.nix
+  ./services/databases/dgraph.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
   ./services/databases/hbase.nix
@@ -826,6 +828,7 @@
   ./services/networking/libreswan.nix
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
+  ./services/networking/lokinet.nix
   ./services/networking/lxd-image-server.nix
   ./services/networking/magic-wormhole-mailbox-server.nix
   ./services/networking/matterbridge.nix
@@ -1057,6 +1060,7 @@
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/grocy.nix
+  ./services/web-apps/healthchecks.nix
   ./services/web-apps/hedgedoc.nix
   ./services/web-apps/hledger-web.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
@@ -1080,6 +1084,7 @@
   ./services/web-apps/nexus.nix
   ./services/web-apps/nifi.nix
   ./services/web-apps/node-red.nix
+  ./services/web-apps/phylactery.nix
   ./services/web-apps/pict-rs.nix
   ./services/web-apps/peertube.nix
   ./services/web-apps/plantuml-server.nix

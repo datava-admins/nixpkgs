@@ -218,8 +218,8 @@ let
         mktplcRef = {
           name = "nord-visual-studio-code";
           publisher = "arcticicestudio";
-          version = "0.18.0";
-          sha256 = "sha256-Uo6peR+2ZNX6nwJ0Yar32Pe0rfBZ+f6ef1cYhUvVUbE=";
+          version = "0.19.0";
+          sha256 = "sha256-awbqFv6YuYI0tzM/QbHRTUl4B2vNUdy52F4nPmv+dRU=";
         };
         meta = with lib; {
           description = "An arctic, north-bluish clean and elegant Visual Studio Code theme.";
@@ -247,8 +247,8 @@ let
         mktplcRef = {
           name = "nix-env-selector";
           publisher = "arrterian";
-          version = "1.0.7";
-          sha256 = "0e76885c9dbb6dca4eac8a75866ec372b948cc64a3a3845327d7c3ef6ba42a57";
+          version = "1.0.9";
+          sha256 = "sha256-TkxqWZ8X+PAonzeXQ+sI9WI+XlqUHll7YyM7N9uErk0=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -310,14 +310,18 @@ let
         mktplcRef = {
           name = "vscode-pylance";
           publisher = "MS-python";
-          version = "2022.1.5";
-          sha256 = "1b5ihrac9xsq35a39vlq7krr1ffqpdjxdlhv9s056hs033kayazl";
+          version = "2022.7.11";
+          sha256 = "sha256-JatjLZXO7iwpBwjL1hrNafBiF81CaozWWANyRm8A36Y=";
         };
 
         buildInputs = [ nodePackages.pyright ];
 
-        meta = {
-          license = lib.licenses.unfree;
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/ms-python.vscode-pylance/changelog";
+          description = "A performant, feature-rich language server for Python in VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance";
+          homepage = "https://github.com/microsoft/pylance-release";
+          license = licenses.unfree;
         };
       };
 
@@ -471,11 +475,11 @@ let
         mktplcRef = {
           name = "vscode-tailwindcss";
           publisher = "bradlc";
-          version = "0.6.13";
-          sha256 = "098vrm28b7jpzk0c2d0cgxvdw4jsswzf18cx1m9jwsm1j40fp5f4";
+          version = "0.8.6";
+          sha256 = "sha256-v15KuD3eYFCsrworCJ1SZAMkyZKztAwWKmfwmbirleI=";
         };
         meta = with lib; {
-          license = licenses.mpl20;
+          license = licenses.mit;
         };
       };
 
@@ -779,8 +783,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "12.0.7";
-          sha256 = "sha256-gPhiytthf35eDhtzkSK2JZjtj4877la3hB1Cswbrszw=";
+          version = "12.1.1";
+          sha256 = "0i1wxgc61rrf11zff0481dg9s2lmv1ngpwx8nb2ygf6lh0axr7cj";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1150,8 +1154,8 @@ let
           mktplcRef = {
             name = "vscode-pull-request-github";
             publisher = "github";
-            version = "0.37.2022030309";
-            sha256 = "1icmg2ssdkxvwp8mn8zzakwn42hrdglsdgfnaf8va4vd9mqixl1v";
+            version = "0.45.2022062709";
+            sha256 = "119dz79vl2pngf6327zbfw97qnci8xg14d23wdd4n75jmra2wrbz";
           };
           meta = { license = lib.licenses.mit; };
         };
@@ -1502,8 +1506,8 @@ let
         mktplcRef = {
           name = "vscode-clangd";
           publisher = "llvm-vs-code-extensions";
-          version = "0.1.15";
-          sha256 = "0skasnc490wp0l5xzpdmwdzjr4qiy63kg2qi27060m5yqkq3h8xn";
+          version = "0.1.17";
+          sha256 = "1vgk4xsdbx0v6sy09wkb63qz6i64n6qcmpiy49qgh2xybskrrzvf";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1519,6 +1523,22 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      lucperkins.vrl-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "lucperkins";
+          name = "vrl-vscode";
+          version = "0.1.4";
+          sha256 = "sha256-xcGa43iPwUR6spOJGTmmWA1dOMNMQEdiuhMZPYZ+dTU=";
+        };
+        meta = {
+          description = "VS Code extension for Vector Remap Language (VRL)";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=lucperkins.vrl-vscode";
+          homepage = "https://github.com/lucperkins/vrl-vscode";
+          license = lib.licenses.mpl20;
+          maintainers = with lib.maintainers; [ lucperkins ];
         };
       };
 
@@ -1915,6 +1935,22 @@ let
         };
       };
 
+      piousdeer.adwaita-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "adwaita-theme";
+          publisher = "piousdeer";
+          version = "1.0.7";
+          sha256 = "zfG9ktxOCUOJaNrWtblq+ktSMppwp1SaB/39F1qfQew=";
+        };
+        meta = with lib; {
+          description = "Theme for the GNOME desktop";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=piousdeer.adwaita-theme";
+          homepage = "https://github.com/piousdeer/vscode-adwaita";
+          license = licenses.gpl3;
+          maintainers = with maintainers; [ wyndon ];
+        };
+      };
+
       prisma.prisma = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "prisma";
@@ -2172,8 +2208,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.1.7";
-          sha256 = "sha256-C0jYDIDBK1JH8eFaFmCUilBXCbU5y2TRF3OZAw9ijoY=";
+          version = "2.2.5";
+          sha256 = "0ayhlzh3b2mcdx6mdj00y4qxvv6mirfpnp8q5zvidm6sv3vwlcj0";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -2426,8 +2462,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.22.2";
-          sha256 = "sha256-dtIlgODzRdoMKnG9050ZcCX3w15A/R3FaMc+ZylvBbU=";
+          version = "1.23.1";
+          sha256 = "sha256-k3z3n+29vqvC/FqjrHUBnYIVcKuJpiT+nITbqVm0Low=";
         };
         meta = {
           license = lib.licenses.mit;

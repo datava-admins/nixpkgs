@@ -287,6 +287,13 @@
       </listitem>
       <listitem>
         <para>
+          The Redis module now disables RDB persistence when
+          <literal>services.redis.servers.&lt;name&gt;.save = []</literal>
+          instead of using the Redis default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Matrix Synapse now requires entries in the
           <literal>state_group_edges</literal> table to be unique, in
           order to prevent accidentally introducing duplicate
@@ -305,6 +312,11 @@
       </listitem>
       <listitem>
         <para>
+          Add udev rules for the Teensy family of microcontrollers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           There is a new module for the <literal>thunar</literal>
           program (the Xfce file manager), which depends on the
           <literal>xfconf</literal> dbus service, and also has a dbus
@@ -313,6 +325,13 @@
           has been renamed to
           <literal>programs.thunar.plugins</literal>, and in a future
           release it may be removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          There is a new module for the <literal>xfconf</literal>
+          program (the Xfce configuration storage system), which has a
+          dbus service.
         </para>
       </listitem>
     </itemizedlist>
