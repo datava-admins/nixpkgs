@@ -771,6 +771,8 @@ in {
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
 
+  atomicwrites-homeassistant = callPackage ../development/python-modules/atomicwrites-homeassistant { };
+
   atomman = callPackage ../development/python-modules/atomman { };
 
   atpublic = callPackage ../development/python-modules/atpublic { };
@@ -1617,6 +1619,8 @@ in {
   cgen = callPackage ../development/python-modules/cgen { };
 
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils { };
+
+  chacha20poly1305-reuseable = callPackage ../development/python-modules/chacha20poly1305-reuseable { };
 
   chai = callPackage ../development/python-modules/chai { };
 
@@ -5686,6 +5690,8 @@ in {
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
+  myst-docutils = callPackage ../development/python-modules/myst-docutils { };
+
   myst-nb = callPackage ../development/python-modules/myst-nb { };
 
   myst-parser = callPackage ../development/python-modules/myst-parser { };
@@ -7520,8 +7526,6 @@ in {
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
 
   pyialarm = callPackage ../development/python-modules/pyialarm { };
-
-  pyialarmxr-homeassistant = callPackage ../development/python-modules/pyialarmxr-homeassistant { };
 
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
@@ -9418,6 +9422,8 @@ in {
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
 
   rstcheck = callPackage ../development/python-modules/rstcheck { };
+
+  rstcheck-core = callPackage ../development/python-modules/rstcheck-core { };
 
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
