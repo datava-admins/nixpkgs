@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.29.1";
+  version = "0.29.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-L1MjPgypKWVTdR16grloRY1JoJ6giXqihsWFa8yWXd0=";
+    sha256 = "sha256-IZ94kYnZ1iNX4sgYF/XvRNvycXJ4fNmRwFgSpYcSopU=";
   };
-  vendorSha256 = "sha256-wM8OOOVw8Pb37/JMpz0AWbpJyHeDBQ0+DO15AiDduUU=";
+  vendorSha256 = "sha256-C1dOeVt+ocqj3s3tSXn8B/vHTRRWj8XU5RWmlQ0lZdA=";
 
   excludedPackages = "misc";
 
@@ -49,8 +49,5 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
-    # Need updated macOS SDK
-    # https://github.com/NixOS/nixpkgs/issues/101229
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

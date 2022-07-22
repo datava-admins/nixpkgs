@@ -2,7 +2,6 @@
 , lib
 , buildPackages
 , fetchFromGitLab
-, fetchpatch
 , removeReferencesTo
 , python3
 , meson
@@ -104,12 +103,6 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-      # Remove 44.1KHz from allowed rates (multiple regressions reported)
-      # To be removed when 0.3.53 is released
-      #(fetchpatch {
-      #  url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/16a7c274989f47b0c0d8ba192a30316b545bd26a.patch";
-      #  sha256 = "sha256-VZ7ChjcR/PGfmH2DmLxfIhd3mj9668l9zLO4k2KBoqg=";
-      #})
     ];
 
     nativeBuildInputs = [
