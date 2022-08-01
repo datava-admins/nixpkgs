@@ -38,7 +38,8 @@ buildPecl {
 
   meta = with lib; {
     description = "PDO driver for IBM databases";
-    license = licenses.asl20;
     homepage = "https://pecl.php.net/package/pdo_ibm";
+    license = licenses.asl20;
+    platforms = [ "x86_64-linux" ];
   };
 }
