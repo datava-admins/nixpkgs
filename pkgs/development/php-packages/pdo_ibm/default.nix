@@ -24,11 +24,15 @@ let
     '';
 };
 in
-buildPecl {
-  pname = "PDO_IBM";
-
+buildPecl rec {
+  pname = "pdo_ibm";
+  name = "PDO_IBM";
   version = "1.5.0";
-  sha256 = "sha256-GrAnl1tlyHGyrN/qWIJI6VZ3QauARMSX5WrUVpz8bJk=";
+
+  src = fetchurl {
+    url = "http://pecl.php.net/get/${name}-${version}.tgz";
+    sha256 = "sha256-GrAnl1tlyHGyrN/qWIJI6VZ3QauARMSX5WrUVpz8bJk=";
+  };
 
   internalDeps = [ php.extensions.pdo ];
 
