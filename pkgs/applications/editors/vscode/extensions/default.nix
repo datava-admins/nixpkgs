@@ -13,7 +13,7 @@
 , jq
 , shellcheck
 , moreutils
-, racket-minimal
+, racket
 , clojure-lsp
 , alejandra
 }:
@@ -34,11 +34,16 @@ let
         mktplcRef = {
           publisher = "1Password";
           name = "op-vscode";
-          version = "1.0.0";
-          sha256 = "sha256-ZeKTP3WKjyuR/ryBdJRHXJT+l2gbY4QnWNTsN9+4nOA=";
+          version = "1.0.1";
+          sha256 = "sha256-0SsHf1zZgmrb7oIsRU6Xpa3AvR8bSfANz5ZlRogjiS0=";
         };
-        meta = {
-          license = lib.licenses.mit;
+        meta = with lib; {
+          changelog = "https://github.com/1Password/op-vscode/releases";
+          description = "A VSCode extension that integrates your development workflow with 1Password service";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=1Password.op-vscode";
+          homepage = "https://github.com/1Password/op-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ _2gn ];
         };
       };
 
@@ -783,8 +788,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "12.1.1";
-          sha256 = "0i1wxgc61rrf11zff0481dg9s2lmv1ngpwx8nb2ygf6lh0axr7cj";
+          version = "12.1.2";
+          sha256 = "0wpmfrfpi6wl9v3dknx2qr2m74azpcw8bvhac21v67w6jxnl3jd9";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -901,17 +906,18 @@ let
         mktplcRef = {
           name = "magic-racket";
           publisher = "evzen-wybitul";
-          version = "0.5.7";
-          sha256 = "sha256-34/H0WgM73yzuOGU2w6Ipq7KuEBuN1bykcLGuvzY3mU=";
+          version = "0.6.4";
+          sha256 = "sha256-Hxa4VPm3QvJICzpDyfk94fGHu1hr+YN9szVBwDB8X4U=";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
           cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."magic-racket.general.racketPath".default = "${racket-minimal}/bin/racket"' package.json | sponge package.json
+          jq '.contributes.configuration.properties."magicRacket.general.racketPath".default = "${racket}/bin/racket"' package.json | sponge package.json
+          jq '.contributes.configuration.properties."magicRacket.general.racoPath".default = "${racket}/bin/raco"' package.json | sponge package.json
         '';
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/evzen-wybitul.magic-racket/changelog";
-          description = "The best coding experience for Racket in VS Code ";
+          description = "The best coding experience for Racket in VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=evzen-wybitul.magic-racket";
           homepage = "https://github.com/Eugleo/magic-racket";
           license = licenses.agpl3Only;
@@ -1330,8 +1336,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "8.27.2";
-          sha256 = "sha256-scvT6cjlMrfG4yrhWlUwGM7ozu1E0xAryPRpV7FGCas=";
+          version = "8.28.0";
+          sha256 = "sha256-ZH2n/r4iKNxf6QETmNnGc5KIAIE0hcAReX3p2MDkve8=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
@@ -1379,8 +1385,8 @@ let
         mktplcRef = {
           name = "svg";
           publisher = "jock";
-          version = "1.4.17";
-          sha256 = "sha256-CDxh/YRyDGocxG4qOcyLXA0zHCg0YJ7XUu3OjFFjleI=";
+          version = "1.4.19";
+          sha256 = "1yl5pxsayplkdqv5jipii7pyj85j2lc4zmibyr69470b6li264rq";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1648,8 +1654,8 @@ let
         mktplcRef = {
           name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.22.0";
-          sha256 = "sha256-+cY9uLQ4oIk7V/4uCNc6BdIAQCXvPPGeqd0apbDjDos=";
+          version = "1.22.1";
+          sha256 = "1ix363fjxi9g450rs3ghx44z3hppvasf0xpzgha93m90djd7ai52";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1709,9 +1715,7 @@ let
         };
       };
 
-      ms-python.python = callPackage ./python {
-        extractNuGet = callPackage ./python/extract-nuget.nix { };
-      };
+      ms-python.python = callPackage ./python { };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1859,8 +1863,8 @@ let
         mktplcRef = {
           name = "vscode-yaml";
           publisher = "redhat";
-          version = "1.7.0";
-          sha256 = "1bbjpaypp0mq5akww5f0pkpq01j0xhhvkfr44f4lb2rdhr5nmnvc";
+          version = "1.9.1";
+          sha256 = "10m70sahl7vf8y82gqz9yk6bk4k4b923xn5rk7fax1nqw0pkln2w";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1915,8 +1919,8 @@ let
         mktplcRef = {
           name = "material-icon-theme";
           publisher = "PKief";
-          version = "4.16.0";
-          sha256 = "sha256-AOHvWoVB26caNgEEnKBhw5Z/tRtaTSeVLkO6Rlc/kqo=";
+          version = "4.19.0";
+          sha256 = "1azkkp4bnd7n8v0m4325hfrr6p6ikid88xbxaanypji25pnyq5a4";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1955,8 +1959,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "3.14.0";
-          sha256 = "09dlm2awd2h0xmx1vcx95kdvz3xf4f5pd7zcdg3mb0g2az4nfld7";
+          version = "4.1.0";
+          sha256 = "sha256-YpdxRoeIesx4R2RIpJ8YmmHEmR3lezdN1efhhg14MzI=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
@@ -2248,8 +2252,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.2.5";
-          sha256 = "0ayhlzh3b2mcdx6mdj00y4qxvv6mirfpnp8q5zvidm6sv3vwlcj0";
+          version = "2.3.1";
+          sha256 = "0pm9i3zw4aa4qrcqnzb9bz166rl7p6nwb81m9rqzisdc85mx4s3x";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -2540,8 +2544,8 @@ let
         mktplcRef = {
           name = "vscode-import-cost";
           publisher = "wix";
-          version = "2.15.0";
-          sha256 = "0d3b6654cdck1syn74vmmd1jmgkrw5v4c4cyrhdxbhggkip732bc";
+          version = "3.3.0";
+          sha256 = "0wl8vl8n0avd6nbfmis0lnlqlyh4yp3cca6kvjzgw5xxdc5bl38r";
         };
         meta = with lib; {
           license = licenses.mit;
