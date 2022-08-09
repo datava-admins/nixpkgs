@@ -1,9 +1,10 @@
 { lib
-, python3Packages
+, python3
+, coreutils
 , fetchFromGitHub
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "mssql-cli";
   version = "1.09";
 
@@ -18,8 +19,11 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace "click >= 4.1,<7.1" "click >= 4.1,<8.2" \
       --replace "'mssql-cli.bat'," ""
+    patchShebangs mssql-cli
+    substituteInPlace mssql-cli \
+      --replace "python " "${python3}/bin/python "
   '';
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     applicationinsights
     click
     cli-helpers
@@ -31,13 +35,17 @@ python3Packages.buildPythonApplication rec {
     prompt-toolkit
     pygments
     sqlparse
+    wrapPython
   ];
 
   preCheck = ''
     rm pytest.ini
   '';
 
-  checkInputs = with python3Packages; [
+  postInstall = ''
+    wrapProgram $out/bin/mssql-cli --set PYTHONPATH $PYTHONPATH --prefix PATH : ${lib.makeBinPath [ python3 coreutils ]}
+  '';
+  checkInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
