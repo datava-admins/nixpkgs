@@ -5,11 +5,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cpm";
-  version = "0.35.2";
+  version = "0.35.4";
 
   src = fetchurl {
     url = "https://github.com/cpm-cmake/CPM.cmake/releases/download/v${version}/CPM.cmake";
-    sha256 = "sha256-QZ3h2x92ltvevcynNYiS+ZCPWnM6T0hyXLLVweFJX2w=";
+    sha256 = "sha256-Ve+NhDAiAzH4x3ZUZjQkuZ69n65ljGc2h6cR62xnf+0=";
   };
 
   dontUnpack = true;
