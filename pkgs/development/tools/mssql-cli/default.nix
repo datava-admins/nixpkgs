@@ -2,8 +2,12 @@
 , python3
 , coreutils
 , fetchFromGitHub
+, azuredatastudio
 }:
 
+let
+  SQLTOOLS = "${azuredatastudio}/azuredatastudio/resources/app/extensions/mssql/sqltoolsservice/Linux/3.0.0-release.215/";
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "mssql-cli";
   version = "1.09";
@@ -43,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/mssql-cli --set PYTHONPATH $PYTHONPATH --prefix PATH : ${lib.makeBinPath [ python3 coreutils ]}
+    wrapProgram $out/bin/mssql-cli --set PYTHONPATH $PYTHONPATH --set MSSQLTOOLSSERVICE_PATH ${SQLTOOLS} --prefix PATH : ${lib.makeBinPath [ python3 coreutils ]}
   '';
   checkInputs = with python3.pkgs; [
     pytestCheckHook
