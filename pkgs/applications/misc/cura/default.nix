@@ -15,7 +15,7 @@ mkDerivation rec {
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
-    rev = "4.13.0";
+    rev = "4.13.2";
     sha256 = "sha256-7y4OcbeQHv+loJ4cMgPU0e818Zsv90EwARdztNWS8zM=";
   };
 
