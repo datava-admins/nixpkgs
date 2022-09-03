@@ -29124,7 +29124,7 @@ with pkgs;
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
 
-  mdev_gpu = callPackage ../applications/virtualization/mdev-gpu/default.nix { };
+  mdev-gpu = callPackage ../applications/virtualization/mdev-gpu/default.nix { };
 
   mdzk = callPackage ../applications/misc/mdzk {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
