@@ -26,8 +26,11 @@ in {
 
         systemd.services.mdev-gpu = {
           description = "Configure GPU(s) to a state where they are ready to be virtualized.";
+          wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Type = "oneshot";
+            Restart = "on-failure";
+            RestartSec = "5";
             ExecStart = "${pkgs.mdev-gpu}/bin/mdev-cli --config ${builtins.toFile "mdev-config" cfg.config}";
           };
         };
