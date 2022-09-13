@@ -28,17 +28,14 @@ stdenv.mkDerivation rec {
     install -m 0600 ${confFile} conf/keycloak.conf
   '' + ''
     install_plugin() {
-    if [ -d "$1" ]; then
-      find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 "{}" "providers/" \;
-    else
-      install -m 0500 "$1" "providers/"
-    fi
+      if [ -d "$1" ]; then
+        find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 "{}" "providers/" \;
+      else
+        install -m 0500 "$1" "providers/"
+      fi
     }
     ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
   '' + ''
-    export KC_HOME_DIR=$out
-    export KC_CONF_DIR=$out/conf
-
     patchShebangs bin/kc.sh
     bin/kc.sh build
 

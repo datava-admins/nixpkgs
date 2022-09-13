@@ -148,6 +148,11 @@ in mkLicense lset) ({
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  bsdOriginalShortened = {
+    spdxId = "BSD-4-Clause-Shortened";
+    fullName = "BSD 4 Clause Shortened";
+  };
+
   bsdOriginalUC = {
     spdxId = "BSD-4-Clause-UC";
     fullName = "BSD 4-Clause University of California-Specific";
@@ -886,6 +891,11 @@ in mkLicense lset) ({
     fullName = "Oracle VM VirtualBox Extension Pack Personal Use and Evaluation License (PUEL)";
     url = "https://www.virtualbox.org/wiki/VirtualBox_PUEL";
     free = false;
+  };
+
+  vol-sl = {
+    fullName = "Volatility Software License, Version 1.0";
+    url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
   };
 
   vsl10 = {
