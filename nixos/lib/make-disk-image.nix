@@ -433,8 +433,8 @@ let format' = format; in let
       ${optionalString (fsType == "btrfs") ''
         echo "Creating Btrfs subvolumes and moving files..."
         ${concatStringsSep "\n" createSubvolumes}
-        #mv -u /mnt/roottmp/* /mnt/
         df -h
+        du -shx /mnt/roottmp/*
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
         chown root:root /mnt/nix
         chown -R root:root /mnt/nix/store
