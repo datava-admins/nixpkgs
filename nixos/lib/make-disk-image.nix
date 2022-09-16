@@ -262,7 +262,7 @@ let format' = format; in let
       # Unfortunately cptofs only supports modes, not ownership, so we can't use
       # rsync's --chown option. Instead, we change the ownerships in the
       # VM script with chown.
-      rsync_flags="-a ${if fsType != "btrfs" then ''--no-o --no-g'' else ''''} $rsync_chmod_flags"
+      rsync_flags="-a --no-o --no-g $rsync_chmod_flags"
       if [[ "$source" =~ '*' ]]; then
         # If the source name contains '*', perform globbing.
         mkdir -p $root/$target
@@ -439,13 +439,17 @@ let format' = format; in let
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
-        #nixos-enter --root $mountPoint -- chown "root:root" "/nix"
-        #nixos-enter --root $mountPoint -- chown -R "root:root" "/nix/store"
-        #nixos-enter --root $mountPoint -- chown "root:nixbld" "/nix/store"
+        nixos-enter --root $mountPoint -- chown "root:root" "/etc"
+        nixos-enter --root $mountPoint -- chown "root:root" "/root"
+        nixos-enter --root $mountPoint -- chown "root:root" "/nix"
+        nixos-enter --root $mountPoint -- chown -R "root:root" "/nix/store"
+        nixos-enter --root $mountPoint -- chown "root:nixbld" "/nix/store"
         nixos-enter --root $mountPoint -- ls -lha /
         nixos-enter --root $mountPoint -- ls -lha /nix
         ls -lha /mnt/
         ls -lha /mnt/nix/
+        ls -lha /mnt/etc/
+        ls -lha /mnt/root/
       ''}
 
       echo "Install a configuration.nix"
