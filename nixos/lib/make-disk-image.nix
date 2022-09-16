@@ -437,9 +437,9 @@ let format' = format; in let
         du -shx /mnt/roottmp/*
         btrfs filesystem resize max /mnt/
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
-        chown root:root /mnt/nix
-        chown -R root:root /mnt/nix/store
-        chown root:nixbld /mnt/nix/store
+        #chown root:root /mnt/nix
+        #chown -R root:root /mnt/nix/store
+        #chown root:nixbld /mnt/nix/store
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
       ''}
@@ -469,6 +469,7 @@ let format' = format; in let
         group="''${groups_[$i]}"
         if [ -n "$user$group" ]; then
           # We have to nixos-enter since we need to use the user and group of the VM
+          echo nixos-enter --root $mountPoint -- chown -R "$user:$group" "$target"
           nixos-enter --root $mountPoint -- chown -R "$user:$group" "$target"
         fi
       done
