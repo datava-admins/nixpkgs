@@ -439,9 +439,9 @@ let format' = format; in let
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
-        nixos-enter --root $mountPoint -- chown "root:root" "/mnt/nix"
-        nixos-enter --root $mountPoint -- chown -R "root:root" "/mnt/nix/store"
-        nixos-enter --root $mountPoint -- chown "root:nixbld" "/mnt/nix/store"
+        nixos-enter --root $mountPoint -- chown "root:root" "/nix"
+        nixos-enter --root $mountPoint -- chown -R "root:root" "/nix/store"
+        nixos-enter --root $mountPoint -- chown "root:nixbld" "/nix/store"
       ''}
 
       echo "Install a configuration.nix"
