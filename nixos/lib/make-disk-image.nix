@@ -439,6 +439,7 @@ let format' = format; in let
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
+        nixos-enter --root $mountPoint -- chown "root:users" "/etc/NIXOS"
         nixos-enter --root $mountPoint -- chown "root:root" "/etc"
         nixos-enter --root $mountPoint -- chown "root:root" "/root"
         nixos-enter --root $mountPoint -- chown "root:root" "/nix"
