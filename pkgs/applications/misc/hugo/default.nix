@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.98.0";
+  version = "0.102.3";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oZzjnuu6C522qBs/A83jKIZ3dUrJRmKJ/C8NRX31yvw=";
+    sha256 = "sha256-qk5iv/oJ2Q8vR5jFl0gR7gA0H/3sHJOOlr8rwg7HjUY=";
   };
 
-  vendorSha256 = "sha256-HM5IE/rVNWyTfjUtVOlw+69+YoWYlLtU2FOXeH2BAi8=";
+  vendorSha256 = "sha256-oWOu8vmxe0a/nIgkjpx7XrB49rjcuqnnpuOMtI9bLfY=";
 
   doCheck = false;
 
@@ -22,6 +22,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [ "-s" "-w" "-X github.com/gohugoio/hugo/common/hugo.vendorInfo=nixpkgs" ];
 
   postInstall = ''
     $out/bin/hugo gen man

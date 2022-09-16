@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , requests
+, setuptools
 , six
 , stone
 , mock
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.30.0";
+  version = "11.34.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,12 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
-    rev = "v${version}";
-    hash = "sha256-w07r95MBAClf0F3SICiZsHLdslzf+JuxC+BVdTACCog=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bahl78c0MGu4AoANO/FWYq/DQWPC4T8WVdRHKzwg444=";
   };
 
   propagatedBuildInputs = [
     requests
+    setuptools
     six
     stone
   ];

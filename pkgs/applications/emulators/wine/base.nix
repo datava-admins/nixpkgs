@@ -6,7 +6,7 @@
   patches,
   vkd3dArches,
   moltenvk,
-  buildScript ? null, configureFlags ? []
+  buildScript ? null, configureFlags ? [], mainProgram ? "wine"
 }:
 
 with import ./util.nix { inherit lib; };
@@ -175,9 +175,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     done
   '';
 
-  # Until https://github.com/NixOS/nixpkgs/pull/172617 is applied,
-  # parallel builds do not always work because of a bug in dlltool.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   # https://bugs.winehq.org/show_bug.cgi?id=43530
   # https://github.com/NixOS/nixpkgs/issues/31989
@@ -193,9 +191,13 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     inherit version;
     homepage = "https://www.winehq.org/";
     license = with lib.licenses; [ lgpl21Plus ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode  # mono, gecko
+    ];
     description = if supportFlags.waylandSupport then "An Open Source implementation of the Windows API on top of OpenGL and Unix (with experimental Wayland support)" else "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     platforms = if supportFlags.waylandSupport then (lib.remove "x86_64-darwin" prevPlatforms) else prevPlatforms;
     maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira ];
-    mainProgram = "wine";
+    inherit mainProgram;
   };
 })

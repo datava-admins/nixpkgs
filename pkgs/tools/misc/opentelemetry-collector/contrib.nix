@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.47.0";
+  version = "0.59.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-IbpQd01uU6/Ihli+gVDjTB8T8cj//XHoZYcDjXD635Q=";
+    sha256 = "sha256-snkrgitPtrdX5LuMscmeeY9KQeBGsPApaDc2LRfRKJ0=";
   };
   # proxy vendor to avoid hash missmatches between linux and macOS
   proxyVendor = true;
-  vendorSha256 = "sha256-1svBCXfutjXfXfVqVHUTAt9T1ON/qbiS+VCt5kP/YIc=";
+  vendorSha256 = "sha256-u0JC/4Pav0ZZIvOzE22kdUWR5wgYAUN8/fKfjsDev0g=";
 
   subPackages = [ "cmd/otelcontribcol" ];
 

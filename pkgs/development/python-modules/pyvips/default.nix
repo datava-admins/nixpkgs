@@ -5,21 +5,22 @@
 , glib
 , vips
 , cffi
-, pkgconfig
+, pkgconfig  # from pythonPackages
+, pkg-config  # from pkgs
 , lib }:
 
 buildPythonPackage rec {
   pname = "pyvips";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "pyvips";
     rev = "v${version}";
-    sha256 = "sha256-qMVoVzqXALhPWVKLzu+VqihHPN7J+pMhKnXdb+ow0zw=";
+    sha256 = "sha256-9S7h3bkm+QP78cpemYS7l3c8t+wXsJ5MUAP2T50R/Mc=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig pkg-config ];
 
   buildInputs = [ glib vips ];
 
@@ -41,6 +42,6 @@ buildPythonPackage rec {
     description = "A python wrapper for libvips";
     homepage = "https://github.com/libvips/pyvips";
     license = licenses.mit;
-    maintainers = with maintainers; [ ccellado ];
+    maintainers = with maintainers; [ ccellado anthonyroussel ];
   };
 }

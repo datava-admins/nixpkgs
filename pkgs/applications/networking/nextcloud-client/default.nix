@@ -1,7 +1,6 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , extra-cmake-modules
 , inotify-tools
@@ -27,7 +26,7 @@
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.5.0";
+  version = "3.6.0";
 
   outputs = [ "out" "dev" ];
 
@@ -35,18 +34,13 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-eFtBdnwHaLirzZaHDw6SRfmsqO3dmBB8Y9csJuiTf1A=";
+    sha256 = "sha256-wAxq5xFlofn2xEguvewMvGcel9O+CN/1AycR3tv/xMA=";
   };
 
   patches = [
     # Explicitly move dbus configuration files to the store path rather than `/etc/dbus-1/services`.
     ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
     ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
-    # don't write cacheDir into home directory
-    (fetchpatch {
-      url = "https://github.com/nextcloud/desktop/commit/3a8aa8a2a88bc9b68098b7866e2a07aa23d3a33c.patch";
-      sha256 = "sha256-OviPANvXap3mg4haxRir/CK1aq8maWZDM/IVsN+OHgk=";
-    })
   ];
 
   postPatch = ''
@@ -83,9 +77,8 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
-    # See also: https://bugreports.qt.io/browse/QTBUG-85967
-    "--set QML_DISABLE_DISK_CACHE 1"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+    # make xdg-open overrideable at runtime
+    "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
   cmakeFlags = [
@@ -103,5 +96,6 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kranzes SuperSandro2000 ];
     platforms = platforms.linux;
+    mainProgram = "nextcloud";
   };
 }

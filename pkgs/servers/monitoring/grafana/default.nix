@@ -1,32 +1,24 @@
-{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests, tzdata, wire, fetchpatch }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests, tzdata, wire }:
 
 buildGoModule rec {
   pname = "grafana";
-  version = "8.5.2";
+  version = "9.1.4";
 
-  excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" ];
+  excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" ];
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-9m6fu+wwmKpw/ehAIfgLe5YzOqTP3BC6/9mUgLL9XS0=";
+    sha256 = "sha256-tMU8xfMbXdPpI8La036tzPozdUK7GsDGZklNetAZ3ho=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "1gq0wyqpgc7crbz8cd4dnwixhx7chnmbl2di4zcqs26g8y30q7rj";
+    sha256 = "sha256-+9Y2ymdlDfSvAsbaFcaTRl7e9NiH2GpNHvZIgssi7/w=";
   };
 
-  patches = [
-    # skip a flaky test, remove on the next update
-    (fetchpatch {
-      url = "https://github.com/grafana/grafana/commit/9e3a01a1bea3f4d5d99e53d55128d79160610349.patch";
-      sha256 = "sha256-rzZxNLn074JBb4DW3QC1zWNGe1uLGIlXvnjh60e8B3Q=";
-    })
-  ];
-
-  vendorSha256 = "sha256-ZL+A6Sz0uHg7ZzYHmA4EU5ZxfRXBLyKglk135iQT600=";
+  vendorSha256 = "sha256-frY84+Tp9qVj9Xs9l0c0u1YyYywMbXO4KS0AF5mpnhQ=";
 
   nativeBuildInputs = [ wire ];
 
@@ -35,6 +27,9 @@ buildGoModule rec {
     # From https://github.com/grafana/grafana/blob/v8.2.3/Makefile#L33-L35
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
+
+    GOARCH= CGO_ENABLED=0 go generate ./pkg/framework/coremodel
+    GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins
 
     # The testcase makes an API call against grafana.com:
     #

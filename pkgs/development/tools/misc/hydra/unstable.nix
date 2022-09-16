@@ -4,13 +4,11 @@
 , perlPackages
 , buildEnv
 , makeWrapper
-, autoconf
-, automake
 , libtool
 , unzip
 , pkg-config
 , sqlite
-, libpqxx_6
+, libpqxx
 , top-git
 , mercurial
 , darcs
@@ -21,12 +19,14 @@
 , libxslt
 , perl
 , postgresql
+, prometheus-cpp
 , nukeReferences
 , git
 , boehmgc
 , nlohmann_json
 , docbook_xsl
 , openssh
+, openldap
 , gnused
 , coreutils
 , findutils
@@ -55,7 +55,6 @@ let
     name = "hydra-perl-deps";
     paths = with perlPackages; lib.closePropagation
       [
-        ModulePluggable
         AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -85,6 +84,7 @@ let
         DigestSHA1
         EmailMIME
         EmailSender
+        FileLibMagic
         FileSlurper
         FileWhich
         IOCompress
@@ -114,12 +114,12 @@ let
         TermReadKey
         Test2Harness
         TestPostgreSQL
+        TestSimple13
         TextDiff
         TextTable
         UUID4Tiny
         XMLSimple
         YAML
-        nix
         nix.perl-bindings
         git
       ];
@@ -127,23 +127,26 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2022-02-07";
+  version = "2022-09-08";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "517dce285a851efd732affc084c7083aed2e98cd";
-    sha256 = "sha256-abWhd/VLNse3Gz7gcVbFANJLAhHV4nbOKjhVDmq/Zmg=";
+    rev = "d6cbf227cba90cf281f72f464393d75a45f2f3a8";
+    sha256 = "sha256-eMStY0/cS/blRGyyp1DUpP3N0SxYZrxah+hNJeKwDSw=";
   };
+
+  patches = [
+    # https://github.com/NixOS/hydra/pull/1215: scmdiff: Hardcode --git-dir
+    (fetchpatch {
+      url = "https://github.com/NixOS/hydra/commit/b6ea85a601ddac9cb0716d8cb4d446439fa0778f.patch";
+      sha256 = "sha256-QHjwLYQucdkBs6OsFI8kWo5ugkPXXlTgdbGFxKBHAHo=";
+    })
+  ];
 
   buildInputs =
     [
-      makeWrapper
-      libtool
-      unzip
-      nukeReferences
-      sqlite
-      libpqxx_6
+      libpqxx
       top-git
       mercurial
       darcs
@@ -152,18 +155,18 @@ stdenv.mkDerivation rec {
       openssl
       bzip2
       libxslt
+      nix
       perlDeps
       perl
-      nix
-      postgresql # for running the tests
-      nlohmann_json
-      boost
       pixz
+      boost
+      postgresql
+      nlohmann_json
+      prometheus-cpp
     ];
 
   hydraPath = lib.makeBinPath (
     [
-      sqlite
       subversion
       openssh
       nix
@@ -177,13 +180,21 @@ stdenv.mkDerivation rec {
       unzip
       git
       top-git
-      mercurial /*darcs*/
+      mercurial
+      darcs
       gnused
       breezy
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ]
   );
 
-  nativeBuildInputs = [ autoreconfHook pkg-config mdbook autoconf automake ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+    mdbook
+    unzip
+    nukeReferences
+  ];
 
   checkInputs = [
     cacert
@@ -191,20 +202,14 @@ stdenv.mkDerivation rec {
     glibcLocales
     python3
     libressl.nc
-  ];
-
-  patches = [
-    ./eval.patch
-    ./missing-std-string.patch
-    (fetchpatch {
-      url = "https://github.com/NixOS/hydra/commit/5ae26aa7604f714dcc73edcb74fe71ddc8957f6c.patch";
-      sha256 = "sha256-wkbWo8SFbT3qwVxwkKQWpQT5Jgb1Bb51yiLTlFdDN/I=";
-    })
+    openldap
   ];
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
   NIX_CFLAGS_COMPILE = "-pthread";
+
+  OPENLDAP_ROOT = openldap;
 
   shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
@@ -213,11 +218,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    # Change 5s timeout for init to 30s
+    substituteInPlace t/lib/HydraTestContext.pm \
+      --replace 'expectOkay(5, ("hydra-init"));' 'expectOkay(30, ("hydra-init"));'
+  '';
+
   preCheck = ''
     patchShebangs .
     export LOGNAME=''${LOGNAME:-foo}
     # set $HOME for bzr so it can create its trace file
     export HOME=$(mktemp -d)
+    # remove flaky test
+    rm t/Hydra/Controller/User/ldap-legacy.t
   '';
 
   postInstall = ''
@@ -239,7 +252,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    inherit perlDeps;
+    inherit nix perlDeps;
     tests.basic = nixosTests.hydra.hydra_unstable;
   };
 

@@ -5,17 +5,17 @@
 
 buildGoModule rec {
   pname = "nomad-pack";
-  version = "2022-04-12";
-  rev   = "50ad747d2a5a2b90af1b3564483510cb04fefbea";
+  version = "0.0.1-techpreview.3";
+  rev   = "3b4163b3b826c8408ae824238daaa45307d03380";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "sha256-VG6Dmx5WD2AzKReMbmrpzXCNhrJqaZY3aQV9P+4ET68=";
+    sha256 = "sha256-Br+BJRAo9qSJQjg2awQTnsYz76WReVWsTUw6XoUb1YY=";
   };
 
-  vendorSha256 = "sha256-7ovR2F9N94iFK/B5OXRcqfykOYHST3354+Ge2L8yzq0=";
+  vendorSha256 = "sha256-dUPDwKdkBXBfyfbFxrpgHwZ0Q5jB7aamClNmv+tLCGA=";
 
   # skip running go tests as they require network access
   doCheck = false;
