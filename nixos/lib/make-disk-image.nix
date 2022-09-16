@@ -437,11 +437,11 @@ let format' = format; in let
         du -shx /mnt/roottmp/*
         btrfs filesystem resize max /mnt/
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
-        #chown root:root /mnt/nix
-        #chown -R root:root /mnt/nix/store
-        #chown root:nixbld /mnt/nix/store
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
+        nixos-enter --root $mountPoint -- chown "root:root" "/mnt/nix"
+        nixos-enter --root $mountPoint -- chown -R "root:root" "/mnt/nix/store"
+        nixos-enter --root $mountPoint -- chown "root:nixbld" "/mnt/nix/store"
       ''}
 
       echo "Install a configuration.nix"
