@@ -434,6 +434,7 @@ let format' = format; in let
         echo "Creating Btrfs subvolumes and moving files..."
         ${concatStringsSep "\n" createSubvolumes}
         #mv -u /mnt/roottmp/* /mnt/
+        df -h
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
         chown root:root /mnt/nix
         chown -R root:root /mnt/nix/store
