@@ -406,7 +406,7 @@ let format' = format; in let
       preVM = prepareImage;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools btrfs-progs ];
       postVM = moveOrConvertImage + postVM;
-      memSize = 1024;
+      memSize = 2048;
     } ''
       export PATH=${binPath}:$PATH
 
