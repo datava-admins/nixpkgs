@@ -435,13 +435,13 @@ let format' = format; in let
         ${concatStringsSep "\n" createSubvolumes}
         df -h
         du -shx /mnt/roottmp/*
+        btrfs filesystem resize max /mnt/
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
         chown root:root /mnt/nix
         chown -R root:root /mnt/nix/store
         chown root:nixbld /mnt/nix/store
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
-        btrfs filesystem resize max /mnt
       ''}
 
       echo "Install a configuration.nix"
