@@ -444,6 +444,8 @@ let format' = format; in let
         nixos-enter --root $mountPoint -- chown "root:nixbld" "/nix/store"
         nixos-enter --root $mountPoint -- ls -lha /
         nixos-enter --root $mountPoint -- ls -lha /nix
+        ls -lha /mnt/
+        ls -lha /mnt/nix/
       ''}
 
       echo "Install a configuration.nix"
