@@ -4,6 +4,42 @@ let
 in {
   options = {
     ec2 = {
+      btrfs = {
+        enable = lib.mkOption {
+          default = false;
+          internal = true;
+          description = ''
+            Whether the EC2 instance uses a Btrfs root.
+          '';
+        };
+        subvols = lib.mkOption {
+          description = ''
+            Subvolumes to create in the image.
+
+            **NOTE:** This option is used only at image creation time, and
+            does not attempt to declaratively create or manage subvolumes 
+            on an existing system.
+          '';
+
+          default = {};
+
+          type = types.attrsOf (types.submodule {
+            options = {
+              mount = lib.mkOption {
+                description = "Where to mount this subvolume.";
+                type = types.nullOr types.string;
+                default = null;
+              };
+
+              properties = lib.mkOption {
+                description = "Properties?? to set on this subvolume.";
+                type = types.attrsOf types.string;
+                default = {};
+              };
+            };
+          });
+        };
+      };
       zfs = {
         enable = lib.mkOption {
           default = false;

@@ -128,8 +128,8 @@ in {
       inherit (cfg) contents format name;
       pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
 
-      fsType = "ext4";
-      partitionTableType = if config.ec2.efi then "efi"
+      fsType = if config.ec2.btrfs.enable then "btrfs" else "ext4";
+      partitionTableType = if config.ec2.efi || config.ec2.btrfs.enable then "efi"
                            else if config.ec2.hvm then "legacy+gpt"
                            else "none";
 
