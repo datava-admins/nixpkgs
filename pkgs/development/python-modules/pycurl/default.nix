@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , isPyPy
 , fetchPypi
@@ -72,11 +73,9 @@ buildPythonPackage rec {
     "test_libcurl_ssl_gnutls"
     # AssertionError: assert 'crypto' in ['curl']
     "test_ssl_in_static_libs"
-    # pycurl.error: (27, '')
-    "test_getinfo_raw_certinfo"
-    "test_request_with_certinfo"
-    "test_request_with_verifypeer"
-    "test_request_without_certinfo"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Fatal Python error: Segmentation fault
+    "cadata_test"
   ];
 
   meta = with lib; {
