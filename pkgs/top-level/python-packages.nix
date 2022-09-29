@@ -306,6 +306,8 @@ in {
 
   aioextensions = callPackage ../development/python-modules/aioextensions { };
 
+  aiofile = callPackage ../development/python-modules/aiofile { };
+
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
   aioflo = callPackage ../development/python-modules/aioflo { };
@@ -373,6 +375,8 @@ in {
   aiolip = callPackage ../development/python-modules/aiolip { };
 
   aiolyric = callPackage ../development/python-modules/aiolyric { };
+
+  aiomisc = callPackage ../development/python-modules/aiomisc { };
 
   aiomodernforms = callPackage ../development/python-modules/aiomodernforms { };
 
@@ -1599,6 +1603,8 @@ in {
     inherit (self) python numpy boost;
   });
 
+  caio = callPackage ../development/python-modules/caio { };
+
   cairo-lang = callPackage ../development/python-modules/cairo-lang { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi { };
@@ -2255,6 +2261,8 @@ in {
   databricks-cli = callPackage ../development/python-modules/databricks-cli { };
 
   databricks-connect = callPackage ../development/python-modules/databricks-connect { };
+
+  databricks-sql-connector = callPackage ../development/python-modules/databricks-sql-connector { };
 
   dataclasses = callPackage ../development/python-modules/dataclasses { };
 
@@ -2949,6 +2957,8 @@ in {
   enaml = callPackage ../development/python-modules/enaml { };
 
   enamlx = callPackage ../development/python-modules/enamlx { };
+
+  energyflow = callPackage ../development/python-modules/energyflow { };
 
   enhancements = callPackage ../development/python-modules/enhancements { };
 
@@ -4831,6 +4841,8 @@ in {
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
+  jsonschema_3 = callPackage ../development/python-modules/jsonschema/3_x.nix { };
+
   jsonstreams = callPackage ../development/python-modules/jsonstreams { };
 
   json-tricks = callPackage ../development/python-modules/json-tricks { };
@@ -5371,6 +5383,8 @@ in {
 
   logfury = callPackage ../development/python-modules/logfury { };
 
+  logging-journald = callPackage ../development/python-modules/logging-journald { };
+
   logi-circle = callPackage ../development/python-modules/logi-circle { };
 
   logical-unification = callPackage ../development/python-modules/logical-unification { };
@@ -5874,6 +5888,8 @@ in {
   msgpack = callPackage ../development/python-modules/msgpack { };
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
+
+  msgspec = callPackage ../development/python-modules/msgspec { };
 
   msldap = callPackage ../development/python-modules/msldap { };
 
@@ -6379,6 +6395,8 @@ in {
   open-garage = callPackage ../development/python-modules/open-garage { };
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
+
+  openai-whisper = callPackage ../development/python-modules/openai-whisper { };
 
   openant = callPackage ../development/python-modules/openant { };
 
@@ -7468,6 +7486,8 @@ in {
   };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
+
+  pybravia = callPackage ../development/python-modules/pybravia { };
 
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
@@ -10778,6 +10798,8 @@ in {
 
   temescal = callPackage ../development/python-modules/temescal { };
 
+  temperusb = callPackage ../development/python-modules/temperusb { };
+
   tempest = callPackage ../development/python-modules/tempest { };
 
   tempita = callPackage ../development/python-modules/tempita { };
@@ -11512,6 +11534,8 @@ in {
 
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
 
+  vector = callPackage ../development/python-modules/vector { };
+
   vehicle = callPackage ../development/python-modules/vehicle { };
 
   vega = callPackage ../development/python-modules/vega { };
@@ -11642,6 +11666,8 @@ in {
   waqiasync = callPackage ../development/python-modules/waqiasync { };
 
   wasabi = callPackage ../development/python-modules/wasabi { };
+
+  wasserstein = callPackage ../development/python-modules/wasserstein { };
 
   wasm = callPackage ../development/python-modules/wasm { };
 
