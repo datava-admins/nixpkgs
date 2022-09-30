@@ -69,6 +69,17 @@ in
         '';
       };
 
+      # Not sure how this impacts mariadb
+      # or what happens if jemalloc is enabled at compile time
+      # but not runtime(?)
+      withJemalloc = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to preload jemalloc to reduce memory fragmentation and overall usage.
+        '';
+      };
+
       dataDir = mkOption {
         type = types.path;
         example = "/var/lib/mysql";
@@ -474,6 +485,10 @@ in
             ) | ${cfg.package}/bin/mysql -N
           '') cfg.ensureUsers}
       '';
+
+      environment = {
+        LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+      };
 
       serviceConfig = mkMerge [
         {
