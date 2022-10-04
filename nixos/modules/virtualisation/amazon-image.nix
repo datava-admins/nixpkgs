@@ -15,7 +15,7 @@ let
     targetRoot = "$targetRoot/";
     wgetExtraOptions = "-q";
   };
-  ptpInitrd = any (mod: mod == "ptp") config.boot.initrd.kernelModules;
+  ptpInitrd = builtins.elem "ptp" config.boot.initrd.kernelModules;
 in
 
 {
