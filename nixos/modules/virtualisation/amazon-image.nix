@@ -37,8 +37,9 @@ in
       { assertion = cfg.efi -> cfg.hvm;
         message = "EC2 instances using EFI must be HVM instances.";
       }
-      { assertion = versionOlder config.boot.kernelPackages.kernel.version "5.17";
-        message = "ENA driver fails to build with kernel >= 5.17";
+      { assertion = (versionAtLeast config.boot.kernelPackages.ena.version "2.8") &&
+        !(elem "ptp" config.boot.initrd.kernelModules);
+        message = "ENA driver >= 2.8 requires ptp module in initrd";
       }
     ];
 
@@ -64,7 +65,7 @@ in
     boot.extraModulePackages = [
       config.boot.kernelPackages.ena
     ];
-    boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
+    boot.initrd.kernelModules = [ "ptp" "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
     boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
 
