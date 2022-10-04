@@ -15,6 +15,7 @@ let
     targetRoot = "$targetRoot/";
     wgetExtraOptions = "-q";
   };
+  ptpInitrd = any (mod: mod == "ptp") config.boot.initrd.kernelModules;
 in
 
 {
@@ -37,7 +38,7 @@ in
       { assertion = cfg.efi -> cfg.hvm;
         message = "EC2 instances using EFI must be HVM instances.";
       }
-      { assertion = (versionAtLeast config.boot.kernelPackages.ena.version "2.8" && !builtins.elem "ptp" config.boot.initrd.kernelModules);
+      { assertion = (versionAtLeast config.boot.kernelPackages.ena.version "2.8" && !ptpInitrd);
         message = "ENA driver >= 2.8 requires ptp module in initrd";
       }
     ];
