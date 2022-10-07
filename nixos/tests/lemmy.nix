@@ -14,15 +14,11 @@ in
     "${lemmyNodeName}" = {
       services.lemmy = {
         enable = true;
-        jwtSecretPath = pkgs.writeTextFile {
-          name = "lemmy-secret";
-          text = "very-secret-password123";
-        };
         ui.port = uiPort;
+        database.createLocally = true;
         settings = {
           hostname = "http://${lemmyNodeName}";
           port = backendPort;
-          database.createLocally = true;
           # Without setup, the /feeds/* and /nodeinfo/* API endpoints won't return 200
           setup = {
             admin_username = "mightyiam";

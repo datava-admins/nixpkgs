@@ -3,9 +3,9 @@ let
   common = opts: libsForQt5.callPackage (import ./common.nix opts) {};
 in rec {
   new-engine = common rec {
-    version = "A60";
-    sha256 = "sha256-E99Mf2T6Bg4NsFXzFn4kNf602DmtiyBk6Vcj6JfOPR0=";
-    installFiles = [ "UEFITool/UEFITool" "UEFIFind/UEFIFind" "UEFIExtract/UEFIExtract" ];
+    version = "A62";
+    sha256 = "sha256-U89j0BV57luv1c9hoYJtisKLxFezuaGFokZ29/NJ0xg=";
+    installFiles = [ "build/UEFITool/UEFITool" "build/UEFIFind/UEFIFind" "build/UEFIExtract/UEFIExtract" ];
   };
   old-engine = common rec {
     version = "0.28.0";

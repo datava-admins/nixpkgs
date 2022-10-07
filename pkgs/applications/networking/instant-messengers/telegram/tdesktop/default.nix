@@ -73,7 +73,7 @@ let
 in
 env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.1.1";
+  version = "4.2.4";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -82,13 +82,10 @@ env.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0b8nwimks6hfnb3bqik8d4s9z689hhj4p9ykqgc36pmpr54nyma8";
+    sha256 = "sha256-X2ZbjlL3YbPdXSgS+wqZL3FUW2xQ0DhqiOO5MR1QyLY=";
   };
 
   postPatch = ''
-    substituteInPlace Telegram/CMakeLists.txt \
-      --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
-
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
       --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
@@ -194,6 +191,6 @@ env.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

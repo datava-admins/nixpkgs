@@ -1,13 +1,14 @@
-{ stdenv, lib, buildPythonApplication, fetchPypi, matplotlib, numpy, pymavlink, pyserial
-, setuptools, wxPython_4_0, billiard, gnureadline, opencv4 }:
+{ stdenv, lib, buildPythonApplication, fetchPypi, lxml, matplotlib, numpy
+, opencv4, pymavlink, pyserial, setuptools, wxPython_4_0, billiard
+, gnureadline }:
 
 buildPythonApplication rec {
   pname = "MAVProxy";
-  version = "1.8.55";
+  version = "1.8.56";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RS3/U52n1Gs3cJtlZeE5z5q1EmC8NrPFt0mHhvIWVTA=";
+    sha256 = "sha256-wyY9oYWABkXNhlZW4RFuyZy/HEnv7cGFVbXVoEnIF1Q=";
   };
 
   postPatch = ''
@@ -16,13 +17,14 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
+    lxml
     matplotlib
     numpy
+    opencv4
     pymavlink
     pyserial
     setuptools
     wxPython_4_0
-    opencv4
   ] ++ lib.optionals stdenv.isDarwin [ billiard gnureadline ];
 
   # No tests
