@@ -144,6 +144,7 @@ mapAliases ({
   pytestrunner = throw "'pytestrunner' has been renamed to/replaced by 'pytest-runner'"; # Converted to throw 2022-09-24
   python-igraph = igraph; # added 2021-11-11
   python-lz4 = throw "'python-lz4' has been renamed to/replaced by 'lz4'"; # Converted to throw 2022-09-24
+  solo-python = solo1-cli; # added 2022-07-11
   python_magic = python-magic; # added 2022-05-07
   python_mimeparse = python-mimeparse; # added 2021-10-31
   python-language-server = throw "python-language-server is no longer maintained, use the python-lsp-server community fork instead."; # Added 2022-08-03
