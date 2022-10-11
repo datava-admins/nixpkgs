@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, bison, cmake, pkg-config
 , boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd, libfido2
 , numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
-, jemalloc
+, jemalloc, libaio
 }:
 
 let
@@ -27,7 +27,7 @@ self = stdenv.mkDerivation rec {
     boost curl icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
     zstd libfido2
   ] ++ lib.optionals stdenv.isLinux [
-    numactl libtirpc jemalloc
+    numactl libtirpc jemalloc libaio
   ] ++ lib.optionals stdenv.isDarwin [
     cctools CoreServices developer_cmds DarwinTools
   ];
