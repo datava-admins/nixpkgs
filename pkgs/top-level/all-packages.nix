@@ -733,7 +733,9 @@ with pkgs;
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
-  mangal = callPackage ../applications/misc/mangal { };
+  mangal = callPackage ../applications/misc/mangal {
+    buildGoModule = buildGo119Module;
+  };
 
   graphw00f = callPackage ../tools/security/graphw00f { };
 
@@ -1074,7 +1076,7 @@ with pkgs;
 
   _1password-gui = callPackage ../applications/misc/1password-gui { };
 
-  _1password-gui-beta = callPackage ../applications/misc/1password-gui/beta.nix { };
+  _1password-gui-beta = callPackage ../applications/misc/1password-gui { channel = "beta"; };
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
@@ -1144,7 +1146,7 @@ with pkgs;
   aefs = callPackage ../tools/filesystems/aefs { };
 
   aegisub = callPackage ../applications/video/aegisub ({
-    wxGTK = wxGTK31;
+    wxGTK = wxGTK32;
     inherit (darwin.apple_sdk.frameworks) CoreText CoreFoundation AppKit Carbon IOKit Cocoa;
   } // (config.aegisub or {}));
 
@@ -1500,7 +1502,7 @@ with pkgs;
 
   dosbox-staging = callPackage ../applications/emulators/dosbox-staging { };
 
-  duckstation = qt6Packages.callPackage ../applications/emulators/duckstation {};
+  duckstation = libsForQt5.callPackage ../applications/emulators/duckstation {};
 
   dynamips = callPackage ../applications/emulators/dynamips { };
 
@@ -4201,7 +4203,9 @@ with pkgs;
     });
   };
 
-  hysteria = callPackage ../tools/networking/hysteria { };
+  hysteria = callPackage ../tools/networking/hysteria {
+    buildGoModule = buildGo119Module;
+  };
 
   hyx = callPackage ../tools/text/hyx { };
 
@@ -6086,7 +6090,9 @@ with pkgs;
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
-  trivy = callPackage ../tools/admin/trivy { };
+  trivy = callPackage ../tools/admin/trivy {
+    buildGoModule = buildGo119Module;
+  };
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
@@ -7451,7 +7457,9 @@ with pkgs;
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
 
-  gvproxy = callPackage ../tools/networking/gvproxy { };
+  gvproxy = callPackage ../tools/networking/gvproxy {
+    buildGoModule = buildGo118Module; # fails to build with 1.19
+  };
 
   gzip = callPackage ../tools/compression/gzip { };
 
@@ -9840,7 +9848,9 @@ with pkgs;
   opae = callPackage ../development/libraries/opae { };
 
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
-  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
+  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix {
+    buildGoModule = buildGo119Module;
+  };
 
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
@@ -9896,6 +9906,8 @@ with pkgs;
   overcommit = callPackage ../development/tools/overcommit { };
 
   overmind = callPackage ../applications/misc/overmind { };
+
+  oxker = callPackage ../applications/misc/oxker { };
 
   ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
 
@@ -11065,6 +11077,8 @@ with pkgs;
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
+  sget = callPackage ../tools/security/sget { };
+
   sha1collisiondetection = callPackage ../tools/security/sha1collisiondetection { };
 
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
@@ -11680,7 +11694,9 @@ with pkgs;
 
   teip = callPackage ../tools/text/teip { };
 
-  telegraf = callPackage ../servers/monitoring/telegraf { };
+  telegraf = callPackage ../servers/monitoring/telegraf {
+    buildGoModule = buildGo119Module;
+  };
 
   teleport = callPackage ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -16844,6 +16860,8 @@ with pkgs;
 
   insomnia = callPackage ../development/web/insomnia { };
 
+  ihp-new = callPackage ../development/web/ihp-new { };
+
   iozone = callPackage ../development/tools/misc/iozone { };
 
   itstool = callPackage ../development/tools/misc/itstool { };
@@ -17638,7 +17656,9 @@ with pkgs;
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
-  wails = callPackage ../development/tools/wails { };
+  wails = callPackage ../development/tools/wails {
+    buildGoModule = buildGo119Module;
+  };
 
   whatsapp-for-linux = callPackage ../applications/networking/instant-messengers/whatsapp-for-linux { };
 
@@ -18588,8 +18608,6 @@ with pkgs;
     pythonPackages = python3Packages;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
-
-  gdal_2 = callPackage ../development/libraries/gdal/2.4.nix { };
 
   gdcm = callPackage ../development/libraries/gdcm {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
@@ -21283,9 +21301,10 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_4
-    libressl_3_5;
+    libressl_3_5
+    libressl_3_6;
 
-  libressl = libressl_3_5;
+  libressl = libressl_3_6;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
@@ -23236,14 +23255,9 @@ with pkgs;
   grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
+  promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
 
   mimir = callPackage ../servers/monitoring/mimir { };
-
-  promtail = grafana-loki.overrideAttrs (o: {
-    pname = "promtail";
-    subPackages = ["clients/cmd/promtail"];
-    CGO_ENABLED = 1;
-  });
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
@@ -23330,6 +23344,8 @@ with pkgs;
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   janus-gateway = callPackage ../servers/janus-gateway { };
+
+  janusgraph = callPackage ../servers/nosql/janusgraph { };
 
   jboss = callPackage ../servers/http/jboss { };
 
@@ -24250,9 +24266,7 @@ with pkgs;
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
-  yaws = callPackage ../servers/http/yaws {
-    erlang = erlangR21;
-  };
+  yaws = callPackage ../servers/http/yaws { };
 
   youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
 
@@ -25098,6 +25112,7 @@ with pkgs;
 
   gotop = callPackage ../tools/system/gotop {
     inherit (darwin.apple_sdk.frameworks) IOKit;
+    buildGoModule = buildGo119Module;
   };
 
   go-migrate = callPackage ../development/tools/go-migrate { };
@@ -26080,6 +26095,8 @@ with pkgs;
 
   libratbag = callPackage ../os-specific/linux/libratbag { };
 
+  librist = callPackage ../development/libraries/librist { };
+
   libre-baskerville = callPackage ../data/fonts/libre-baskerville { };
 
   libre-bodoni = callPackage ../data/fonts/libre-bodoni { };
@@ -26861,6 +26878,8 @@ with pkgs;
 
   ao = libfive;
 
+  apache-directory-server = callPackage ../servers/apache-directory-server {};
+
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
   apkeep = callPackage ../tools/misc/apkeep {
@@ -26889,7 +26908,9 @@ with pkgs;
 
   argocd = callPackage ../applications/networking/cluster/argocd { };
 
-  argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot { };
+  argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot {
+    buildGoModule = buildGo119Module;
+  };
 
   argo-rollouts = callPackage ../applications/networking/cluster/argo-rollouts { };
 
@@ -26937,16 +26958,10 @@ with pkgs;
   };
   audaciousQt5 = audacious;
 
-  audacity-gtk2 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk2; };
-  audacity-gtk3 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk3; };
-  audacity =
-    if stdenv.isDarwin then
-      callPackage ../applications/audio/audacity {
-        inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox AudioUnit Carbon Cocoa CoreAudio CoreAudioKit CoreServices;
-        suil = suil-qt5;
-      }
-    else
-      audacity-gtk2;
+  audacity = callPackage ../applications/audio/audacity {
+    inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox AudioUnit Carbon CoreAudio CoreAudioKit CoreServices;
+    suil = suil-qt5;
+  };
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
@@ -28783,7 +28798,9 @@ with pkgs;
 
   haunt = callPackage ../applications/misc/haunt { };
 
-  hugo = callPackage ../applications/misc/hugo { };
+  hugo = callPackage ../applications/misc/hugo {
+    buildGoModule = buildGo119Module;
+  };
 
   gatekeeper = callPackage ../applications/networking/cluster/gatekeeper { };
 
@@ -29819,7 +29836,7 @@ with pkgs;
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  mediathekview = callPackage ../applications/video/mediathekview { jre = adoptopenjdk-hotspot-bin-16; };
+  mediathekview = callPackage ../applications/video/mediathekview { jre = temurin-bin-17; };
 
   megapixels = callPackage ../applications/graphics/megapixels { };
 
@@ -31125,6 +31142,9 @@ with pkgs;
   };
 
   qutebrowser = libsForQt5.callPackage ../applications/networking/browsers/qutebrowser { };
+  qutebrowser-qt6 = callPackage ../applications/networking/browsers/qutebrowser {
+    inherit (qt6Packages) qtbase qtwebengine wrapQtAppsHook qtwayland;
+  };
 
   qxw = callPackage ../applications/editors/qxw {};
 
@@ -32523,7 +32543,9 @@ with pkgs;
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor {
-    wxGTK = wxGTK31;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (llvmPackages) openmp;
+    wxGTK = wxGTK32;
   };
 
   xa = callPackage ../development/compilers/xa/xa.nix { };
@@ -33060,7 +33082,9 @@ with pkgs;
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
-  erigon = callPackage ../applications/blockchains/erigon.nix { };
+  erigon = callPackage ../applications/blockchains/erigon.nix {
+    buildGoModule = buildGo119Module;
+  };
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
@@ -37399,7 +37423,9 @@ with pkgs;
 
   webwormhole = callPackage ../tools/networking/webwormhole { };
 
-  werf = callPackage ../applications/networking/cluster/werf { };
+  werf = callPackage ../applications/networking/cluster/werf {
+    buildGoModule = buildGo119Module;
+  };
 
   wifi-password = callPackage ../os-specific/darwin/wifi-password {};
 

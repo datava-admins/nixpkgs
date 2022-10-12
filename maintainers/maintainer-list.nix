@@ -9555,6 +9555,13 @@
     githubId = 23743547;
     name = "Akshay Oppiliappan";
   };
+  ners = {
+    name = "ners";
+    email = "ners@gmx.ch";
+    matrix = "@ners:ners.ch";
+    github = "ners";
+    githubId = 50560955;
+  };
   nessdoor = {
     name = "Tomas Antonio Lopez";
     email = "entropy.overseer@protonmail.com";
@@ -11999,6 +12006,12 @@
     email = "81568712+sioodmy@users.noreply.github.com";
     github = "sioodmy";
     githubId = 81568712;
+  };
+  siph = {
+    name = "Chris Dawkins";
+    email = "dawkins.chris.dev@gmail.com";
+    github = "siph";
+    githubId = 6619112;
   };
   schmitthenner = {
     email = "development@schmitthenner.eu";
