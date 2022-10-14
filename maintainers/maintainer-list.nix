@@ -1241,6 +1241,15 @@
     githubId = 12923;
     name = "Astro";
   };
+  astrobeastie = {
+    email = "fischervincent98@gmail.com";
+    github = "astrobeastie";
+    githubId = 26362368;
+    name = "Vincent Fischer";
+    keys = [{
+      fingerprint = "BF47 81E1 F304 1ADF 18CE  C401 DE16 C7D1 536D A72F";
+    }];
+  };
   astsmtl = {
     email = "astsmtl@yandex.ru";
     github = "astsmtl";
@@ -6507,6 +6516,12 @@
     githubId = 297653;
     name = "Joe Salisbury";
   };
+  john-shaffer = {
+    email = "jdsha@proton.me";
+    github = "john-shaffer";
+    githubId = 53870456;
+    name = "John Shaffer";
+  };
   johanot = {
     email = "write@ownrisk.dk";
     github = "johanot";
@@ -11687,6 +11702,15 @@
     github = "rraval";
     githubId = 373566;
     name = "Ronuk Raval";
+  };
+  rrbutani = {
+    email = "rrbutani+nix@gmail.com";
+    github = "rrbutani";
+    githubId = 7833358;
+    keys = [{
+      fingerprint = "7DCA 5615 8AB2 621F 2F32  9FF4 1C7C E491 479F A273";
+    }];
+    name = "Rahul Butani";
   };
   rski = {
     name = "rski";
