@@ -236,6 +236,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     pcov = callPackage ../development/php-packages/pcov { };
 
+    pdo_ibm = callPackage ../development/php-packages/pdo_ibm { };
+
     pdo_oci = buildPecl rec {
       inherit (php.unwrapped) src version;
 
