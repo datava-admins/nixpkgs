@@ -435,6 +435,9 @@ let format' = format; in let
         ${concatStringsSep "\n" createSubvolumes}
         #mv -u /mnt/roottmp/* /mnt/
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
+        chown root:root /nix
+        chown -R root:root /nix/store
+        chown root:nixbld /nix/store
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
         btrfs filesystem resize max /mnt

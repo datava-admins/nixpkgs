@@ -16,6 +16,7 @@ let
 
     cargoSha256 = "sha256-4YF1fqthnWY6eu6J4SMwFG655KXdFCXmA9wxLyOOAw4=";
 
+
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 

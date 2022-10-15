@@ -22,6 +22,7 @@
 , libXi
 , kmod
 , python3
+, polkit
 , autoPatchelfHook
 , makeWrapper
 , sqlite
@@ -70,6 +71,7 @@ stdenv.mkDerivation rec {
     libX11
     libXi
     kmod
+    polkit
   ];
 
   nativeBuildInputs = [ python3 vmware-unpack-env autoPatchelfHook makeWrapper ]
