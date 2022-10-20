@@ -36,6 +36,7 @@ let
       "static"
       "nix" # mainly for nixUnstable users, but also for access to nix/netrc
       # Shells
+      "shells"
       "bashrc"
       "zshenv"
       "zshrc"
@@ -73,7 +74,7 @@ let
       "pki"
     ];
   in concatStringsSep "\n  "
-  (map (file: "--ro-bind-try $(${coreutils}/bin/readlink -f /etc/${file}) /etc/${file}") files);
+  (map (file: "--ro-bind-try $(${coreutils}/bin/readlink -m /etc/${file}) /etc/${file}") files);
 
   # Create this on the fly instead of linking from /nix
   # The container might have to modify it and re-run ldconfig if there are
