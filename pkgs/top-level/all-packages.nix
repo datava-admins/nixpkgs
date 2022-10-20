@@ -36637,6 +36637,8 @@ with pkgs;
 
   nhentai = callPackage ../applications/misc/nhentai { };
 
+  nsncd = callPackage ../os-specific/linux/nsncd { };
+
   nvd = callPackage ../tools/package-management/nvd { };
 
   solfege = python3Packages.callPackage ../misc/solfege { };
