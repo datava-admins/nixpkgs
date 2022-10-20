@@ -3221,9 +3221,9 @@ in {
 
   facedancer = callPackage ../development/python-modules/facedancer { };
 
-  face_recognition = callPackage ../development/python-modules/face_recognition { };
+  face-recognition = callPackage ../development/python-modules/face-recognition { };
 
-  face_recognition_models = callPackage ../development/python-modules/face_recognition_models { };
+  face-recognition-models = callPackage ../development/python-modules/face-recognition/models.nix { };
 
   factory_boy = callPackage ../development/python-modules/factory_boy { };
 
@@ -4728,7 +4728,7 @@ in {
 
   isoweek = callPackage ../development/python-modules/isoweek { };
 
-  itanium_demangler = callPackage ../development/python-modules/itanium_demangler { };
+  itanium-demangler = callPackage ../development/python-modules/itanium-demangler { };
 
   itemadapter = callPackage ../development/python-modules/itemadapter { };
 
@@ -7478,7 +7478,7 @@ in {
 
   push-receiver = callPackage ../development/python-modules/push-receiver { };
 
-  pushbullet = callPackage ../development/python-modules/pushbullet { };
+  pushbullet-py = callPackage ../development/python-modules/pushbullet-py { };
 
   pushover-complete = callPackage ../development/python-modules/pushover-complete { };
 
@@ -11964,6 +11964,8 @@ in {
   winacl = callPackage ../development/python-modules/winacl { };
 
   winsspi = callPackage ../development/python-modules/winsspi { };
+
+  withings-api = callPackage ../development/python-modules/withings-api { };
 
   wktutils = callPackage ../development/python-modules/wktutils { };
 

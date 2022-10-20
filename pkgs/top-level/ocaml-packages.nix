@@ -144,6 +144,8 @@ let
 
     camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
+    class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
+
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
@@ -793,6 +795,8 @@ let
 
     mdx = callPackage ../development/ocaml-modules/mdx { };
 
+    mec = callPackage ../development/ocaml-modules/mec { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
@@ -1395,6 +1399,8 @@ let
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
+
+    semver = callPackage ../development/ocaml-modules/semver { };
 
     sha = callPackage ../development/ocaml-modules/sha { };
 
