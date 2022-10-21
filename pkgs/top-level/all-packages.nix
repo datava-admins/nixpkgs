@@ -2607,6 +2607,8 @@ with pkgs;
 
   galene = callPackage ../servers/web-apps/galene { };
 
+  galaxy-buds-client = callPackage ../applications/audio/galaxy-buds-client { };
+
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
@@ -6861,6 +6863,8 @@ with pkgs;
 
   gexiv2 = callPackage ../development/libraries/gexiv2 { };
 
+  gex = callPackage ../applications/version-management/git-and-tools/gex { };
+
   gftp = callPackage ../applications/networking/ftp/gftp {
     gtk = gtk2;
   };
@@ -10870,7 +10874,11 @@ with pkgs;
 
   rnnoise = callPackage ../development/libraries/rnnoise { };
 
-  rnnoise-plugin = callPackage ../development/libraries/rnnoise-plugin {};
+  # Use `apple_sdk_11_0` because `apple_sdk.libs` does not provide `simd`
+  rnnoise-plugin = darwin.apple_sdk_11_0.callPackage ../development/libraries/rnnoise-plugin {
+    inherit (darwin.apple_sdk_11_0.frameworks) WebKit MetalKit CoreAudioKit;
+    inherit (darwin.apple_sdk_11_0.libs) simd;
+  };
 
   rnote = callPackage ../applications/graphics/rnote {
     inherit (gst_all_1) gstreamer;
@@ -11961,7 +11969,7 @@ with pkgs;
   toml2nix = callPackage ../development/tools/toml2nix { };
 
   topgrade = callPackage ../tools/misc/topgrade {
-    inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
   };
 
   top-git = callPackage ../applications/version-management/git-and-tools/topgit { };
@@ -16287,6 +16295,8 @@ with pkgs;
   bossa = callPackage ../development/embedded/bossa {
     wxGTK = wxGTK30;
   };
+
+  bossa-arduino = callPackage ../development/embedded/bossa/arduino.nix { };
 
   bob = callPackage ../development/tools/build-managers/bob { };
 
