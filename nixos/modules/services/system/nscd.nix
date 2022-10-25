@@ -104,7 +104,7 @@ in
 
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
-        restartTriggers = lib.optionals cfg.enableNsncd ([
+        restartTriggers = lib.optionals (!cfg.enableNsncd) ([
           config.environment.etc.hosts.source
           config.environment.etc."nsswitch.conf".source
           config.environment.etc."nscd.conf".source

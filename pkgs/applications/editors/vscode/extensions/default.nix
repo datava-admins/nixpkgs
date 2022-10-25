@@ -1413,8 +1413,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "8.28.0";
-          sha256 = "sha256-ZH2n/r4iKNxf6QETmNnGc5KIAIE0hcAReX3p2MDkve8=";
+          version = "8.29.0";
+          sha256 = "sha256-khAlxN+y06aneZE97fqNg2esj/wvIUINiMdVc/exd38=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
@@ -2374,6 +2374,8 @@ let
           maintainers = with maintainers; [ datafoo ];
         };
       };
+
+      sumneko.lua = callPackage ./lua { };
 
       svelte.svelte-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
