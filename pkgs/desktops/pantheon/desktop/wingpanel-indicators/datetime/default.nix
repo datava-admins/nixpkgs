@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GxlnzLDrZmDDAGlUMoM4k4SkbCqra3Th6ugRAj3Wse4=";
+    sha256 = "sha256-5hg0TH12bEeEPhUUmZz7vS4YTB6t779CXyOCf0c4/X4=";
   };
 
   patches = [
@@ -37,10 +37,6 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       elementary_calendar = elementary-calendar;
     })
-
-    # Workaround for showing date numbers (TODO: should try to fix upstream)
-    # https://github.com/elementary/calendar/issues/756#issuecomment-1252400047
-    ./partly-revert-pr-150.patch
   ];
 
   nativeBuildInputs = [

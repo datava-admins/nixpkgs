@@ -144,6 +144,8 @@ let
 
     camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
+    class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
+
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
@@ -793,6 +795,8 @@ let
 
     mdx = callPackage ../development/ocaml-modules/mdx { };
 
+    mec = callPackage ../development/ocaml-modules/mec { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
@@ -915,8 +919,6 @@ let
     mirage-vnetif = callPackage ../development/ocaml-modules/mirage-vnetif { };
 
     mldoc =  callPackage ../development/ocaml-modules/mldoc { };
-
-    mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
 
@@ -1324,8 +1326,6 @@ let
 
     process = callPackage ../development/ocaml-modules/process { };
 
-    prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
-
     progress = callPackage ../development/ocaml-modules/progress { };
 
     promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
@@ -1396,6 +1396,8 @@ let
 
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
+    semver = callPackage ../development/ocaml-modules/semver { };
+
     sha = callPackage ../development/ocaml-modules/sha { };
 
     shared-memory-ring = callPackage ../development/ocaml-modules/shared-memory-ring { };
@@ -1435,6 +1437,12 @@ let
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
 
     tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
+
+    tezos-bls12-381-polynomial = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial { };
+
+    tezos-plompiler = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial/plompiler.nix { };
+
+    tezos-plonk = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial/plonk.nix { };
 
     theora = callPackage ../development/ocaml-modules/theora { };
 
@@ -1652,6 +1660,8 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_4_13 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.13.nix { });
 
   ocamlPackages_4_14 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.14.nix { });
+
+  ocamlPackages_5_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.0.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_14;
 

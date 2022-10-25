@@ -61,6 +61,7 @@ let
     in rec {
         buildEnv = callPackage ./wrapper.nix {
           lua = self;
+          makeWrapper = makeBinaryWrapper;
           inherit (luaPackages) requiredLuaModules;
         };
         withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
@@ -68,6 +69,8 @@ let
         interpreter = "${self}/bin/${executable}";
         inherit executable luaversion sourceVersion;
         luaOnBuild = luaOnBuildForHost.override { inherit packageOverrides; self = luaOnBuild; };
+
+        tests = callPackage ./tests { inherit (luaPackages) wrapLua; };
 
         inherit luaAttr;
   };
