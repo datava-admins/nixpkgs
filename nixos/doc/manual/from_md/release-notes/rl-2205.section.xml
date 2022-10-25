@@ -51,6 +51,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>steam</literal> and <literal>lutris</literal> support
+          for nvidia cards has been improved, proton runtimes 5-7 now
+          work as expected.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           systemd services can now set
           <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.reloadTriggers</link>
           instead of <literal>reloadIfChanged</literal> for a more
