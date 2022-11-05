@@ -12387,6 +12387,8 @@ with pkgs;
 
   versus = callPackage ../applications/networking/versus { };
 
+  vuls = callPackage ../tools/security/vuls { };
+
   vgrep = callPackage ../tools/text/vgrep { };
 
   vhd2vl = callPackage ../applications/science/electronics/vhd2vl { };
