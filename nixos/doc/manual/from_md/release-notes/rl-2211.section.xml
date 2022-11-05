@@ -316,6 +316,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/skeeto/endlessh">endlessh</link>,
+          an SSH tarpit. Available as
+          <link linkend="opt-services.endlessh.enable">services.endlessh</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/shizunge/endlessh-go">endlessh-go</link>,
           an SSH tarpit that exposes Prometheus metrics. Available as
           <link linkend="opt-services.endlessh-go.enable">services.endlessh-go</link>.
@@ -719,6 +726,16 @@
           being abandoned by the upstream. It is recommended to use
           <literal>awscli</literal> or <literal>awscli2</literal>
           instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="https://ce-programming.github.io/CEmu">CEmu
+          TI-84 Plus CE emulator</link> package has been renamed to
+          <literal>cemu-ti</literal>. The
+          <link xlink:href="https://cemu.info">Cemu Wii U
+          emulator</link> is now packaged as <literal>cemu</literal>.
         </para>
       </listitem>
       <listitem>

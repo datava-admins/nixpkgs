@@ -1013,6 +1013,7 @@
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
+  ./services/security/endlessh.nix
   ./services/security/endlessh-go.nix
   ./services/security/fail2ban.nix
   ./services/security/fprintd.nix
@@ -1044,6 +1045,7 @@
   ./services/security/vaultwarden/default.nix
   ./services/security/yubikey-agent.nix
   ./services/system/cachix-agent/default.nix
+  ./services/system/cachix-watch-store.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix

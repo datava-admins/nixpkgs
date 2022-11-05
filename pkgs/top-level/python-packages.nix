@@ -1898,6 +1898,8 @@ self: super: with self; {
 
   conda = callPackage ../development/python-modules/conda { };
 
+  confection = callPackage ../development/python-modules/confection { };
+
   configargparse = callPackage ../development/python-modules/configargparse { };
 
   configclass = callPackage ../development/python-modules/configclass { };
@@ -2278,6 +2280,8 @@ self: super: with self; {
   deltachat = callPackage ../development/python-modules/deltachat { };
 
   deluge-client = callPackage ../development/python-modules/deluge-client { };
+
+  demetriek = callPackage ../development/python-modules/demetriek { };
 
   demjson3 = callPackage ../development/python-modules/demjson3 { };
 
@@ -4054,6 +4058,8 @@ self: super: with self; {
   gviz-api = callPackage ../development/python-modules/gviz-api { };
 
   gym = callPackage ../development/python-modules/gym { };
+
+  gym-notices = callPackage ../development/python-modules/gym-notices { };
 
   gyp = callPackage ../development/python-modules/gyp { };
 
@@ -6109,6 +6115,8 @@ self: super: with self; {
     enablePython = true; # ... and its Python bindings
   })).python;
 
+  niaaml = callPackage ../development/python-modules/niaaml { };
+
   niaarm = callPackage ../development/python-modules/niaarm { };
 
   niapy = callPackage ../development/python-modules/niapy { };
@@ -6284,6 +6292,8 @@ self: super: with self; {
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
+
+  nsz = callPackage ../development/python-modules/nsz { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 
@@ -7277,9 +7287,7 @@ self: super: with self; {
   proto-plus = callPackage ../development/python-modules/proto-plus { };
 
   protobuf = callPackage ../development/python-modules/protobuf {
-    disabled = isPyPy;
     # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
-    doCheck = !isPy3k;
     inherit (pkgs) protobuf;
   };
 
@@ -12135,8 +12143,6 @@ self: super: with self; {
   ytmusicapi = callPackage ../development/python-modules/ytmusicapi { };
 
   yubico-client = callPackage ../development/python-modules/yubico-client { };
-
-  yutto = callPackage ../tools/misc/yutto { };
 
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
 
