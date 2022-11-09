@@ -191,6 +191,12 @@ final: prev: {
 
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
+    nativeBuildInputs = [ pkgs.installShellFiles ];
+    postInstall = ''
+      installShellCompletion --cmd gt \
+        --bash <($out/bin/gt completion) \
+        --zsh <($out/bin/gt completion)
+    '';
   };
 
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
@@ -356,6 +362,10 @@ final: prev: {
     preRebuild = ''
       sed -i -e "s|#!/usr/bin/env node|#! ${nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
     '';
+  };
+
+  photoprism-frontend = prev."photoprism-frontend-../../servers/photoprism".override {
+    meta.broken = true; # use the top-level package instead
   };
 
   pnpm = prev.pnpm.override {
