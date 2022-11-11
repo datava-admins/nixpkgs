@@ -187,6 +187,8 @@
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
+  ./programs/mdevctl.nix
+  ./programs/mepo.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
   ./programs/msmtp.nix
@@ -321,6 +323,7 @@
   ./services/backup/znapzend.nix
   ./services/blockchain/ethereum/geth.nix
   ./services/blockchain/ethereum/erigon.nix
+  ./services/blockchain/ethereum/lighthouse.nix
   ./services/backup/zrepl.nix
   ./services/cluster/corosync/default.nix
   ./services/cluster/hadoop/default.nix
