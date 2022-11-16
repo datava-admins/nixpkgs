@@ -62,6 +62,16 @@ let
         };
       });
 
+      nibe = super.nibe.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.0";
+        src = fetchFromGitHub {
+          owner = "yozik04";
+          repo = "nibe";
+          rev = "refs/tags/${version}";
+          hash = "sha256-DguGWNJfc5DfbcKMX2eMM2U1WyVPcdtv2BmpVloOFSU=";
+        };
+      });
+
       # pytest-aiohttp>0.3.0 breaks home-assistant tests
       pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.0";
@@ -70,7 +80,7 @@ let
           pname = "pytest-aiohttp";
           hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
         };
-        propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
+        propagatedBuildInputs = with self; [ aiohttp pytest ];
         doCheck = false;
         patches = [];
       });
@@ -259,6 +269,7 @@ in python.pkgs.buildPythonApplication rec {
 
   postPatch = let
     relaxedConstraints = [
+      "aiohttp"
       "attrs"
       "awesomeversion"
       "bcrypt"

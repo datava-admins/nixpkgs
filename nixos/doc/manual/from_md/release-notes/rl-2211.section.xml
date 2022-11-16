@@ -132,6 +132,15 @@
       </listitem>
       <listitem>
         <para>
+          PHP is now built <literal>NTS</literal> (Non-Thread Safe)
+          style by default, for Apache and <literal>mod_php</literal>
+          usage we still enable <literal>ZTS</literal> (Zend Thread
+          Safe). This has been a common practice for a long time in
+          other distributions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>protonup</literal> has been aliased to and replaced
           by <literal>protonup-ng</literal> due to upstream not
           maintaining it.
@@ -863,6 +872,12 @@
       </listitem>
       <listitem>
         <para>
+          Linux 4.9 has been removed because it will reach its end of
+          life within the lifespan of 22.11.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           (Neo)Vim can not be configured with
           <literal>configure.pathogen</literal> anymore to reduce
           maintainance burden. Use <literal>configure.packages</literal>
@@ -946,6 +961,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>obs-studio</literal> hase been updated to version 28.
+          If you have packaged custom plugins, check if they are
+          compatible. <literal>obs-websocket</literal> has been
+          integrated into <literal>obs-studio</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>signald</literal> has been bumped to
           <literal>0.23.0</literal>. For the upgrade, a migration
           process is necessary. It can be done by running a command like
@@ -977,6 +1000,16 @@ signald -d /var/lib/signald/db \
           are out-of-date and the (previously required) attributes
           <literal>name</literal> and <literal>version</literal> are no
           longer accepted.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Syncthing service now only allows absolute paths—starting
+          with <literal>/</literal> or <literal>~/</literal>—for
+          <literal>services.syncthing.folders.&lt;name&gt;.path</literal>.
+          In a future release other paths will be allowed again and
+          interpreted relative to
+          <literal>services.syncthing.dataDir</literal>.
         </para>
       </listitem>
     </itemizedlist>
@@ -1191,6 +1224,13 @@ signald -d /var/lib/signald/db \
       </listitem>
       <listitem>
         <para>
+          The redis module now persists each instance’s configuration
+          file in the state directory, in order to support some more
+          advanced use cases like sentinel.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The udisks2 service, available at
           <literal>services.udisks2.enable</literal>, is now disabled by
           default. It will automatically be enabled through services and
@@ -1246,6 +1286,19 @@ signald -d /var/lib/signald/db \
       <listitem>
         <para>
           Add udev rules for the Teensy family of microcontrollers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Qt QML disk cache is now disabled by default. This fixes a
+          long-standing issue where updating Qt/KDE apps would sometimes
+          cause them to crash or behave strangely without explanation.
+          Those concerned about the small (~10%) performance hit to
+          application startup can re-enable the cache (and expose
+          themselves to gremlins) by setting the envrionment variable
+          <literal>QML_FORCE_DISK_CACHE</literal> to
+          <literal>1</literal> using e.g. the
+          <literal>environment.sessionVariables</literal> NixOS option.
         </para>
       </listitem>
       <listitem>
@@ -1354,10 +1407,30 @@ signald -d /var/lib/signald/db \
       </listitem>
       <listitem>
         <para>
-          boot.kernel.sysctl is defined as a freeformType and adds a
-          custom merge option for <quote>net.core.rmem_max</quote>
-          (taking the highest value defined to avoid conflicts between 2
-          services trying to set that value)
+          <literal>boot.kernel.sysctl</literal> is defined as a
+          freeformType and adds a custom merge option for
+          <quote>net.core.rmem_max</quote> (taking the highest value
+          defined to avoid conflicts between 2 services trying to set
+          that value).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>mame</literal> package does not ship with its
+          tools anymore in the default output. They were moved to a
+          separate <literal>tools</literal> output instead. For
+          convenience, <literal>mame-tools</literal> package was added
+          for those who want to use it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A NixOS module for Firefox has been added which allows
+          preferences and
+          <link xlink:href="https://github.com/mozilla/policy-templates/blob/master/README.md">policies</link>
+          to be set. This also allows extensions to be installed via the
+          <literal>ExtensionSettings</literal> policy. The new options
+          are under <literal>programs.firefox</literal>.
         </para>
       </listitem>
     </itemizedlist>
