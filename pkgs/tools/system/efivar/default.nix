@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/rhboot/efivar/commit/15622b7e5761f3dde3f0e42081380b2b41639a48.patch";
       sha256 = "sha256-SjZXj0hA2eQu2MfBoNjFPtd2DMYadtL7ZqwjKSf2cmI=";
     })
+    # src/Makefile: build util.c separately for makeguids
+    # util.c needs to be built twice when cross-compiling
+    (fetchpatch {
+      url = "https://github.com/rhboot/efivar/commit/ca48d3964d26f5e3b38d73655f19b1836b16bd2d.patch";
+      hash = "sha256-DkNFIK4i7Eypyf2UeK7qHW36N2FSVRJ2rnOVLriWi5c=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config mandoc ];
@@ -34,8 +40,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "Tools and library to manipulate EFI variables";
+    homepage = "https://github.com/rhboot/efivar";
     platforms = platforms.linux;
     license = licenses.lgpl21Only;
   };

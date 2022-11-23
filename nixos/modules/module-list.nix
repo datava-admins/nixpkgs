@@ -383,6 +383,7 @@
   ./services/databases/pgmanage.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
+  ./services/databases/surrealdb.nix
   ./services/databases/victoriametrics.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
@@ -491,6 +492,7 @@
   ./services/hardware/vdr.nix
   ./services/home-automation/home-assistant.nix
   ./services/home-automation/zigbee2mqtt.nix
+  ./services/home-automation/evcc.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/filebeat.nix
@@ -719,6 +721,7 @@
   ./services/monitoring/teamviewer.nix
   ./services/monitoring/telegraf.nix
   ./services/monitoring/thanos.nix
+  ./services/monitoring/tremor-rs.nix
   ./services/monitoring/tuptime.nix
   ./services/monitoring/unifi-poller.nix
   ./services/monitoring/ups.nix
@@ -1050,6 +1053,7 @@
   ./services/security/vault.nix
   ./services/security/vaultwarden/default.nix
   ./services/security/yubikey-agent.nix
+  ./services/system/automatic-timezoned.nix
   ./services/system/cachix-agent/default.nix
   ./services/system/cachix-watch-store.nix
   ./services/system/cloud-init.nix
