@@ -15,6 +15,7 @@ let
     targetRoot = "$targetRoot/";
     wgetExtraOptions = "-q";
   };
+  ptpInitrd = builtins.elem "ptp" config.boot.initrd.kernelModules;
 in
 
 {
@@ -37,20 +38,20 @@ in
       { assertion = cfg.efi -> cfg.hvm;
         message = "EC2 instances using EFI must be HVM instances.";
       }
-      { assertion = versionOlder config.boot.kernelPackages.kernel.version "5.17";
-        message = "ENA driver fails to build with kernel >= 5.17";
+      { assertion = versionAtLeast config.boot.kernelPackages.ena.version "2.8" -> ptpInitrd;
+        message = "ENA driver >= 2.8 requires ptp module in initrd";
       }
     ];
 
     boot.growPartition = cfg.hvm;
 
-    fileSystems."/" = mkIf (!cfg.zfs.enable) {
+    fileSystems."/" = mkIf (!cfg.zfs.enable && !cfg.btrfs.enable) {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
       autoResize = true;
     };
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
+    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable || cfg.btrfs.enable) {
       # The ZFS image uses a partition labeled ESP whether or not we're
       # booting with EFI.
       device = "/dev/disk/by-label/ESP";
@@ -64,7 +65,7 @@ in
     boot.extraModulePackages = [
       config.boot.kernelPackages.ena
     ];
-    boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
+    boot.initrd.kernelModules = [ "ptp" "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
     boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
 

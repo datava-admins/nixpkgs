@@ -4,17 +4,53 @@ let
 in {
   options = {
     ec2 = {
+      btrfs = {
+        enable = lib.mkOption {
+          default = false;
+          internal = true;
+          description = ''
+            Whether the EC2 instance uses a Btrfs root.
+          '';
+        };
+        subvols = lib.mkOption {
+          description = ''
+            Subvolumes to create in the image.
+
+            **NOTE:** This option is used only at image creation time, and
+            does not attempt to declaratively create or manage subvolumes 
+            on an existing system.
+          '';
+
+          default = {};
+
+          type = types.attrsOf (types.submodule {
+            options = {
+              mount = lib.mkOption {
+                description = "Where to mount this subvolume.";
+                type = types.nullOr types.string;
+                default = null;
+              };
+
+              properties = lib.mkOption {
+                description = "Properties?? to set on this subvolume.";
+                type = types.attrsOf types.string;
+                default = {};
+              };
+            };
+          });
+        };
+      };
       zfs = {
         enable = lib.mkOption {
           default = false;
           internal = true;
-          description = lib.mdDoc ''
+          description = ''
             Whether the EC2 instance uses a ZFS root.
           '';
         };
 
         datasets = lib.mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Datasets to create under the `tank` and `boot` zpools.
 
             **NOTE:** This option is used only at image creation time, and
@@ -27,13 +63,13 @@ in {
           type = types.attrsOf (types.submodule {
             options = {
               mount = lib.mkOption {
-                description = lib.mdDoc "Where to mount this dataset.";
+                description = "Where to mount this dataset.";
                 type = types.nullOr types.string;
                 default = null;
               };
 
               properties = lib.mkOption {
-                description = lib.mdDoc "Properties to set on this dataset.";
+                description = "Properties to set on this dataset.";
                 type = types.attrsOf types.string;
                 default = {};
               };
@@ -44,7 +80,7 @@ in {
       hvm = lib.mkOption {
         default = lib.versionAtLeast config.system.stateVersion "17.03";
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether the EC2 instance is a HVM instance.
         '';
       };
@@ -52,7 +88,7 @@ in {
         default = pkgs.stdenv.hostPlatform.isAarch64;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether the EC2 instance is using EFI.
         '';
       };

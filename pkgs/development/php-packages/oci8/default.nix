@@ -1,7 +1,11 @@
 { buildPecl, lib, oracle-instantclient, php }:
 
 let
-  versionData = if (lib.versionOlder php.version "8.1") then {
+  versionData = 
+  if (lib.versionOlder php.version "8.0") then {
+    version = "2.2.0";
+    sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
+  } else if (lib.versionOlder php.version "8.1") then {
     version = "3.0.1";
     sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
   } else {
