@@ -10,6 +10,7 @@ with lib;
 
 let
   cfg = config.ec2;
+  ptpInitrd = builtins.elem "ptp" config.boot.initrd.kernelModules;
 in
 
 {
@@ -25,17 +26,21 @@ in
 
   config = {
 
-    assertions = [ ];
+    assertions = [
+      { assertion = versionAtLeast config.boot.kernelPackages.ena.version "2.8" -> ptpInitrd;
+        message = "ENA driver >= 2.8 requires ptp module in initrd";
+      }
+    ];
 
     boot.growPartition = true;
 
-    fileSystems."/" = mkIf (!cfg.zfs.enable) {
+    fileSystems."/" = mkIf (!cfg.zfs.enable && !cfg.btrfs.enable) {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
       autoResize = true;
     };
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
+    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable || cfg.btrfs.enable) {
       # The ZFS image uses a partition labeled ESP whether or not we're
       # booting with EFI.
       device = "/dev/disk/by-label/ESP";
@@ -49,8 +54,8 @@ in
     boot.extraModulePackages = [
       config.boot.kernelPackages.ena
     ];
-    boot.initrd.kernelModules = [ "xen-blkfront" ];
-    boot.initrd.availableKernelModules = [ "nvme" ];
+    boot.initrd.kernelModules = [ "ptp" "xen-blkfront" "xen-netfront" ];
+    boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
     boot.kernelParams = [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
 
     # Prevent the nouveau kernel module from being loaded, as it

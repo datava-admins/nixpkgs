@@ -1228,11 +1228,6 @@ mapAliases ({
   phraseapp-client = throw "phraseapp-client is archived by upstream. Use phrase-cli instead"; # Added 2022-05-15
   phwmon = throw "phwmon has been removed: abandoned by upstream"; # Added 2022-04-24
 
-  # Obsolete PHP version aliases
-  php74 = throw "php74 has been dropped due to the lack of maintanence from upstream for future releases"; # Added 2022-05-24
-  php74Packages = php74; # Added 2022-05-24
-  php74Extensions = php74; # Added 2022-05-24
-
   php73 = throw "php73 has been dropped due to the lack of maintanence from upstream for future releases"; # Added 2021-06-03
   php73Packages = php73; # Added 2021-06-03
   php73Extensions = php73; # Added 2021-06-03
@@ -1243,7 +1238,6 @@ mapAliases ({
     php74.override { embedSupport = true; apxs2Support = false; }
   ''; # Added 2020-04-01
   php73-embed = php-embed; # Added 2020-04-01
-  php74-embed = php-embed; # Added 2020-04-01
 
   phpPackages-embed = throw ''
     php*Packages-embed has been dropped, you can build something
@@ -1251,7 +1245,6 @@ mapAliases ({
     (php74.override { embedSupport = true; apxs2Support = false; }).packages
   ''; # Added 2020-04-01
   php73Packages-embed = phpPackages-embed;
-  php74Packages-embed = phpPackages-embed;
 
   php-unit = throw ''
     php*-unit has been dropped, you can build something similar with
@@ -1266,7 +1259,6 @@ mapAliases ({
     }
   ''; # Added 2020-04-01
   php73-unit = php-unit; # Added 2020-04-01
-  php74-unit = php-unit; # Added 2020-04-01
 
   phpPackages-unit = throw ''
     php*Packages-unit has been dropped, you can build something
@@ -1281,7 +1273,6 @@ mapAliases ({
     }).packages
   ''; # Added 2020-04-01
   php73Packages-unit = phpPackages-unit;
-  php74Packages-unit = phpPackages-unit;
 
   pidgin-with-plugins = throw "'pidgin-with-plugins' has been renamed to/replaced by 'pidgin'"; # Converted to throw 2022-02-22
   pidginlatex = throw "'pidginlatex' has been renamed to/replaced by 'pidgin-latex'"; # Converted to throw 2022-02-22

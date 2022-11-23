@@ -22,6 +22,12 @@ let
       cp -R * $out/
       runHook postInstall
     '';
+  meta = with lib; {
+    description = "IBM DB2 ODBC Driver";
+    homepage = "https://www.ibm.com/support/pages/db2-odbc-cli-driver-download-and-installation-information";
+    license = licenses.unfreeRedistributable;
+    platforms = [ "x86_64-linux" ];
+  };
 };
 in
 buildPecl rec {

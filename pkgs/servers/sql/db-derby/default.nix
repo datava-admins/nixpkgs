@@ -5,11 +5,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "db-derby";
-  version = "10.15.2.0";
+  version = "10.16.1.1";
 
   src = fetchurl {
     url = "https://dlcdn.apache.org//db/derby/${pname}-${version}/${pname}-${version}-bin.tar.gz";
-    sha256 = "sha256-rFEkai2e73DOzWViB1swqplT9iLL0s01Ubw9I53G8Co=";
+    sha256 = "sha256-N6743KQgYdWGevsgCcjXqA5owW5WrsrwiPPjDkcNnvY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

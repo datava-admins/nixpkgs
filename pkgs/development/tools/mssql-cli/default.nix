@@ -10,7 +10,7 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "mssql-cli";
-  version = "1.09";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "dbcli";

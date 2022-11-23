@@ -24,13 +24,12 @@ in appimageTools.wrapType2 {
 
   extraPkgs = pkgs: with pkgs; [
     libsecret
-    libappindicator-gtk3
   ];
 
   meta = with lib; {
     description = "ElectronMail is an Electron-based unofficial desktop client for ProtonMail";
     homepage = "https://github.com/vladimiry/ElectronMail";
-    license = licenses.gpl3;
+    license = licenses.mit;
     maintainers = [ maintainers.princemachiavelli ];
     platforms = [ "x86_64-linux" ];
   };

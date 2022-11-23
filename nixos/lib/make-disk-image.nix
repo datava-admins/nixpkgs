@@ -211,6 +211,8 @@ assert (lib.assertMsg (lib.all
 
 assert (btrfsSubvolumes != []) -> fsType == "btrfs";
 
+assert (btrfsSubvolumes != []) -> fsType == "btrfs";
+
 with lib;
 
 let format' = format; in let
@@ -262,7 +264,7 @@ let format' = format; in let
         mklabel gpt \
         mkpart ESP fat32 8MiB ${bootSize} \
         set 1 boot on \
-        mkpart primary ext4 ${bootSize} -1
+        mkpart primary ${fsType} ${bootSize} -1
       ${optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
@@ -278,7 +280,7 @@ let format' = format; in let
         set 1 boot on \
         mkpart no-fs 0 1024KiB \
         set 2 bios_grub on \
-        mkpart primary ext4 ${bootSize} -1
+        mkpart primary ${fsType }${bootSize} -1
       ${optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
@@ -607,6 +609,28 @@ let format' = format; in let
         rm -rf /mnt/roottmp
         btrfs filesystem resize max /mnt
       ''}
+      ${optionalString (fsType == "btrfs") ''
+        echo "Creating Btrfs subvolumes and moving files..."
+        ${concatStringsSep "\n" createSubvolumes}
+        df -h
+        du -shx /mnt/roottmp/*
+        btrfs filesystem resize max /mnt/
+        cp --reflink=always --archive /mnt/roottmp/* /mnt/
+        btrfs subvolume list /mnt
+        rm -rf /mnt/roottmp
+        nixos-enter --root $mountPoint -- chown "root:users" "/etc/NIXOS"
+        nixos-enter --root $mountPoint -- chown "root:root" "/etc"
+        nixos-enter --root $mountPoint -- chown "root:root" "/root"
+        nixos-enter --root $mountPoint -- chown "root:root" "/nix"
+        nixos-enter --root $mountPoint -- chown -R "root:root" "/nix/store"
+        nixos-enter --root $mountPoint -- chown "root:nixbld" "/nix/store"
+        nixos-enter --root $mountPoint -- ls -lha /
+        nixos-enter --root $mountPoint -- ls -lha /nix
+        ls -lha /mnt/
+        ls -lha /mnt/nix/
+        ls -lha /mnt/etc/
+        ls -lha /mnt/root/
+      ''}
 
       echo "Install a configuration.nix"
       mkdir -p /mnt/etc/nixos
@@ -639,6 +663,7 @@ let format' = format; in let
         group="''${groups_[$i]}"
         if [ -n "$user$group" ]; then
           # We have to nixos-enter since we need to use the user and group of the VM
+          echo nixos-enter --root $mountPoint -- chown -R "$user:$group" "$target"
           nixos-enter --root $mountPoint -- chown -R "$user:$group" "$target"
         fi
       done

@@ -495,6 +495,10 @@ with pkgs;
 
   dae = callPackage ../tools/networking/dae { };
 
+  db-derby = callPackage ../servers/sql/db-derby { };
+
+  databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
+
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
@@ -16935,6 +16939,16 @@ with pkgs;
   php80Packages = recurseIntoAttrs php80.packages;
 
   phpactor = callPackage ../development/tools/phpactor { };
+
+  # Import PHP74 interpreter, extensions and packages
+  php74 = callPackage ../development/interpreters/php/7.4.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    pcre2 = pcre2.override {
+      withJitSealloc = !stdenv.isDarwin;
+    };
+  };
+  php74Extensions = recurseIntoAttrs php74.extensions;
+  php74Packages = recurseIntoAttrs php74.packages;
 
   picoc = callPackage ../development/interpreters/picoc { };
 
