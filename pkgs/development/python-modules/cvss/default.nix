@@ -1,27 +1,51 @@
-{ buildPythonPackage
-, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , jsonschema
-, lib
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "cvss";
   version = "2.5";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit version pname;
-    sha256 = "sha256-Y/ZIz/smR0mM8oZGpwBP4PSIcsm6fYZTvr1xBAn4ug4=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "RedHatProductSecurity";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-6S646cvm+UwdpRGOtCuNijWcUxhZD6IG407hNBz+NA4=";
   };
 
-  propagatedBuildInputs = [
+  checkInputs = [
     jsonschema
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "cvss"
+  ];
+
+  disabledTests = [
+    # Tests require additional data
+    "test_calculator"
+    "test_cvsslib"
+    "test_json_ordering"
+    "test_json_schema_repr"
+    "test_random"
+    "test_rh_vector"
+    "test_simple"
+    "test_simple_31"
   ];
 
   meta = with lib; {
-    description = "CVSS2/3 library with interactive calculator for Python 2 and Python 3";
-    homepage = "https://github.com/skontar/cvss";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.raboof ];
-    platforms = platforms.all;
+    description = "Library for CVSS2/3";
+    homepage = "https://github.com/RedHatProductSecurity/cvss";
+    changelog = "https://github.com/RedHatProductSecurity/cvss/releases/tag/v${version}";
+    license = with licenses; [ lgpl3Plus ];
+    maintainers = with maintainers; [ fab ];
   };
 }

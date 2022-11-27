@@ -132,6 +132,12 @@ mapAliases ({
   bird2 = bird; # Added 2022-02-21
   bird6 = throw "bird6 was dropped. Use bird instead, which has support for both ipv4/ipv6"; # Added 2022-02-21
   bitbucket-cli = throw "bitbucket-cli has been removed: abandoned by upstream"; # Added 2022-03-21
+  bitcoin-classic = throw "bitcoin-classic has been removed: the Bitcoin Classic project has closed down, https://bitcoinclassic.com/news/closing.html"; # Added 2022-11-24
+  bitcoind-classic = throw "bitcoind-classic has been removed: the Bitcoin Classic project has closed down, https://bitcoinclassic.com/news/closing.html"; # Added 2022-11-24
+  bitcoin-gold = throw "bitcoin-gold has been removed since it's unnmaintained and will stop building with Qt > 5.14"; # Added 2022-11-24
+  bitcoind-gold = throw "bitcoin-gold has been removed since it's unnmaintained: https://github.com/BTCGPU/BTCGPU/graphs/code-frequency"; # Added 2022-11-24
+  digibyte = throw "digibyte has been removed since it's unnmaintained and will stop building with Qt > 5.14"; # Added 2022-11-24
+  digibyted = throw "digibyted has been removed since it's unnmaintained: https://github.com/digibyte/digibyte/graphs/code-frequency"; # Added 2022-11-24
   bitsnbots = throw "bitsnbots has been removed because it was broken and upstream missing"; # Added 2021-08-22
   blastem = throw "blastem has been removed from nixpkgs as it would still require python2"; # Added 2022-01-01
   bluezFull = bluez; # Added 2019-12-03
@@ -177,6 +183,7 @@ mapAliases ({
   cask = emacs.pkgs.cask; # Added 2022-11-12
   cargo-download = throw "cargo-download has been removed from nixpkgs as it is unmaintained, use cargo-clone instead"; # Added 2022-10-11
   cargo-tree = throw "cargo-tree has been removed, use the builtin `cargo tree` command instead"; # Added 2020-08-20
+  carnix = throw "carnix has been removed, use alternatives such as naersk and crate2nix instead"; # Added 2022-11-22
   casperjs = throw "casperjs has been removed, it was abandoned by upstream and broken";
   cassandra_2_1 = throw "cassandra_2_1 has been removed, please use cassandra_3_11 instead"; # Added 2022-10-29
   cassandra_2_2 = throw "cassandra_2_2 has been removed, please use cassandra_3_11 instead"; # Added 2022-10-29
@@ -195,6 +202,7 @@ mapAliases ({
   clickshare-csc1 = throw "'clickshare-csc1' has been removed as it requires qt4 which is being removed"; # Added 2022-06-16
   inherit (libsForQt5.mauiPackages) clip; # added 2022-05-17
   cpp-ipfs-api = cpp-ipfs-http-client; # Project has been renamed. Added 2022-05-15
+  cratesIO = throw "cratesIO has been removed, use alternatives such as naersk and crate2nix instead"; # Added 2022-11-22
   creddump = throw "creddump has been removed from nixpkgs as the upstream has abandoned the project"; # Added 2022-01-01
 
   # these are for convenience, not for backward compat and shouldn't expire
@@ -1627,6 +1635,7 @@ mapAliases ({
   youtubeDL = throw "'youtubeDL' has been renamed to/replaced by 'youtube-dl'"; # Converted to throw 2022-02-22
   ytop = throw "ytop has been abandoned by upstream. Consider switching to bottom instead";
   yubikey-neo-manager = throw "yubikey-neo-manager has been removed because it was broken. Use yubikey-manager-qt instead"; # Added 2021-03-08
+  yubioath-desktop = throw "yubioath-desktop has been deprecated by upstream in favor of https://github.com/Yubico/yubioath-flutter"; # Added 2022-11-22
   yuzu-ea = yuzu-early-access; # Added 2022-08-18
   yuzu = yuzu-mainline; # Added 2021-01-25
 
