@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "7.1.0";
+  version = "7.2.0-rc2";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "1rmvrgqjhrvcmchnz170dxvrrf14n6nm39y8ivrprmfydd9lwqx0";
+    sha256 = "s7SKHTrGzbDKh/8ahC9yVWDO/ITJdwFipdQgNAwXTRE=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -98,31 +98,36 @@ stdenv.mkDerivation rec {
     # will still be needed in nix until the macOS SDK reaches 10.13+.
     ./provide-fallback-for-utimensat.patch
     # Cocoa clipboard support only works on macOS 10.14+
-    ./revert-ui-cocoa-add-clipboard-support.patch
+    # Wait for NixOS upstream to update MacOS patches.
+    # ./revert-ui-cocoa-add-clipboard-support.patch
     # Standard about panel requires AppKit and macOS 10.13+
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/99eb313ddbbcf73c1adcdadceba1423b691c6d05.diff";
-      sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
-      revert = true;
-    })
+    # Stil needed/wanted?
+    #(fetchpatch {
+    #  url = "https://gitlab.com/qemu-project/qemu/-/commit/99eb313ddbbcf73c1adcdadceba1423b691c6d05.diff";
+    #  sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
+    #  revert = true;
+    #})
+    # Try without... may have caused issues with nested VMs using vSphere.
     # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
-      sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
-      revert = true;
-    })
-    ./9pfs-use-GHashTable-for-fid-table.patch
-    (fetchpatch {
-      name = "CVE-2022-3165.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/d307040b18bfcb1393b910f1bae753d5c12a4dc7.patch";
-      sha256 = "sha256-YPhm580lBNuAv7G1snYccKZ2V5ycdV8Ri8mTw5jjFBc=";
-    })
+    #(fetchpatch {
+    #  url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
+    #  sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
+    #  revert = true;
+    #})
+    # Already included in 7.2.0-rc2
+    #./9pfs-use-GHashTable-for-fid-table.patch
+    # Already fixed in 7.2.0-rc2?
+    #(fetchpatch {
+    #  name = "CVE-2022-3165.patch";
+    #  url = "https://gitlab.com/qemu-project/qemu/-/commit/d307040b18bfcb1393b910f1bae753d5c12a4dc7.patch";
+    #  sha256 = "sha256-YPhm580lBNuAv7G1snYccKZ2V5ycdV8Ri8mTw5jjFBc=";
+    #})
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
-    sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
+    sed -i "/install_emptydir(get_option('localstatedir') \/ 'run')/d" \
         qga/meson.build
   '';
 
