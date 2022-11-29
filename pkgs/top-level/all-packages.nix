@@ -1613,9 +1613,7 @@ with pkgs;
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
-  ludusavi = callPackage ../applications/backup/ludusavi {
-    inherit (plasma5Packages) kdialog;
-  };
+  ludusavi = callPackage ../applications/backup/ludusavi { };
 
   maiko = callPackage ../applications/emulators/maiko { };
 
@@ -4276,8 +4274,6 @@ with pkgs;
 
   grim = callPackage ../tools/graphics/grim { };
 
-  gringo = callPackage ../tools/misc/gringo { };
-
   grit = callPackage ../tools/misc/grit { };
 
   grobi = callPackage ../tools/X11/grobi { };
@@ -6838,8 +6834,6 @@ with pkgs;
 
   fsarchiver = callPackage ../tools/archivers/fsarchiver { };
 
-  fsfs = callPackage ../tools/filesystems/fsfs { };
-
   fstl = qt5.callPackage ../applications/graphics/fstl { };
 
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
@@ -9305,9 +9299,7 @@ with pkgs;
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
-  miniupnpc = callPackage ../tools/networking/miniupnpc {
-    inherit (darwin) cctools;
-  };
+  miniupnpc = callPackage ../tools/networking/miniupnpc { };
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
@@ -11247,8 +11239,6 @@ with pkgs;
 
   screen-message = callPackage ../tools/X11/screen-message { };
 
-  screencloud = libsForQt5.callPackage ../applications/graphics/screencloud { };
-
   screenkey = callPackage ../applications/video/screenkey { };
 
   scrub = callPackage ../tools/misc/scrub { };
@@ -12072,8 +12062,6 @@ with pkgs;
   tldr = callPackage ../tools/misc/tldr { };
 
   tldr-hs = haskellPackages.tldr;
-
-  tlspool = callPackage ../tools/networking/tlspool { };
 
   tlsx = callPackage ../tools/security/tlsx { };
 
@@ -13486,7 +13474,9 @@ with pkgs;
 
   avra = callPackage ../development/compilers/avra { };
 
-  ballerina = callPackage ../development/compilers/ballerina { openjdk = openjdk11; };
+  ballerina = callPackage ../development/compilers/ballerina {
+    openjdk = openjdk11_headless;
+  };
 
   beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
 
@@ -14172,7 +14162,7 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnatboot
+      then buildPackages.gnatboot11
       else buildPackages.gnat11;
   });
 
@@ -14188,11 +14178,13 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnatboot
+      then buildPackages.gnatboot12
       else buildPackages.gnat12;
   });
 
-  gnatboot = wrapCC (callPackage ../development/compilers/gnatboot { });
+  gnatboot = gnatboot12;
+  gnatboot11 = wrapCC (callPackage ../development/compilers/gnatboot { majorVersion = "11"; });
+  gnatboot12 = wrapCC (callPackage ../development/compilers/gnatboot { majorVersion = "12"; });
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
@@ -14227,7 +14219,7 @@ with pkgs;
   gcc-arm-embedded-9 = callPackage ../development/compilers/gcc-arm-embedded/9 {};
   gcc-arm-embedded-10 = callPackage ../development/compilers/gcc-arm-embedded/10 {};
   gcc-arm-embedded-11 = callPackage ../development/compilers/gcc-arm-embedded/11 {};
-  gcc-arm-embedded = gcc-arm-embedded-10;
+  gcc-arm-embedded = gcc-arm-embedded-11;
 
   # Has to match the default gcc so that there are no linking errors when
   # using C/C++ libraries in D packages
@@ -15217,9 +15209,6 @@ with pkgs;
   rhack = callPackage ../development/tools/rust/rhack { };
   roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
-  rustracer = callPackage ../development/tools/rust/racer {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   rust-analyzer-unwrapped = callPackage ../development/tools/rust/rust-analyzer {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -15923,7 +15912,7 @@ with pkgs;
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
   pysideGeneratorrunner = callPackage ../development/python-modules/pyside/generatorrunner.nix { };
 
-  svg2tikz = python27Packages.svg2tikz;
+  svg2tikz = with python3.pkgs; toPythonApplication svg2tikz;
 
   svg2pdf = callPackage ../tools/graphics/svg2pdf { };
 
@@ -17527,6 +17516,8 @@ with pkgs;
   patchelf_0_14 = callPackage ../development/tools/misc/patchelf { };
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
+
+  patsh = callPackage ../development/tools/misc/patsh { };
 
   pax-rs = callPackage ../development/tools/pax-rs { };
 
@@ -20780,7 +20771,9 @@ with pkgs;
 
   libow = callPackage ../development/libraries/libow { };
 
-  libp11 = callPackage ../development/libraries/libp11 { };
+  libp11 = callPackage ../development/libraries/libp11 {
+    openssl = openssl_1_1;
+  };
 
   libpam-wrapper = callPackage ../development/libraries/libpam-wrapper { };
 
@@ -21150,7 +21143,7 @@ with pkgs;
   };
 
   libxml2Python = let
-    libxml2 = python2Packages.libxml2;
+    inherit (python3.pkgs) libxml2;
   in pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
@@ -21976,7 +21969,7 @@ with pkgs;
     (import ../development/libraries/qt-5/5.12) {
       inherit newScope;
       inherit lib fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
-      inherit bison cups dconf harfbuzz libGL perl gtk3;
+      inherit bison cups dconf harfbuzz libGL perl gtk3 python2;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit darwin;
       inherit buildPackages;
@@ -21989,7 +21982,7 @@ with pkgs;
     (import ../development/libraries/qt-5/5.14) {
       inherit newScope;
       inherit lib fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
-      inherit bison cups dconf harfbuzz libGL perl gtk3;
+      inherit bison cups dconf harfbuzz libGL perl gtk3 python2;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit darwin;
       inherit buildPackages;
@@ -22002,7 +21995,7 @@ with pkgs;
     (import ../development/libraries/qt-5/5.15) {
       inherit newScope;
       inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper;
-      inherit bison cups dconf harfbuzz libGL perl gtk3;
+      inherit bison cups dconf harfbuzz libGL perl gtk3 python3;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit darwin;
       inherit buildPackages;
@@ -25630,9 +25623,7 @@ with pkgs;
 
   pam_mysql = callPackage ../os-specific/linux/pam_mysql { };
 
-  pam_p11 = callPackage ../os-specific/linux/pam_p11 {
-    openssl = openssl_1_1;
-  };
+  pam_p11 = callPackage ../os-specific/linux/pam_p11 { };
 
   pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
 
@@ -27028,7 +27019,6 @@ with pkgs;
 
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
     inherit (gnome) adwaita-icon-theme;
-    inherit (plasma5Packages) breeze-icons;
   };
 
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
@@ -28118,9 +28108,7 @@ with pkgs;
 
   echoip = callPackage ../servers/echoip { };
 
-  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
-    jdk = jdk11;
-  });
+  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
   ecpdap = callPackage ../development/embedded/fpga/ecpdap {
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -28341,8 +28329,6 @@ with pkgs;
   kerbrute = callPackage ../tools/security/kerbrute { };
 
   kvmtool = callPackage ../applications/virtualization/kvmtool { };
-
-  exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
   exrtools = callPackage ../applications/graphics/exrtools { };
 
@@ -33116,7 +33102,7 @@ with pkgs;
     gtk = gtk2;
   };
 
-  xxh = with python3Packages; toPythonApplication xxh;
+  xxh = callPackage ../tools/networking/xxh { };
 
   kodiPackages = recurseIntoAttrs (kodi.packages);
 
@@ -33952,7 +33938,6 @@ with pkgs;
 
   asc = callPackage ../games/asc {
     lua = lua5_1;
-    libsigcxx = libsigcxx12;
     physfs = physfs_2;
   };
 

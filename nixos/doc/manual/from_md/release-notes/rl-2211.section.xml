@@ -79,6 +79,32 @@
       </listitem>
       <listitem>
         <para>
+          <literal>nscd</literal> functionality, necessary to provide
+          non-glibc-builtin NSS modules (such as
+          <literal>nss_systemd</literal> or <literal>nss_ldap</literal>)
+          can now be provided by <literal>nsncd</literal>, by setting
+          <literal>services.nscd.enableNsncd</literal> to
+          <literal>true</literal>.
+        </para>
+        <para>
+          The <literal>nscd</literal> daemon provided by glibc, which is
+          currently used by NixOS isn’t very reliable. For example, it’s
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/135888">not
+          fully possible to disable caching functionality</link>,
+          causing various issues and failed lookups.
+        </para>
+        <para>
+          In contrast to nscd’s behavior of caching module responses on
+          its own, nsncd merely forwards requests to NSS modules, which
+          might cache or not.
+        </para>
+        <para>
+          We plan to use <literal>nsncd</literal> by default in NixOS
+          23.05.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>emacs</literal> enables native compilation which
           means:
         </para>
@@ -141,7 +167,7 @@
       </listitem>
       <listitem>
         <para>
-          PHP 8.2.0 RC 6 is available.
+          PHP 8.2.0 RC 7 is available.
         </para>
       </listitem>
       <listitem>
@@ -656,7 +682,7 @@
           <literal>22.11</literal>. This is to make sure that people
           using
           <link xlink:href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html">server-side
-          encryption</link> don’t loose access to their files.
+          encryption</link> don’t lose access to their files.
         </para>
         <para>
           In any other case it’s safe to use OpenSSL 3 for PHP’s openssl
@@ -707,6 +733,14 @@
           because of stability and compatibility issues. Users who still
           wish to remain using GTK can do so by using
           <literal>emacs-gtk</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>kanidm</literal> has been updated to 1.1.0-alpha.10
+          and now requires a tls certificate and key. It will always
+          start an https and – if enabled – an ldaps server and no http
+          and ldap server anymore.
         </para>
       </listitem>
       <listitem>
@@ -1404,6 +1438,14 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
+          The <literal>netlify-cli</literal> package has been updated
+          from 6.13.2 to 12.2.4, see the
+          <link xlink:href="https://github.com/netlify/cli/releases">changelog</link>
+          for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>dockerTools.buildImage</literal> deprecates the
           misunderstood <literal>contents</literal> parameter, in favor
           of <literal>copyToRoot</literal>. Use
@@ -1664,6 +1706,22 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           <literal>services.picom.experimentalBackends</literal> was
           removed since it is now the default and the option will cause
           <literal>picom</literal> to quit instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>haskellPackage.callHackage</literal> is not always
+          invalidated if <literal>all-cabal-hashes</literal> changes,
+          leading to less rebuilds of haskell dependencies.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>haskellPackages.callHackage</literal> and
+          <literal>haskellPackages.callCabal2nix</literal> (and related
+          functions) no longer keep a reference to the
+          <literal>cabal2nix</literal> call used to generate them. As a
+          result, they will be garbage collected more often.
         </para>
       </listitem>
     </itemizedlist>
