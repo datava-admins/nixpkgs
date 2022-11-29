@@ -5537,6 +5537,10 @@ self: super: with self; {
 
   mariadb = callPackage ../development/python-modules/mariadb { };
 
+  marisa = callPackage ../development/python-modules/marisa {
+    inherit (pkgs) marisa;
+  };
+
   marisa-trie = callPackage ../development/python-modules/marisa-trie { };
 
   markdown2 = callPackage ../development/python-modules/markdown2 { };
@@ -11453,6 +11457,8 @@ self: super: with self; {
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
+
+  types-psutil = callPackage ../development/python-modules/types-psutil { };
 
   types-python-dateutil = callPackage ../development/python-modules/types-python-dateutil { };
 
