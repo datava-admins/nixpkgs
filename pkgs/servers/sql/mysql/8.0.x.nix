@@ -52,10 +52,11 @@ self = stdenv.mkDerivation rec {
     "-DINSTALL_MYSQLTESTDIR="
     "-DINSTALL_DOCDIR=share/mysql/docs"
     "-DINSTALL_SHAREDIR=share/mysql"
-  ] ++ lib.optionals stdenv.isLinux [
-    "-DWITH_JEMALLOC=ON"
-    "-DWITH_LTO=ON"
-  ];
+  ]
+  ++ lib.optional stdenv.isLinux "-DWITH_LTO=ON"
+  # Issue building ARM under QEMU with jemalloc
+  ++ lib.optional (stdenv.isLinux && stdenv.isx86_64) "-DWITH_JEMALLOC=ON"
+  ;
 
   postInstall = ''
     moveToOutput "lib/*.a" $static
