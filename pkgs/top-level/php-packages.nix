@@ -302,6 +302,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
+
+    zstd = callPackage ../development/php-packages/zstd { };
   } // (
     let
       # This list contains build instructions for different modules that one may
