@@ -2836,6 +2836,8 @@ self: super: with self; {
 
   easygui = callPackage ../development/python-modules/easygui { };
 
+  easyocr = callPackage ../development/python-modules/easyocr { };
+
   EasyProcess = callPackage ../development/python-modules/easyprocess { };
 
   easysnmp = callPackage ../development/python-modules/easysnmp { };
@@ -6543,6 +6545,8 @@ self: super: with self; {
   optuna = callPackage ../development/python-modules/optuna { };
 
   opuslib = callPackage ../development/python-modules/opuslib { };
+
+  opytimark = callPackage ../development/python-modules/opytimark { };
 
   oralb-ble = callPackage ../development/python-modules/oralb-ble { };
 
@@ -10252,6 +10256,8 @@ self: super: with self; {
   shutilwhich = callPackage ../development/python-modules/shutilwhich { };
 
   sievelib = callPackage ../development/python-modules/sievelib { };
+
+  signalslot = callPackage ../development/python-modules/signalslot { };
 
   signedjson = callPackage ../development/python-modules/signedjson { };
 
