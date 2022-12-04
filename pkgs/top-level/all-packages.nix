@@ -5866,6 +5866,8 @@ with pkgs;
 
   dfc  = callPackage ../tools/system/dfc { };
 
+  dfrs  = callPackage ../tools/system/dfrs { };
+
   dev86 = callPackage ../development/compilers/dev86 { };
 
   diskrsync = callPackage ../tools/backup/diskrsync { };
@@ -13226,6 +13228,8 @@ with pkgs;
 
   zsh-clipboard = callPackage ../shells/zsh/zsh-clipboard { };
 
+  zsh-edit = callPackage ../shells/zsh/zsh-edit { };
+
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
 
   zsh-history = callPackage ../shells/zsh/zsh-history { };
@@ -13243,6 +13247,8 @@ with pkgs;
   zsh-system-clipboard = callPackage ../shells/zsh/zsh-system-clipboard { };
 
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
+
+  zsh-forgit = callPackage ../shells/zsh/zsh-forgit { };
 
   zsh-fzf-tab = callPackage ../shells/zsh/zsh-fzf-tab { };
 
@@ -29994,7 +30000,9 @@ with pkgs;
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
-  ladybird = qt6.callPackage ../applications/networking/browsers/ladybird { };
+  ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
+    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else gcc11Stdenv;
+  };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
 
