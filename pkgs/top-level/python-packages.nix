@@ -4567,6 +4567,8 @@ self: super: with self; {
 
   intreehooks = callPackage ../development/python-modules/intreehooks { };
 
+  invisible-watermark = callPackage ../development/python-modules/invisible-watermark { };
+
   invocations = callPackage ../development/python-modules/invocations { };
 
   invoke = callPackage ../development/python-modules/invoke { };
@@ -8267,6 +8269,8 @@ self: super: with self; {
   pynzb = callPackage ../development/python-modules/pynzb { };
 
   pyobihai = callPackage ../development/python-modules/pyobihai { };
+
+  pyocd = callPackage ../development/python-modules/pyocd { };
 
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;
