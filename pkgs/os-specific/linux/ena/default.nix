@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
     cd kernel/linux/ena
+    export ENA_PHC_INCLUDE=1
     substituteInPlace Makefile --replace '/lib/modules/$(BUILD_KERNEL)' ${kernel.dev}/lib/modules/${kernel.modDirVersion}
     runHook postConfigure
   '';
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
     homepage = "https://github.com/amzn/amzn-drivers";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.eelco ];
+    maintainers = with maintainers; [ eelco sielicki ];
     platforms = platforms.linux;
   };
 }
