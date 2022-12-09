@@ -2026,11 +2026,11 @@ with pkgs;
 
   maiko = callPackage ../applications/emulators/maiko { };
 
-  mame = libsForQt5.callPackage ../applications/emulators/mame {
-    inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
-  };
+  mame = libsForQt5.callPackage ../applications/emulators/mame { };
 
-  mame-tools = (lib.getOutput "tools" mame);
+  mame-tools = lib.addMetaAttrs {
+    description = mame.meta.description + " (tools only)";
+  } (lib.getOutput "tools" mame);
 
   mednafen = callPackage ../applications/emulators/mednafen {
     inherit (darwin) libiconv;
@@ -2067,7 +2067,7 @@ with pkgs;
   pcem = callPackage ../applications/emulators/pcem { };
 
   pcsx2 = callPackage ../applications/emulators/pcsx2 {
-    wxGTK = wxGTK30-gtk3;
+    wxGTK = wxGTK30;
   };
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
@@ -2790,9 +2790,7 @@ with pkgs;
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
-  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop {
-    openjdk11 = openjdk11.override { enableJavaFX = true; };
-  };
+  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
 
   bic = callPackage ../development/interpreters/bic { };
 
@@ -3191,6 +3189,8 @@ with pkgs;
   imgcrypt = callPackage ../applications/virtualization/imgcrypt { };
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
+
+  ipp-usb = callPackage ../os-specific/linux/ipp-usb { };
 
   itch = callPackage ../games/itch {};
 
@@ -10695,7 +10695,7 @@ with pkgs;
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
   poedit = callPackage ../tools/text/poedit {
-    wxGTK30-gtk3 = wxGTK30-gtk3.override { withWebKit = true; };
+    wxGTK30 = wxGTK30.override { withWebKit = true; };
   };
 
   polaris = callPackage ../servers/polaris { };
@@ -13366,6 +13366,8 @@ with pkgs;
   par = callPackage ../tools/text/par { };
 
   zip = callPackage ../tools/archivers/zip { };
+
+  zinc = callPackage ../servers/search/zinc { };
 
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
 
@@ -16737,7 +16739,7 @@ with pkgs;
   bloop = callPackage ../development/tools/build-managers/bloop { };
 
   bossa = callPackage ../development/embedded/bossa {
-    wxGTK = wxGTK30-gtk3;
+    wxGTK = wxGTK30;
   };
 
   bossa-arduino = callPackage ../development/embedded/bossa/arduino.nix { };
@@ -18122,6 +18124,10 @@ with pkgs;
   };
 
   taoup = callPackage ../tools/misc/taoup { };
+
+  tarmac = callPackage ../development/tools/tarmac {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
@@ -23161,12 +23167,9 @@ with pkgs;
   };
 
   wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix {
-    withGtk2 = true;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
   };
-  wxGTK30-gtk2 = wxGTK30.override { withGtk2 = true; };
-  wxGTK30-gtk3 = wxGTK30.override { withGtk2 = false; };
 
   wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix {
     inherit (darwin.stubs) derez rez setfile;
@@ -23184,7 +23187,7 @@ with pkgs;
   };
 
   wxSVG = callPackage ../development/libraries/wxSVG {
-    wxGTK = wxGTK30-gtk3;
+    wxGTK = wxGTK30;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -23786,6 +23789,8 @@ with pkgs;
   exhibitor = callPackage ../servers/exhibitor { };
 
   hyp = callPackage ../servers/http/hyp { };
+
+  peering-manager = callPackage ../servers/web-apps/peering-manager { };
 
   podgrab = callPackage ../servers/misc/podgrab { };
 
@@ -25741,9 +25746,7 @@ with pkgs;
 
   go-migrate = callPackage ../development/tools/go-migrate { };
 
-  go-mockery = callPackage ../development/tools/go-mockery {
-    buildGoModule = buildGo118Module; # tests fail with 1.19
-  };
+  go-mockery = callPackage ../development/tools/go-mockery { };
 
   gomacro = callPackage ../development/tools/gomacro { };
 
@@ -26096,6 +26099,8 @@ with pkgs;
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
   twa = callPackage ../tools/networking/twa { };
+
+  twingate = callPackage ../applications/networking/twingate { };
 
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot {})
@@ -31778,7 +31783,7 @@ with pkgs;
   radioboat = callPackage ../applications/audio/radioboat { };
 
   radiotray-ng = callPackage ../applications/audio/radiotray-ng {
-    wxGTK = wxGTK30-gtk3;
+    wxGTK = wxGTK30;
   };
 
   raiseorlaunch = callPackage ../applications/misc/raiseorlaunch {};
@@ -33473,6 +33478,8 @@ with pkgs;
   yarp = callPackage ../applications/science/robotics/yarp {};
 
   yate = callPackage ../applications/misc/yate { };
+
+  yaup = callPackage ../applications/networking/yaup { };
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
@@ -35971,14 +35978,6 @@ with pkgs;
     });
 
     java = openjdk17;
-    z3 = z3_4_4_0.overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "Z3Prover";
-        repo = "z3";
-        rev = "0482e7fe727c75e259ac55a932b28cf1842c530e";
-        sha256 = "1m53avlljxqd2p8w266ksmjywjycsd23h224yn786qsnf36dr63x";
-      };
-    });
   };
   isabelle-components = recurseIntoAttrs (callPackage ../applications/science/logic/isabelle/components { });
 
