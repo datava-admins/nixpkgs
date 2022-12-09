@@ -989,6 +989,7 @@
   ./services/networking/tox-node.nix
   ./services/networking/toxvpn.nix
   ./services/networking/tvheadend.nix
+  ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
@@ -1016,6 +1017,7 @@
   ./services/networking/zerotierone.nix
   ./services/networking/znc/default.nix
   ./services/printing/cupsd.nix
+  ./services/printing/ipp-usb.nix
   ./services/scheduling/atd.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
@@ -1140,6 +1142,7 @@
   ./services/web-apps/onlyoffice.nix
   ./services/web-apps/pict-rs.nix
   ./services/web-apps/peertube.nix
+  ./services/web-apps/peering-manager.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix
