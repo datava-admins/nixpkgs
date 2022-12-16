@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
   # linux 3.12
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
+
+  patches = [ ./ena_linux_6_1.patch ];
+
   configurePhase = ''
     runHook preConfigure
     cd kernel/linux/ena
