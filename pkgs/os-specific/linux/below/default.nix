@@ -1,49 +1,41 @@
-{ lib, rustPlatform, fetchCrate,
-fetchFromGitHub,
-pkg-config,
-libbpf,
-libelf,
-zlib,
-llvmPackages,
-ncurses5,
-rustfmt
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, clang
+, pkg-config
+, elfutils
+, rustfmt
+, zlib
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "below";
-  version = "0.5.0";
+  version = "0.6.3";
 
-  src = fetchCrate {
-    inherit version pname;
-    sha256 = "sha256-Km+rfIFdFXSvX5evZ76yJoDIaD3iSdjN+GHiuqWzaNc=";
+  src = fetchFromGitHub {
+    owner = "facebookincubator";
+    repo = "below";
+    rev = "v${version}";
+    sha256 = "sha256-d5a/M2XEw2E2iydopzedqZ/XfQU7KQyTC5NrPTeeNLg=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    llvmPackages.clang-unwrapped
-    rustfmt
-  ];
-  RUST_BACKTRACE = 1;
+  cargoSha256 = "sha256-EoRCmEe9SAySZCm+QhaR4ngik4Arnm4SZjgDM5fSRmk=";
 
-  buildInputs = [
-    libelf
-    zlib
-    libbpf
-    ncurses5
-  ];
+  # bpf code compilation
+  hardeningDisable = [ "stackprotector" ];
 
-  checkFlags = [
-    # Disable tests that require /sys access
-    "--skip=test::record_replay_integration"
-    "--skip=test::advance_forward_and_reverse"
-    "--skip=test::disable_io_stat"
-    "--skip=test::disable_disk_stat"
-  ];
-  cargoSha256 = "sha256-bwGdhRSl1qiTKRNoG9VzxigmftPpHbfWDWRGTmnRdf8=";
+  nativeBuildInputs = [ clang pkg-config rustfmt ];
+  buildInputs = [ elfutils zlib ];
+
+  # needs /sys/fs/cgroup
+  doCheck = false;
 
   meta = with lib; {
-    description = "Interactive tool to view and record historical system data with cgroup2 support";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ globin ];
+    description = "A time traveling resource monitor for modern Linux systems";
+    license = licenses.asl20;
     homepage = "https://github.com/facebookincubator/below";
-    license = with licenses; [ asl20 ];
   };
 }

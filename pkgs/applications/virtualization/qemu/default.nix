@@ -2,7 +2,7 @@
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
 , makeWrapper, runtimeShell, removeReferencesTo
-, attr, libcap, libcap_ng, socat
+, attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
 , guestAgentSupport ? with stdenv.hostPlatform; isLinux || isSunOS || isWindows
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "7.2.0-rc2";
+  version = "7.2.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "s7SKHTrGzbDKh/8ahC9yVWDO/ITJdwFipdQgNAwXTRE=";
+    sha256 = "sha256-W0nOJod0Ta1JSukKiYxSIEo0BuhNBySCoeG+hU7rIVc=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib glib perl pixman
     vde2 texinfo lzo snappy libtasn1
-    gnutls nettle curl
+    gnutls nettle curl libslirp
   ]
     ++ lib.optionals ncursesSupport [ ncurses ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile vmnet ]
@@ -109,19 +109,11 @@ stdenv.mkDerivation rec {
     #})
     # Try without... may have caused issues with nested VMs using vSphere.
     # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
-    #(fetchpatch {
-    #  url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
-    #  sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
-    #  revert = true;
-    #})
-    # Already included in 7.2.0-rc2
-    #./9pfs-use-GHashTable-for-fid-table.patch
-    # Already fixed in 7.2.0-rc2?
-    #(fetchpatch {
-    #  name = "CVE-2022-3165.patch";
-    #  url = "https://gitlab.com/qemu-project/qemu/-/commit/d307040b18bfcb1393b910f1bae753d5c12a4dc7.patch";
-    #  sha256 = "sha256-YPhm580lBNuAv7G1snYccKZ2V5ycdV8Ri8mTw5jjFBc=";
-    #})
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
+      sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
+      revert = true;
+    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
