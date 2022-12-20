@@ -44,20 +44,6 @@
       </listitem>
       <listitem>
         <para>
-          <literal>steam</literal> and <literal>lutris</literal> support
-          for nvidia cards has been improved, proton runtimes 5-7 now
-          work as expected.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>steam</literal> and <literal>lutris</literal> support
-          for nvidia cards has been improved, proton runtimes 5-7 now
-          work as expected.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           systemd services can now set
           <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.reloadTriggers</link>
           instead of <literal>reloadIfChanged</literal> for a more
@@ -342,7 +328,7 @@
       <listitem>
         <para>
           <link xlink:href="https://maddy.email/">Maddy</link>, a free
-          an open source mail server. Available as
+          an open source mail server. Availabe as
           <link linkend="opt-services.maddy.enable">services.maddy</link>.
         </para>
       </listitem>
@@ -1436,7 +1422,7 @@
               derivation if <literal>name</literal> is
               <literal>&quot;vim&quot;</literal> (the default). This
               makes the <literal>wrapManual</literal> argument obsolete,
-              but this behavior can be overridden by setting the
+              but this behavior can be overriden by setting the
               <literal>standalone</literal> argument.
             </para>
           </listitem>
@@ -2245,14 +2231,6 @@ sudo cp /var/lib/redis/dump.rdb /var/lib/redis-peertube/dump.rdb
       </listitem>
       <listitem>
         <para>
-          <literal>services.xserver.videoDrivers = [ &quot;nvidia&quot; ];</literal>
-          will now also install
-          <literal>pkgs.nvidia-vaapi-driver</literal> as a driver as
-          well.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           <literal>security.acme</literal> certificates will now
           correctly check for CA revokation before reaching their
           minimum age.
@@ -2666,18 +2644,6 @@ sudo cp /var/lib/redis/dump.rdb /var/lib/redis-peertube/dump.rdb
           from the <literal>tmuxPlugins</literal> group. The specified
           packages are added to the system and loaded by
           <literal>tmux</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>hardware.nvidia</literal> has a new option
-          <literal>open</literal> that can be used to opt in the
-          opensource version of NVIDIA kernel driver. Note that the
-          driver’s support for GeForce and Workstation GPUs is still
-          alpha quality, see
-          <link xlink:href="https://developer.nvidia.com/blog/nvidia-releases-open-source-gpu-kernel-modules/">NVIDIA
-          Releases Open-Source GPU Kernel Modules</link> for the
-          official announcement.
         </para>
       </listitem>
       <listitem>
