@@ -181,6 +181,7 @@
   ./programs/hamster.nix
   ./programs/htop.nix
   ./programs/iftop.nix
+  ./programs/i3lock.nix
   ./programs/iotop.nix
   ./programs/java.nix
   ./programs/k3b.nix
@@ -725,6 +726,7 @@
   ./services/monitoring/riemann.nix
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
+  ./services/monitoring/statsd.nix
   ./services/monitoring/sysstat.nix
   ./services/monitoring/teamviewer.nix
   ./services/monitoring/telegraf.nix
