@@ -3454,8 +3454,6 @@ with pkgs;
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
-  clasp = callPackage ../tools/misc/clasp { };
-
   clevercsv = with python3Packages; toPythonApplication clevercsv;
 
   clevis = callPackage ../tools/security/clevis {
@@ -32649,8 +32647,8 @@ with pkgs;
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
-  vengi-tools = callPackage ../applications/graphics/vengi-tools {
-    inherit (darwin.apple_sdk.frameworks) Carbon CoreServices OpenCL;
+  vengi-tools = darwin.apple_sdk_11_0.callPackage ../applications/graphics/vengi-tools {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon CoreServices OpenCL;
   };
 
   verbiste = callPackage ../applications/misc/verbiste {
