@@ -6333,6 +6333,8 @@ self: super: with self; {
 
   notify2 = callPackage ../development/python-modules/notify2 { };
 
+  notion-client = callPackage ../development/python-modules/notion-client { };
+
   notmuch = callPackage ../development/python-modules/notmuch {
     inherit (pkgs) notmuch;
   };
@@ -8886,6 +8888,8 @@ self: super: with self; {
 
   pytest-freezegun = callPackage ../development/python-modules/pytest-freezegun { };
 
+  pytest-freezer = callPackage ../development/python-modules/pytest-freezer { };
+
   pytest-golden = callPackage ../development/python-modules/pytest-golden { };
 
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
@@ -8987,6 +8991,8 @@ self: super: with self; {
   pytest-subtests = callPackage ../development/python-modules/pytest-subtests { };
 
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
+
+  pytest-tap = callPackage ../development/python-modules/pytest-tap { };
 
   pytest-test-utils = callPackage ../development/python-modules/pytest-test-utils { };
 
