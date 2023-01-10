@@ -66,10 +66,6 @@ self: super: {
   # > https://github.com/roelvandijk/numerals
   numerals = doJailbreak (dontCheck super.numerals);
 
-  # Too stricut upper bound on time
-  # https://github.com/acw/rate-limit/issues/9
-  rate-limit = doJailbreak super.rate-limit;
-
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
@@ -215,10 +211,6 @@ self: super: {
   # Too strict bounds on algebraic-graphs and bytestring
   # https://github.com/haskell-nix/hnix-store/issues/180
   hnix-store-core = doJailbreak super.hnix-store-core;
-
-  # Too strict upper bound on bytestring
-  # https://github.com/wangbj/hashing/issues/3
-  hashing = doJailbreak super.hashing;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
@@ -482,12 +474,6 @@ self: super: {
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
 
-  # Too strict upper bounds on bytestring & time
-  # https://github.com/barrucadu/irc-conduit/issues/35
-  irc-conduit = doJailbreak super.irc-conduit;
-  # https://github.com/barrucadu/irc-client/issues/77
-  irc-client = doJailbreak super.irc-client;
-
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
 
@@ -658,12 +644,15 @@ self: super: {
   }) newer;
 
   # * The standard libraries are compiled separately.
-  # * We need multiple patches from master to fix compilation with
+  # * We need a patch from master to fix compilation with
   #   updated dependencies (haskeline and megaparsec) which can be
-  #   removed when the next idris release (1.3.4 probably) comes
-  #   around.
+  #   removed when the next idris release comes around.
   idris = self.generateOptparseApplicativeCompletions [ "idris" ]
-    (doJailbreak (dontCheck super.idris));
+    (appendPatch (fetchpatch {
+      name = "idris-libffi-0.2.patch";
+      url = "https://github.com/idris-lang/Idris-dev/commit/6d6017f906c5aa95594dba0fd75e7a512f87883a.patch";
+      hash = "sha256-wyLjqCyLh5quHMOwLM5/XjlhylVC7UuahAM79D8+uls=";
+    }) (doJailbreak (dontCheck super.idris)));
 
   # Too strict bound on hspec
   # https://github.com/lspitzner/multistate/issues/9#issuecomment-1367853016
@@ -1361,9 +1350,7 @@ self: super: {
   haskell-language-server = (lib.pipe super.haskell-language-server [
     dontCheck
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
-    (assert super.hls-call-hierarchy-plugin.version == "1.1.0.0"; disableCabalFlag "callHierarchy") # Disabled temporarily: https://github.com/haskell/haskell-language-server/pull/3431
   ]).overrideScope (lself: lsuper: {
-    hls-call-hierarchy-plugin = null;
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
     # ghc-paths is special because it depends on Cabal for building
@@ -1460,16 +1447,6 @@ self: super: {
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
   hercules-ci-agent = lib.pipe super.hercules-ci-agent [
-    (appendPatches [
-      # haskell-updates branch, will be merged in 0.9.10
-      (fetchpatch2 {
-        name = "hercules-ci-agent-cachix-1.1";
-        url = "https://github.com/hercules-ci/hercules-ci-agent/commit/b76d888548da37a96ae47f1be871de6605d38edd.patch";
-        sha256 = "sha256-kqEkDHbatcYS8LuQlGV/1j/6LXWviQoDQAHDr6DBbDU=";
-        stripLen = 1;
-        includes = [ "*.hs" ];
-      })
-    ])
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
   ];
 
@@ -1913,18 +1890,6 @@ self: super: {
   # 2022-12-30: Restrictive upper bound on optparse-applicative
   retrie = doJailbreak super.retrie;
 
-  # Fixes https://github.com/NixOS/nixpkgs/issues/140613
-  # https://github.com/recursion-schemes/recursion-schemes/issues/128
-  recursion-schemes = overrideCabal (drv: {
-    patches = drv.patches or [] ++ [
-      ./patches/recursion-schemes-128.patch
-    ];
-    # make sure line endings don't break the patch
-    prePatch = drv.prePatch or "" + ''
-      "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-    '';
-  }) super.recursion-schemes;
-
   # 2022-08-30 Too strict bounds on finite-typelits
   # https://github.com/jumper149/blucontrol/issues/1
   blucontrol = doJailbreak super.blucontrol;
@@ -2003,18 +1968,6 @@ self: super: {
       "--skip" "/toJsonSerializer/should generate valid JSON/"
     ] ++ drv.testFlags or [];
   }) super.hschema-aeson;
-  # https://gitlab.com/k0001/xmlbf/-/issues/32
-  xmlbf = overrideCabal (drv: {
-    testFlags = [
-      "-p" "!/xml: <x b=\"\" a=\"y\"><\\/x>/&&!/xml: <x b=\"z\" a=\"y\"><\\/x>/"
-    ] ++ drv.testFlags or [];
-  }) super.xmlbf;
-  # https://github.com/ssadler/aeson-quick/issues/3
-  aeson-quick = overrideCabal (drv: {
-    testFlags = [
-      "-p" "!/asLens.set/&&!/complex.set/&&!/multipleKeys.set/"
-    ] ++ drv.testFlags or [];
-  }) super.aeson-quick;
   # https://github.com/minio/minio-hs/issues/165
   minio-hs = overrideCabal (drv: {
     testFlags = [
@@ -2142,18 +2095,9 @@ self: super: {
   # https://github.com/zellige/hs-geojson/issues/29
   geojson = dontCheck super.geojson;
 
-  # Doesn't support aeson >= 2.0
-  # https://github.com/channable/vaultenv/issues/118
-  vaultenv = super.vaultenv.overrideScope (self: super: {
-    aeson = self.aeson_1_5_6_0;
-  });
-
-  # Support network >= 3.1.2
-  # https://github.com/erebe/wstunnel/pull/107
-  wstunnel = appendPatch (fetchpatch {
-    url = "https://github.com/erebe/wstunnel/pull/107/commits/47c1f62bdec1dbe77088d9e3ceb6d872f922ce34.patch";
-    sha256 = "sha256-fW5bVbAGQxU/gd9zqgVNclwKraBtUjkKDek7L0c4+O0=";
-  }) super.wstunnel;
+  # Test suite doesn't compile
+  # https://github.com/erebe/wstunnel/issues/145
+  wstunnel = dontCheck super.wstunnel;
 
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
@@ -2363,4 +2307,16 @@ self: super: {
   } super.postgrest));
 
   html-charset = dontCheck super.html-charset;
+
+  # true-name-0.1.0.4 has been tagged, but has not been released to Hackage.
+  # Also, beyond 0.1.0.4 an additional patch is required to make true-name
+  # compatible with current versions of template-haskell
+  # https://github.com/liyang/true-name/pull/4
+  true-name = appendPatch (fetchpatch {
+    url = "https://github.com/liyang/true-name/compare/0.1.0.3...nuttycom:true-name:update_template_haskell.patch";
+    hash = "sha256-ZMBXGGc2X5AKXYbqgkLXkg5BhEwyj022E37sUEWahtc=";
+  }) (overrideCabal (drv: {
+    revision = null;
+    editedCabalFile = null;
+  }) super.true-name);
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

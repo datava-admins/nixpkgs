@@ -78,6 +78,7 @@ in {
   allTerminfo = handleTest ./all-terminfo.nix {};
   alps = handleTest ./alps.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
+  apcupsd = handleTest ./apcupsd.nix {};
   apfs = handleTest ./apfs.nix {};
   apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};
@@ -224,7 +225,8 @@ in {
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
-  freshrss = handleTest ./freshrss.nix {};
+  freshrss-sqlite = handleTest ./freshrss-sqlite.nix {};
+  freshrss-pgsql = handleTest ./freshrss-pgsql.nix {};
   frr = handleTest ./frr.nix {};
   fsck = handleTest ./fsck.nix {};
   ft2-clone = handleTest ./ft2-clone.nix {};
@@ -527,7 +529,6 @@ in {
   plotinus = handleTest ./plotinus.nix {};
   podgrab = handleTest ./podgrab.nix {};
   podman = handleTestOn ["aarch64-linux" "x86_64-linux"] ./podman/default.nix {};
-  podman-dnsname = handleTestOn ["aarch64-linux" "x86_64-linux"] ./podman/dnsname.nix {};
   podman-tls-ghostunnel = handleTestOn ["aarch64-linux" "x86_64-linux"] ./podman/tls-ghostunnel.nix {};
   polaris = handleTest ./polaris.nix {};
   pomerium = handleTestOn ["x86_64-linux"] ./pomerium.nix {};

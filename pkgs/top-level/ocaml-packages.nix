@@ -98,6 +98,8 @@ let
 
     brisk-reconciler = callPackage ../development/ocaml-modules/brisk-reconciler { };
 
+    brr = callPackage ../development/ocaml-modules/brr { };
+
     bwd = callPackage ../development/ocaml-modules/bwd { };
 
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
@@ -328,7 +330,11 @@ let
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
+    domainslib = callPackage ../development/ocaml-modules/domainslib { };
+
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
+
+    dscheck = callPackage ../development/ocaml-modules/dscheck { };
 
     dssi = callPackage ../development/ocaml-modules/dssi { };
 
@@ -660,6 +666,8 @@ let
 
     js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix { };
 
+    js_of_ocaml-toplevel = callPackage ../development/tools/ocaml/js_of_ocaml/toplevel.nix {};
+
     js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
@@ -736,6 +744,8 @@ let
     };
 
     lo = callPackage ../development/ocaml-modules/lo { };
+
+    lockfree = callPackage ../development/ocaml-modules/lockfree { };
 
     logs = callPackage ../development/ocaml-modules/logs { };
 
@@ -944,6 +954,8 @@ let
 
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
+    note = callPackage ../development/ocaml-modules/note { };
+
     notty = callPackage ../development/ocaml-modules/notty { };
 
     npy = callPackage ../development/ocaml-modules/npy {
@@ -1115,6 +1127,8 @@ let
     opus = callPackage ../development/ocaml-modules/opus { };
 
     ordering = callPackage ../development/ocaml-modules/ordering { };
+
+    oseq = callPackage ../development/ocaml-modules/oseq { };
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
@@ -1508,12 +1522,6 @@ let
     webbrowser = callPackage ../development/ocaml-modules/webbrowser { };
 
     webmachine = callPackage ../development/ocaml-modules/webmachine { };
-
-    wodan = callPackage ../development/ocaml-modules/wodan { };
-
-    wodan-irmin = callPackage ../development/ocaml-modules/wodan/irmin.nix { };
-
-    wodan-unix = callPackage ../development/ocaml-modules/wodan/unix.nix { };
 
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 

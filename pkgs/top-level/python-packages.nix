@@ -278,6 +278,8 @@ self: super: with self; {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiopurpleair = callPackage ../development/python-modules/aiopurpleair { };
+
   aiopvapi = callPackage ../development/python-modules/aiopvapi { };
 
   aiopvpc = callPackage ../development/python-modules/aiopvpc { };
@@ -2592,6 +2594,8 @@ self: super: with self; {
 
   django-scopes = callPackage ../development/python-modules/django-scopes { };
 
+  django-scim2 = callPackage ../development/python-modules/django-scim2 { };
+
   djangoql = callPackage ../development/python-modules/djangoql { };
 
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
@@ -3621,8 +3625,6 @@ self: super: with self; {
   garminconnect = callPackage ../development/python-modules/garminconnect { };
 
   gast = callPackage ../development/python-modules/gast { };
-
-  garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
 
   gatt = callPackage ../development/python-modules/gatt { };
 
@@ -5052,6 +5054,8 @@ self: super: with self; {
 
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
 
+  keyrings-passwordstore = callPackage ../development/python-modules/keyrings-passwordstore { };
+
   keystoneauth1 = callPackage ../development/python-modules/keystoneauth1 { };
 
   keyutils = callPackage ../development/python-modules/keyutils {
@@ -5074,6 +5078,8 @@ self: super: with self; {
   };
 
   kivy-garden = callPackage ../development/python-modules/kivy-garden { };
+
+  kiwiki-client = callPackage ../development/python-modules/kiwiki-client { };
 
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
 
@@ -5142,6 +5148,8 @@ self: super: with self; {
   lc7001 = callPackage ../development/python-modules/lc7001 { };
 
   lcov_cobertura = callPackage ../development/python-modules/lcov_cobertura { };
+
+  ld2410-ble = callPackage ../development/python-modules/ld2410-ble { };
 
   ldap3 = callPackage ../development/python-modules/ldap3 { };
 
@@ -5658,7 +5666,7 @@ self: super: with self; {
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
     inherit buildPythonPackage pythonOlder fetchPypi;
-    inherit (self) pyface pygments numpy vtk traitsui envisage apptools pyqt5;
+    inherit (self) pyface pygments numpy packaging vtk traitsui envisage apptools pyqt5;
   };
 
   mbddns = callPackage ../development/python-modules/mbddns { };
@@ -6449,6 +6457,8 @@ self: super: with self; {
   od = callPackage ../development/python-modules/od { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
+
+  odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
 
   offtrac = callPackage ../development/python-modules/offtrac { };
 
@@ -8059,6 +8069,8 @@ self: super: with self; {
 
   pykakasi = callPackage ../development/python-modules/pykakasi { };
 
+  pykaleidescape = callPackage ../development/python-modules/pykaleidescape { };
+
   pykdl = callPackage ../development/python-modules/pykdl { };
 
   pykdtree = callPackage ../development/python-modules/pykdtree {
@@ -9600,6 +9612,8 @@ self: super: with self; {
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 
+  quadprog = callPackage ../development/python-modules/quadprog { };
+
   qualysclient = callPackage ../development/python-modules/qualysclient { };
 
   quamash = callPackage ../development/python-modules/quamash { };
@@ -9754,6 +9768,8 @@ self: super: with self; {
   reorder-python-imports = callPackage ../development/python-modules/reorder-python-imports { };
 
   reolink = callPackage ../development/python-modules/reolink { };
+
+  reolink-aio = callPackage ../development/python-modules/reolink-aio { };
 
   reparser = callPackage ../development/python-modules/reparser { };
 
@@ -10108,6 +10124,8 @@ self: super: with self; {
   schiene = callPackage ../development/python-modules/schiene { };
 
   schwifty = callPackage ../development/python-modules/schwifty { };
+
+  scim2-filter-parser = callPackage ../development/python-modules/scim2-filter-parser { };
 
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
 
@@ -11890,7 +11908,7 @@ self: super: with self; {
 
   vt-py = callPackage ../development/python-modules/vt-py { };
 
-  vtk = toPythonModule (pkgs.vtk.override {
+  vtk = toPythonModule (pkgs.vtk_9.override {
     pythonInterpreter = python;
     enablePython = true;
   });
