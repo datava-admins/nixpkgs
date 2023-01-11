@@ -15,13 +15,15 @@ let
 
   bees = stdenv.mkDerivation rec {
     pname = "bees";
-    version = "0.8";
+    version = "0.8-dev";
 
     src = fetchFromGitHub {
       owner = "Zygo";
       repo = "bees";
-      rev = "v${version}";
-      sha256 = "sha256-xBejyi/W8DLQmcicTqEQb5c4uZKu7jsLGjmWmW74t88=";
+      #rev = "v${version}";
+      # 2023-01-04
+      rev = "d27621b779e05471fbf65eda13cf51dc382d61b1";
+      hash = "sha256-oJMTC6fH5JfDE5PfdJM3EVg7rk7FjJ2qA8SMKqNGaC4=";
     };
 
     buildInputs = [
