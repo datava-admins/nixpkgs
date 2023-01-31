@@ -10,7 +10,7 @@ self = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    hash = "sha256-Hw2SojeJgkRxbdWB95k1bgc8LaY8Oy5KAeEDLL7VDig=";
+    sha256 = "sha256-Hw2SojeJgkRxbdWB95k1bgc8LaY8Oy5KAeEDLL7VDig=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]
