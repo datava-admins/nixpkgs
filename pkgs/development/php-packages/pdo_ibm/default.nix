@@ -2,12 +2,12 @@
 let
   db2-odbc-cli = mkDerivation {
     pname = "db2-odbc-cli";
-    version = "11.5.6.0";
+    version = "11.5.8.0";
     dontConfigure = true;
 
     src = fetchurl {
       url = "https://public.dhe.ibm.com/ibmdl/export/pub/software/data/db2/drivers/odbc_cli/linuxx64_odbc_cli.tar.gz";
-      sha256 = "sha256-Cwx/qarZVEAkyvxyvNRP9wTcfsWUMc5/IZvx2ExYu7M=";
+      hash = "sha256-P3aQJNzBCJO2SNxYjnDwzckHi7zp6xzIc7qm4Qb703w=";
     };
 
     nativeBuildInputs = [
