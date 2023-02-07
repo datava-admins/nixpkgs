@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -8,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
-  version = "0.6.0";
+  version = "0.6.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,10 +18,14 @@ buildPythonPackage rec {
     owner = "dieselrabbit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/ePvq+jFLiIsP1w9YxMl3lbekNRaDhKMjKXoYkCOpn8=";
+    hash = "sha256-3V63DnMzICLZUyzcyWNa7XI0fd1kOat15cL6GPos04E=";
   };
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    async-timeout
+  ];
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

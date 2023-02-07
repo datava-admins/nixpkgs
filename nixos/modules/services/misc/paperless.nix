@@ -212,23 +212,40 @@ in
 
     systemd.services.paperless-scheduler = {
       description = "Paperless Celery Beat";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "paperless-consumer.service" "paperless-web.service" "paperless-task-queue.service" ];
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
         ExecStart = "${pkg}/bin/celery --app paperless beat --loglevel INFO";
         Restart = "on-failure";
       };
       environment = env;
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "paperless-consumer.service" "paperless-web.service" "paperless-task-queue.service" ];
 
       preStart = ''
         ln -sf ${manage} ${cfg.dataDir}/paperless-manage
 
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
-        if [[ $(cat "$versionFile" 2>/dev/null) != ${pkg} ]]; then
+        version=$(cat "$versionFile" 2>/dev/null || echo 0)
+
+        if [[ $version != ${pkg.version} ]]; then
           ${pkg}/bin/paperless-ngx migrate
-          echo ${pkg} > "$versionFile"
+
+          # Parse old version string format for backwards compatibility
+          version=$(echo "$version" | grep -ohP '[^-]+$')
+
+          versionLessThan() {
+            target=$1
+            [[ $({ echo "$version"; echo "$target"; } | sort -V | head -1) != "$target" ]]
+          }
+
+          if versionLessThan 1.12.0; then
+            # Reindex documents as mentioned in https://github.com/paperless-ngx/paperless-ngx/releases/tag/v1.12.1
+            echo "Reindexing documents, to allow searching old comments. Required after the 1.12.x upgrade."
+            ${pkg}/bin/paperless-ngx document_index reindex
+          fi
+
+          echo ${pkg.version} > "$versionFile"
         fi
       ''
       + optionalString (cfg.passwordFile != null) ''
@@ -248,6 +265,7 @@ in
 
     systemd.services.paperless-task-queue = {
       description = "Paperless Celery Workers";
+      after = [ "paperless-scheduler.service" ];
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
         ExecStart = "${pkg}/bin/celery --app paperless worker --loglevel INFO";
@@ -275,20 +293,24 @@ in
 
     systemd.services.paperless-consumer = {
       description = "Paperless document consumer";
+      # Bind to `paperless-scheduler` so that the consumer never runs
+      # during migrations
+      bindsTo = [ "paperless-scheduler.service" ];
+      after = [ "paperless-scheduler.service" ];
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
         ExecStart = "${pkg}/bin/paperless-ngx document_consumer";
         Restart = "on-failure";
       };
       environment = env;
-      # Bind to `paperless-scheduler` so that the consumer never runs
-      # during migrations
-      bindsTo = [ "paperless-scheduler.service" ];
-      after = [ "paperless-scheduler.service" ];
     };
 
     systemd.services.paperless-web = {
       description = "Paperless web server";
+      # Bind to `paperless-scheduler` so that the web server never runs
+      # during migrations
+      bindsTo = [ "paperless-scheduler.service" ];
+      after = [ "paperless-scheduler.service" ];
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
         ExecStart = ''
@@ -312,10 +334,6 @@ in
       # Allow the web interface to access the private /tmp directory of the server.
       # This is required to support uploading files via the web interface.
       unitConfig.JoinsNamespaceOf = "paperless-task-queue.service";
-      # Bind to `paperless-scheduler` so that the web server never runs
-      # during migrations
-      bindsTo = [ "paperless-scheduler.service" ];
-      after = [ "paperless-scheduler.service" ];
     };
 
     users = optionalAttrs (cfg.user == defaultUser) {

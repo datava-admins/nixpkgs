@@ -1,4 +1,5 @@
 { lib
+, beautifulsoup4
 , buildPythonPackage
 , fetchFromGitHub
 , matplotlib
@@ -8,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ghrepo-stats";
-  version = "0.4.0";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,11 +17,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mrbean-bremen";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-KFjqHrN0prcqu3wEPZpa7rLfuD0X/DN7BMo4zcHNmYo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QHFwIfX0rSVnWgxe82zQXMwIS99CiPgprfoMbuXvXH0=";
   };
 
+  postPatch = ''
+    # https://github.com/mrbean-bremen/ghrepo-stats/pull/1
+    substituteInPlace setup.py \
+      --replace "bs4" "beautifulsoup4"
+  '';
+
   propagatedBuildInputs = [
+    beautifulsoup4
     matplotlib
     PyGithub
   ];

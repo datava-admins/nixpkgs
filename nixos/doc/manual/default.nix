@@ -68,12 +68,15 @@ let
 
   sources = lib.sourceFilesBySuffices ./. [".xml"];
 
-  modulesDoc = builtins.toFile "modules.xml" ''
-    <section xmlns:xi="http://www.w3.org/2001/XInclude" id="modules">
-    ${(lib.concatMapStrings (path: ''
-      <xi:include href="${path}" />
-    '') (lib.catAttrs "value" config.meta.doc))}
-    </section>
+  modulesDoc = runCommand "modules.xml" {
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    nixos-render-docs manual docbook \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      "$out" \
+      --section \
+        --section-id modules \
+        --chapters ${lib.concatMapStrings (p: "${p.value} ") config.meta.doc}
   '';
 
   generatedSources = runCommand "generated-docbook" {} ''
@@ -176,40 +179,10 @@ let
       lintrng $out/man-pages-combined.xml
     '';
 
-  olinkDB = runCommand "manual-olinkdb"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
-    }
-    ''
-      xsltproc \
-        ${manualXsltprocOptions} \
-        --stringparam collect.xref.targets only \
-        --stringparam targets.filename "$out/manual.db" \
-        --nonet \
-        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
-        ${manual-combined}/manual-combined.xml
-
-      cat > "$out/olinkdb.xml" <<EOF
-      <?xml version="1.0" encoding="utf-8"?>
-      <!DOCTYPE targetset SYSTEM
-        "file://${docbook_xsl_ns}/xml/xsl/docbook/common/targetdatabase.dtd" [
-        <!ENTITY manualtargets SYSTEM "file://$out/manual.db">
-      ]>
-      <targetset>
-        <targetsetinfo>
-            Allows for cross-referencing olinks between the manpages
-            and manual.
-        </targetsetinfo>
-
-        <document targetdoc="manual">&manualtargets;</document>
-      </targetset>
-      EOF
-    '';
-
 in rec {
   inherit generatedSources;
 
-  inherit (optionsDoc) optionsJSON optionsNix optionsDocBook;
+  inherit (optionsDoc) optionsJSON optionsNix optionsDocBook optionsUsedDocbook;
 
   # Generate the NixOS manual.
   manualHTML = runCommand "nixos-manual-html"
@@ -224,7 +197,6 @@ in rec {
       mkdir -p $dst
       xsltproc \
         ${manualXsltprocOptions} \
-        --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --stringparam id.warnings "1" \
         --nonet --output $dst/ \
         ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
@@ -261,7 +233,6 @@ in rec {
 
       xsltproc \
         ${manualXsltprocOptions} \
-        --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --nonet --xinclude --output $dst/epub/ \
         ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
         ${manual-combined}/manual-combined.xml
@@ -283,19 +254,23 @@ in rec {
   # Generate the NixOS manpages.
   manpages = runCommand "nixos-manpages"
     { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+      nativeBuildInputs = [
+        buildPackages.libxml2.bin
+        buildPackages.libxslt.bin
+        buildPackages.installShellFiles
+      ];
       allowedReferences = ["out"];
     }
     ''
       # Generate manpages.
-      mkdir -p $out/share/man
+      mkdir -p $out/share/man/man8
+      installManPage ${./manpages}/*
       xsltproc --nonet \
         --maxdepth 6000 \
         --param man.output.in.separate.dir 1 \
         --param man.output.base.dir "'$out/share/man/'" \
         --param man.endnotes.are.numbered 0 \
         --param man.break.after.slash 1 \
-        --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl \
         ${manual-combined}/man-pages-combined.xml
     '';

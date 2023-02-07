@@ -25,14 +25,14 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.9.10"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.9.19"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-rRtC1OApm9fEd79I3ZD0kVbvqwsSNog46zHfdqTw5Pk=";
+    hash = "sha256-0Z4jTN9+bsurCYqJcYqG0r0ed3gWG9PDgT5J/+stiPE=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ with py.pkgs; buildPythonApplication rec {
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsonschema
     mock
     pytestCheckHook

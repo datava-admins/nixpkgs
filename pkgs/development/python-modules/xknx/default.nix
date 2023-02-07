@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "2.1.0";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-a8hC63G+FZBe6yePgrmzRsRTzpHWS+tBQmVUS/uHfzI=";
+    hash = "sha256-G4az6YmCDv1MPF30mBQVNBPZdebjZqd+0vxo5F5iDWY=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     ifaddr
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

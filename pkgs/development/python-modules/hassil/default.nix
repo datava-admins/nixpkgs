@@ -2,6 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 
+# build
+, antlr4
+
 # propagates
 , antlr4-python3-runtime
 , dataclasses-json
@@ -13,7 +16,7 @@
 
 let
   pname = "hassil";
-  version = "0.1.3";
+  version = "0.2.6";
 in
 buildPythonPackage {
   inherit pname version;
@@ -21,11 +24,17 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KWkzHWMo50OIrZ2kwFhhqDSleFFkAD7/JugjvSyCkww=";
+    hash = "sha256-KbzGZLW+HrG4meOa0mVTh3jmt43gRxl9yN9asWMDxiY=";
   };
+
+  nativeBuildInputs = [
+    antlr4
+  ];
 
   postPatch = ''
     sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements.txt
+    rm hassil/grammar/*.{tokens,interp}
+    antlr -Dlanguage=Python3 -visitor -o hassil/grammar/ *.g4
   '';
 
   propagatedBuildInputs = [
@@ -34,7 +43,7 @@ buildPythonPackage {
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
