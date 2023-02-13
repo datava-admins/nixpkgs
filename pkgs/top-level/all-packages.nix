@@ -2017,7 +2017,7 @@ with pkgs;
   lilo = callPackage ../tools/misc/lilo { };
 
   logseq = callPackage ../applications/misc/logseq {
-    electron = electron_19;
+    electron = electron_20;
   };
 
   natls = callPackage ../tools/misc/natls { };
@@ -15981,6 +15981,10 @@ with pkgs;
         pipewireSupport = false;
       };
     };
+
+    # the default readline is too old to be found by pkg-config,
+    # and thus meson, and thus pipewire
+    readline = readline81;
   };
 
   pipewire-media-session = callPackage ../development/libraries/pipewire/media-session.nix {};
@@ -21312,6 +21316,8 @@ with pkgs;
   lzo = callPackage ../development/libraries/lzo { };
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
+
+  magic-enum = callPackage ../development/libraries/magic-enum { };
 
   mapnik = callPackage ../development/libraries/mapnik {
     harfbuzz = harfbuzz.override {
@@ -31062,7 +31068,9 @@ with pkgs;
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};
 
-  obsidian = callPackage ../applications/misc/obsidian { };
+  obsidian = callPackage ../applications/misc/obsidian {
+    electron = electron_21;
+  };
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
