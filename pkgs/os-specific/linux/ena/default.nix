@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
-    hash = "sha256-KlRNI2lnUbNeQGY1G+Qm683yXRTNCJwWIri51+PAi9o=";
+    sha256 = "sha256-KlRNI2lnUbNeQGY1G+Qm683yXRTNCJwWIri51+PAi9o=";
   };
 
   hardeningDisable = [ "pic" ];

@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [ glib freetype gobject-introspection ]
+  buildInputs = [ glib freetype ]
     ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
   propagatedBuildInputs = lib.optional withGraphite2 graphite2
@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
   # Slightly hacky; some pkgs expect them in a single directory.
   postFixup = lib.optionalString withIcu ''
     rm "$out"/lib/libharfbuzz.* "$dev/lib/pkgconfig/harfbuzz.pc"
-    ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.la
     ln -s {'${harfbuzz.dev}',"$dev"}/lib/pkgconfig/harfbuzz.pc
     ${lib.optionalString stdenv.isDarwin ''
       ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.dylib

@@ -169,6 +169,8 @@ self = stdenv.mkDerivation {
     "--disable-init-state"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
+  ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [
+    "--enable-embedded-sandbox-shell"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system) [
     "--with-system=${stdenv.hostPlatform.nix.system}"
   ] ++ lib.optionals (!withLibseccomp) [
@@ -179,6 +181,10 @@ self = stdenv.mkDerivation {
   ];
 
   makeFlags = [
+    # gcc runs multi-threaded LTO using make and does not yet detect the new fifo:/path style
+    # of make jobserver. until gcc adds support for this we have to instruct make to use this
+    # old style or LTO builds will run their linking on only one thread, which takes forever.
+    "--jobserver-style=pipe"
     "profiledir=$(out)/etc/profile.d"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";

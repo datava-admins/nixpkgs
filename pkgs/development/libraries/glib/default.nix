@@ -19,6 +19,7 @@
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
+, testers
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
@@ -188,6 +189,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddevbindir=${placeholder "dev"}/bin"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    "-Db_lundef=false"
+    "-Dxattr=false"
   ];
 
   NIX_CFLAGS_COMPILE = toString [
@@ -277,7 +281,10 @@ stdenv.mkDerivation (finalAttrs: {
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
 
-    tests.withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+    tests = {
+      withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
 
     inherit flattenInclude;
     updateScript = gnome.updateScript {
@@ -300,9 +307,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
-    homepage    = "https://www.gtk.org/";
+    homepage    = "https://wiki.gnome.org/Projects/GLib";
     license     = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
+    pkgConfigModules = [
+      "gio-2.0"
+      "gobject-2.0"
+      "gthread-2.0"
+    ];
     platforms   = platforms.unix;
 
     longDescription = ''

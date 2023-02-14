@@ -2,14 +2,15 @@
 , stdenv
 , cmake
 , pkg-config
-, boost
 , curl
+, asio
 , fetchFromGitHub
 , fetchpatch
 , ffmpeg
 , gnutls
 , lame
 , libev
+, game-music-emu
 , libmicrohttpd
 , libopenmpt
 , mpg123
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.98.1";
+  version = "0.99.5";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pnAdlCCqWzR0W8dF9CE48K8yHMVIx3egZlXvibxU18A=";
+    sha256 = "sha256-SbWL36GRIJPSvxZyj6sebJxTkSPsUcsKyC3TmcIq2O0";
   };
 
   outputs = [ "out" "dev" ];
@@ -44,12 +45,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    asio
     curl
     ffmpeg
     gnutls
     lame
     libev
+    game-music-emu
     libmicrohttpd
     libopenmpt
     mpg123
