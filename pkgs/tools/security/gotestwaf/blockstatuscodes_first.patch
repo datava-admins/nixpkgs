@@ -1,0 +1,30 @@
+diff --git a/internal/scanner/scanner.go b/internal/scanner/scanner.go
+index 1b7b0a6..64b80fd 100644
+--- a/internal/scanner/scanner.go
++++ b/internal/scanner/scanner.go
+@@ -331,6 +331,12 @@ func (s *Scanner) Run(ctx context.Context) error {
+ // checkBlocking checks the response status-code or request body using
+ // a regular expression to determine if the request has been blocked.
+ func (s *Scanner) checkBlocking(responseMsgHeader, body string, statusCode int) (bool, error) {
++	for _, code := range s.cfg.BlockStatusCodes {
++		if statusCode == code {
++			return true, nil
++		}
++	}
++
+ 	if s.cfg.BlockRegex != "" {
+ 		response := body
+ 		if responseMsgHeader != "" {
+@@ -344,12 +350,6 @@ func (s *Scanner) checkBlocking(responseMsgHeader, body string, statusCode int)
+ 		}
+ 	}
+ 
+-	for _, code := range s.cfg.BlockStatusCodes {
+-		if statusCode == code {
+-			return true, nil
+-		}
+-	}
+-
+ 	return false, nil
+ }
+ 
