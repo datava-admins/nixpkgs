@@ -5,16 +5,19 @@
 
 buildGoModule rec {
   pname = "gotestwaf";
-  version = "0.3.1";
+  version = "cb5b7df12facc7c4e5d4ad886901fb1f2cd37189";
 
   src = fetchFromGitHub {
     owner = "wallarm";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0c627bxx0mlxhc1fsd2k3x1lm5855pl215m88la662d70559z6k8";
+    rev = version;
+    sha256 = "sha256-gw8TbCtOZwFvs/Rv7psZL5WBap2qs25Y/D4k8o9mREk=";
   };
 
+  patches = [ ./blockstatuscodes_first.patch ];
+
   vendorSha256 = null;
+  doCheck = false;
 
   postFixup = ''
     # Rename binary
