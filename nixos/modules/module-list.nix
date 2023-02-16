@@ -1319,7 +1319,6 @@
   ./virtualisation/containers.nix
   ./virtualisation/containers-next
   ./virtualisation/nixos-containers.nix
-  ./virtualisation/oci-containers.nix
   ./virtualisation/cri-o.nix
   ./virtualisation/docker.nix
   ./virtualisation/docker-rootless.nix
