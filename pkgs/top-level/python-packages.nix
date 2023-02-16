@@ -4067,6 +4067,8 @@ self: super: with self; {
 
   gql = callPackage ../development/python-modules/gql { };
 
+  grad-cam = callPackage ../development/python-modules/grad-cam { };
+
   gradient = callPackage ../development/python-modules/gradient { };
 
   gradient-utils = callPackage ../development/python-modules/gradient-utils { };
@@ -4243,8 +4245,6 @@ self: super: with self; {
   halohome = callPackage ../development/python-modules/halohome { };
 
   handout = callPackage ../development/python-modules/handout { };
-
-  hangups = callPackage ../development/python-modules/hangups { };
 
   hap-python = callPackage ../development/python-modules/hap-python { };
 
@@ -5466,8 +5466,6 @@ self: super: with self; {
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
-  lightning = callPackage ../development/python-modules/lightning { };
-
   lightning-utilities  = callPackage ../development/python-modules/lightning-utilities { };
 
   lightparam = callPackage ../development/python-modules/lightparam { };
@@ -6199,6 +6197,8 @@ self: super: with self; {
   myst-nb = callPackage ../development/python-modules/myst-nb { };
 
   myst-parser = callPackage ../development/python-modules/myst-parser { };
+
+  n3fit = callPackage ../development/python-modules/n3fit { };
 
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
@@ -8316,8 +8316,6 @@ self: super: with self; {
   pylru = callPackage ../development/python-modules/pylru { };
 
   pylsqpack = callPackage ../development/python-modules/pylsqpack { };
-
-  pyls-black = callPackage ../development/python-modules/pyls-black { };
 
   pyls-flake8 = callPackage ../development/python-modules/pyls-flake8 { };
 

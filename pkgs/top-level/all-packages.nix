@@ -368,6 +368,8 @@ with pkgs;
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  c64-debugger = callPackage ../applications/emulators/c64-debugger { };
+
   caroline = callPackage ../development/libraries/caroline { };
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
@@ -1260,7 +1262,7 @@ with pkgs;
 
   akkoma = callPackage ../servers/akkoma { };
   akkoma-frontends = recurseIntoAttrs {
-    pleroma-fe = callPackage ../servers/akkoma/pleroma-fe { };
+    akkoma-fe = callPackage ../servers/akkoma/akkoma-fe { };
     admin-fe = callPackage ../servers/akkoma/admin-fe { };
   };
   akkoma-emoji = recurseIntoAttrs {
@@ -5666,6 +5668,8 @@ with pkgs;
 
   sqlint = callPackage ../development/tools/sqlint { };
 
+  squawk = callPackage ../development/tools/squawk { };
+
   antibody = callPackage ../shells/zsh/antibody { };
 
   antigen = callPackage ../shells/zsh/antigen { };
@@ -7041,6 +7045,8 @@ with pkgs;
   enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse {
     boost = boost172;
   };
+
+  enc = callPackage ../tools/security/enc { };
 
   endlessh = callPackage ../servers/endlessh { };
 
@@ -11001,8 +11007,7 @@ with pkgs;
 
   pocketbase = callPackage ../servers/pocketbase { };
 
-  podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
-  podman-unwrapped = callPackage ../applications/virtualization/podman { };
+  podman = callPackage ../applications/virtualization/podman { };
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
 
@@ -15020,9 +15025,7 @@ with pkgs;
   openjdk_headless = jdk_headless;
 
   graalvmCEPackages =
-    recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition {
-      inherit (darwin.apple_sdk.frameworks) Foundation;
-    });
+    recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition { });
   graalvm-ce = graalvm11-ce;
   graalvm11-ce = graalvmCEPackages.graalvm11-ce;
   graalvm17-ce = graalvmCEPackages.graalvm17-ce;
@@ -15793,6 +15796,7 @@ with pkgs;
     openssl = openssl_1_1;
   };
   cargo-diet = callPackage ../development/tools/rust/cargo-diet { };
+  cargo-dist = callPackage ../development/tools/rust/cargo-dist { };
   cargo-embed = callPackage ../development/tools/rust/cargo-embed {
     inherit (darwin.apple_sdk.frameworks) AppKit;
     inherit (darwin) DarwinTools;
@@ -18121,6 +18125,10 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
   };
 
+  listenbrainz-mpd = callPackage ../applications/audio/listenbrainz-mpd  {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   lit = callPackage ../development/tools/misc/lit { };
 
   litecli = callPackage ../development/tools/database/litecli {};
@@ -19492,6 +19500,7 @@ with pkgs;
 
   eccodes = callPackage ../development/libraries/eccodes {
     pythonPackages = python3Packages;
+    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
   };
 
   eclib = callPackage ../development/libraries/eclib {};
@@ -20929,6 +20938,8 @@ with pkgs;
   libdigidocpp = callPackage ../development/libraries/libdigidocpp { };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
+
+  libdisplay-info = callPackage ../development/libraries/libdisplay-info { };
 
   libdivecomputer = callPackage ../development/libraries/libdivecomputer { };
 
@@ -30446,6 +30457,16 @@ with pkgs;
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) ImageMagick;
   };
 
+  ikiwiki-full = ikiwiki.override {
+    bazaarSupport = false;      # tests broken
+    cvsSupport = true;
+    docutilsSupport = true;
+    gitSupport = true;
+    mercurialSupport = true;
+    monotoneSupport = true;
+    subversionSupport = true;
+  };
+
   iksemel = callPackage ../development/libraries/iksemel {
     texinfo = texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
   };
@@ -34836,6 +34857,8 @@ with pkgs;
   opendune = callPackage ../games/opendune { };
 
   openrct2 = callPackage ../games/openrct2 { };
+
+  opensearch = callPackage ../servers/search/opensearch { };
 
   osu-lazer = callPackage ../games/osu-lazer { };
 
