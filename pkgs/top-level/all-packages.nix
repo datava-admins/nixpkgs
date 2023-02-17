@@ -5407,8 +5407,9 @@ with pkgs;
 
   proxmox-backup-client = callPackage ../applications/backup/proxmox-backup-client { };
 
-  pueue = callPackage ../applications/misc/pueue {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  pueue = darwin.apple_sdk_11_0.callPackage ../applications/misc/pueue {
+    inherit (darwin.apple_sdk_11_0) Libsystem;
+    inherit (darwin.apple_sdk_11_0.frameworks) SystemConfiguration;
   };
 
   pixcat = with python3Packages; toPythonApplication pixcat;
@@ -11660,7 +11661,7 @@ with pkgs;
 
   s3bro = callPackage ../tools/admin/s3bro { };
 
-  s3fs = callPackage ../tools/filesystems/s3fs { };
+  s3fs = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/s3fs { };
 
   s3cmd = python3Packages.callPackage ../tools/networking/s3cmd { };
 
@@ -12775,6 +12776,8 @@ with pkgs;
   txtpbfmt = callPackage ../development/tools/txtpbfmt { };
 
   ipbt = callPackage ../tools/misc/ipbt { };
+
+  tuckr = callPackage ../applications/misc/tuckr { };
 
   tuhi = callPackage ../applications/misc/tuhi { };
 
@@ -16942,9 +16945,7 @@ with pkgs;
 
   srelay = callPackage ../tools/networking/srelay { };
 
-  xidel = callPackage ../tools/text/xidel {
-    openssl = openssl_1_1;
-  };
+  xidel = callPackage ../tools/text/xidel { };
 
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
@@ -19748,6 +19749,8 @@ with pkgs;
   fribidi = callPackage ../development/libraries/fribidi { };
 
   funambol = callPackage ../development/libraries/funambol { };
+
+  function-runner = callPackage ../development/web/function-runner { };
 
   functionalplus = callPackage ../development/libraries/functionalplus { };
 
@@ -26263,8 +26266,8 @@ with pkgs;
   nsh = callPackage ../shells/nsh { };
 
   nushell = darwin.apple_sdk_11_0.callPackage ../shells/nushell {
+    inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
-    inherit (darwin.apple_sdk) sdk;
   };
 
   nettools = if stdenv.isLinux
@@ -30351,7 +30354,7 @@ with pkgs;
   waybar = callPackage ../applications/misc/waybar {};
 
   waylock = callPackage ../applications/misc/waylock {
-    zig = zig_0_9;
+    zig = zig_0_10;
   };
 
   wayshot = callPackage ../tools/misc/wayshot { };
@@ -33433,6 +33436,8 @@ with pkgs;
   todoman = callPackage ../applications/office/todoman { };
 
   tofi = callPackage ../applications/misc/tofi { };
+
+  tokyo-night-gtk = callPackage ../data/themes/tokyo-night-gtk { };
 
   topydo = callPackage ../applications/misc/topydo {};
 
@@ -39185,4 +39190,6 @@ with pkgs;
   resgate = callPackage ../servers/resgate { };
 
   oversteer = callPackage ../applications/misc/oversteer { };
+
+  volantes-cursors = callPackage ../data/icons/volantes-cursors { };
 }
