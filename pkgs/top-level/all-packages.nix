@@ -1532,6 +1532,8 @@ with pkgs;
 
   mprocs = callPackage ../tools/misc/mprocs { };
 
+  mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
+
   nominatim = callPackage ../servers/nominatim { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
@@ -7586,6 +7588,8 @@ with pkgs;
 
   gdmap = callPackage ../tools/system/gdmap { };
 
+  gdtoolkit = callPackage ../development/tools/gdtoolkit { };
+
   gef = callPackage ../development/tools/misc/gef { };
 
   gelasio = callPackage ../data/fonts/gelasio { };
@@ -11008,7 +11012,8 @@ with pkgs;
 
   pocketbase = callPackage ../servers/pocketbase { };
 
-  podman = callPackage ../applications/virtualization/podman { };
+  podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
+  podman-unwrapped = callPackage ../applications/virtualization/podman { };
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
 
@@ -11045,6 +11050,8 @@ with pkgs;
   pantum-driver = callPackage ../misc/drivers/pantum-driver {
     libjpeg8 = libjpeg.override { enableJpeg8 = true; };
   };
+
+  posteid-seed-extractor = callPackage ../tools/security/posteid-seed-extractor {};
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
@@ -11396,6 +11403,8 @@ with pkgs;
   redmine = callPackage ../applications/version-management/redmine { };
 
   redpanda = callPackage ../servers/redpanda { };
+
+  redpanda-server = redpanda.server;
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
@@ -12202,6 +12211,8 @@ with pkgs;
 
   strip-nondeterminism = perlPackages.strip-nondeterminism;
 
+  structorizer = callPackage ../applications/graphics/structorizer { };
+
   structure-synth = callPackage ../tools/graphics/structure-synth { };
 
   su-exec = callPackage ../tools/security/su-exec {};
@@ -12792,6 +12803,8 @@ with pkgs;
   };
 
   tuptime = callPackage ../tools/system/tuptime { };
+
+  turbo = callPackage ../tools/misc/turbo { };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
@@ -23035,6 +23048,8 @@ with pkgs;
 
   rover = callPackage ../development/tools/rover { };
 
+  rqlite = callPackage ../servers/sql/rqlite { };
+
   rshell = python3.pkgs.callPackage ../development/embedded/rshell { };
 
   rttr = callPackage ../development/libraries/rttr { };
@@ -23428,6 +23443,8 @@ with pkgs;
   sub-batch = callPackage ../applications/video/sub-batch { };
 
   subdl = callPackage ../applications/video/subdl { };
+
+  subtitleedit = callPackage ../applications/video/subtitleedit { };
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
 
@@ -27565,6 +27582,8 @@ with pkgs;
 
   nanum-gothic-coding = callPackage ../data/fonts/nanum-gothic-coding {  };
 
+  nasin-nanpa = callPackage ../data/fonts/nasin-nanpa {};
+
   national-park-typeface = callPackage ../data/fonts/national-park { };
 
   netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
@@ -30264,6 +30283,8 @@ with pkgs;
   pixeluvo = callPackage ../applications/graphics/pixeluvo { };
 
   pixinsight = libsForQt5.callPackage ../applications/graphics/pixinsight { };
+
+  protonup-qt = python3Packages.callPackage ../applications/misc/protonup-qt { };
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
@@ -35807,6 +35828,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  theforceengine = callPackage ../games/theforceengine { };
+
   tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
 
   tbls = callPackage ../tools/misc/tbls { };
@@ -36362,6 +36385,10 @@ with pkgs;
   muscle = callPackage ../applications/science/biology/muscle { };
 
   n3 = callPackage ../applications/science/biology/N3 { };
+
+  nest = callPackage ../applications/science/biology/nest { };
+
+  nest-mpi = callPackage ../applications/science/biology/nest { withMpi = true; };
 
   neuron = callPackage ../applications/science/biology/neuron { python = null; };
 
@@ -39192,4 +39219,6 @@ with pkgs;
   oversteer = callPackage ../applications/misc/oversteer { };
 
   volantes-cursors = callPackage ../data/icons/volantes-cursors { };
+
+  gnss-share = callPackage ../servers/gnss-share { };
 }
