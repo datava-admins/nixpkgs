@@ -1538,6 +1538,8 @@ with pkgs;
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
+  paperview = callPackage ../tools/X11/paperview { };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout {};
@@ -2266,6 +2268,8 @@ with pkgs;
   };
 
   xcpc = callPackage ../applications/emulators/xcpc { };
+
+  xemu = callPackage ../applications/emulators/xemu { };
 
   yapesdl = callPackage ../applications/emulators/yapesdl { };
 
@@ -8865,6 +8869,8 @@ with pkgs;
 
   kubepug = callPackage ../development/tools/kubepug { };
 
+  kubeshark = callPackage ../applications/networking/cluster/kubeshark { };
+
   kubergrunt = callPackage ../applications/networking/cluster/kubergrunt { };
 
   kubo = callPackage ../applications/networking/kubo { };
@@ -10359,7 +10365,11 @@ with pkgs;
 
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
-  opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix { };
+  opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix {
+    # Build currently fails on Go > 1.18
+    # See https://github.com/evilsocket/opensnitch/issues/851
+    buildGoModule = buildGo118Module;
+  };
 
   opensnitch-ui = libsForQt5.callPackage ../tools/networking/opensnitch/ui.nix { };
 
@@ -10475,6 +10485,15 @@ with pkgs;
   openresolv = callPackage ../tools/networking/openresolv { };
 
   openrgb = libsForQt5.callPackage ../applications/misc/openrgb { };
+
+  openrgb-with-all-plugins = openrgb.withPlugins [
+    openrgb-plugin-effects
+    openrgb-plugin-hardwaresync
+  ];
+
+  openrgb-plugin-effects = libsForQt5.callPackage ../applications/misc/openrgb-plugins/effects { };
+
+  openrgb-plugin-hardwaresync = libsForQt5.callPackage ../applications/misc/openrgb-plugins/hardwaresync { };
 
   openrussian-cli = callPackage ../misc/openrussian-cli {
     lua = lua5_3;
@@ -12253,7 +12272,9 @@ with pkgs;
 
   sshpass = callPackage ../tools/networking/sshpass { };
 
-  sslscan = callPackage ../tools/security/sslscan { };
+  sslscan = callPackage ../tools/security/sslscan {
+    openssl = openssl.override { withZlib = true; };
+  };
 
   sslmate = callPackage ../development/tools/sslmate { };
 

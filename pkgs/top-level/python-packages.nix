@@ -2377,6 +2377,8 @@ self: super: with self; {
 
   deploykit = callPackage ../development/python-modules/deploykit { };
 
+  deprecat = callPackage ../development/python-modules/deprecat { };
+
   deprecated = callPackage ../development/python-modules/deprecated { };
 
   deprecation = callPackage ../development/python-modules/deprecation { };
@@ -11837,6 +11839,8 @@ self: super: with self; {
   types-futures = callPackage ../development/python-modules/types-futures { };
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
+
+  types-pillow = callPackage ../development/python-modules/types-pillow { };
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
 
