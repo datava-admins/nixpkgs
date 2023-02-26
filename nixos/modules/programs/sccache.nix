@@ -7,8 +7,8 @@ let
 in {
   options.programs.sccache = {
     # host configuration
-    enable = mkEnableOption "sccache";
-    service = mkEnableOption "sccache service";
+    enable = mkEnableOption (mdDoc "sccache");
+    service = mkEnableOption (mdDoc "sccache service");
     cacheBackend = mkOption {
       type = types.enum [ "local" "s3" "redis" "memcached" "gcs" "azure" ];
       description = "cache backend for sccache";
