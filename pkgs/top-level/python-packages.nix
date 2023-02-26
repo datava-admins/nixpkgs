@@ -6336,11 +6336,9 @@ self: super: with self; {
 
   networkx = callPackage ../development/python-modules/networkx { };
 
-  neuron-mpi = toPythonModule (pkgs.neuron-mpi.override { inherit python; });
+  neuron-full = pkgs.neuron-full.override { python3 = python; };
 
-  neuron = toPythonModule (pkgs.neuron.override { inherit python; });
-
-  neuronpy = callPackage ../development/python-modules/neuronpy { };
+  neuronpy = python.pkgs.toPythonModule neuron-full;
 
   nevow = callPackage ../development/python-modules/nevow { };
 
@@ -7096,6 +7094,8 @@ self: super: with self; {
 
   overpy = callPackage ../development/python-modules/overpy { };
 
+  overrides = callPackage ../development/python-modules/overrides { };
+
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
   pdunehd = callPackage ../development/python-modules/pdunehd { };
@@ -7243,6 +7243,8 @@ self: super: with self; {
 
   pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
 
+  pyfibaro = callPackage ../development/python-modules/pyfibaro { };
+
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
 
   pyflexit = callPackage ../development/python-modules/pyflexit { };
@@ -7334,6 +7336,8 @@ self: super: with self; {
   python-flirt = callPackage ../development/python-modules/python-flirt { };
 
   python-fullykiosk = callPackage ../development/python-modules/python-fullykiosk { };
+
+  python-fx = callPackage ../development/python-modules/python-fx { };
 
   python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
 
@@ -8190,6 +8194,8 @@ self: super: with self; {
   pyhomeworks = callPackage ../development/python-modules/pyhomeworks { };
 
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
+
+  pyheif = callPackage ../development/python-modules/pyheif { };
 
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
 
@@ -9676,6 +9682,8 @@ self: super: with self; {
 
   pywatchman = callPackage ../development/python-modules/pywatchman { };
 
+  pywaterkotte = callPackage ../development/python-modules/pywaterkotte { };
+
   pywavelets = callPackage ../development/python-modules/pywavelets { };
 
   pywayland = callPackage ../development/python-modules/pywayland { };
@@ -10557,6 +10565,8 @@ self: super: with self; {
   shouldbe = callPackage ../development/python-modules/shouldbe { };
 
   should-dsl = callPackage ../development/python-modules/should-dsl { };
+
+  show-in-file-manager = callPackage ../development/python-modules/show-in-file-manager { };
 
   showit = callPackage ../development/python-modules/showit { };
 
@@ -12582,6 +12592,8 @@ self: super: with self; {
   Yapsy = callPackage ../development/python-modules/yapsy { };
 
   yara-python = callPackage ../development/python-modules/yara-python { };
+
+  yaramod = callPackage ../development/python-modules/yaramod { };
 
   yarg = callPackage ../development/python-modules/yarg { };
 

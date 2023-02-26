@@ -3443,6 +3443,8 @@ with pkgs;
 
   goku = callPackage ../os-specific/darwin/goku { };
 
+  grandperspective = callPackage ../os-specific/darwin/grandperspective { };
+
   grb = callPackage ../applications/misc/grb { };
 
   kerf   = kerf_1; /* kerf2 is WIP */
@@ -8637,7 +8639,7 @@ with pkgs;
 
   jitterentropy = callPackage ../development/libraries/jitterentropy { };
 
-  jl = haskellPackages.callPackage ../development/tools/jl { };
+  jl = haskellPackages.jl;
 
   jless = callPackage ../development/tools/jless {
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -9212,6 +9214,8 @@ with pkgs;
   nats-top = callPackage ../tools/system/nats-top { };
 
   natscli = callPackage ../tools/system/natscli { };
+
+  nsc = callPackage ../tools/system/nsc { };
 
   nbench = callPackage ../tools/misc/nbench { };
 
@@ -12545,7 +12549,7 @@ with pkgs;
 
   textadept = callPackage ../applications/editors/textadept { };
 
-  texworks = libsForQt5.callPackage ../applications/editors/texworks { };
+  texworks = qt6Packages.callPackage ../applications/editors/texworks { };
 
   tf2pulumi = callPackage ../development/tools/tf2pulumi { };
 
@@ -18242,8 +18246,6 @@ with pkgs;
 
   mdl = callPackage ../development/tools/misc/mdl { };
 
-  python-language-server = callPackage ../development/dotnet-modules/python-language-server { };
-
   python-matter-server = with python3Packages; toPythonApplication python-matter-server;
 
   minify = callPackage ../development/web/minify { };
@@ -19415,6 +19417,14 @@ with pkgs;
   ubus = callPackage ../development/libraries/ubus { };
 
   uci = callPackage ../development/libraries/uci { };
+
+  uclient = callPackage ../development/libraries/uclient { };
+
+  ustream-ssl = callPackage ../development/libraries/ustream-ssl { ssl_implementation = openssl; };
+
+  ustream-ssl-wolfssl = callPackage ../development/libraries/ustream-ssl { ssl_implementation = wolfssl; };
+
+  ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl { ssl_implementation = mbedtls_2; };
 
   uri = callPackage ../development/libraries/uri { stdenv = gcc10StdenvCompat; };
 
@@ -21864,7 +21874,13 @@ with pkgs;
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
 
-  libubox = callPackage ../development/libraries/libubox { };
+  libubox-nossl = callPackage ../development/libraries/libubox { };
+
+  libubox = callPackage ../development/libraries/libubox { with_ustream_ssl = true; };
+
+  libubox-wolfssl = callPackage ../development/libraries/libubox { with_ustream_ssl = true; ustream-ssl = ustream-ssl-wolfssl; };
+
+  libubox-mbedtls = callPackage ../development/libraries/libubox { with_ustream_ssl = true; ustream-ssl = ustream-ssl-mbedtls; };
 
   libudev-zero = callPackage ../development/libraries/libudev-zero { };
 
@@ -25002,6 +25018,7 @@ with pkgs;
     mariadb_108
     mariadb_109
     mariadb_1010
+    mariadb_1011
   ;
   mariadb = mariadb_106;
   mariadb-embedded = mariadb.override { withEmbedded = true; };
@@ -26047,6 +26064,8 @@ with pkgs;
   libkrunfw = callPackage ../development/libraries/libkrunfw { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
+
+  libnl-tiny = callPackage ../os-specific/linux/libnl-tiny { };
 
   libtraceevent = callPackage ../os-specific/linux/libtraceevent {};
 
@@ -31760,7 +31779,10 @@ with pkgs;
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
-  openmm = callPackage ../development/libraries/science/chemistry/openmm { };
+  openmm = callPackage ../development/libraries/science/chemistry/openmm {
+    stdenv = if stdenv.targetPlatform.isAarch64 then gcc9Stdenv else gcc11Stdenv;
+    gfortran = if stdenv.targetPlatform.isAarch64 then gfortran9 else gfortran11;
+  };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
@@ -35827,6 +35849,7 @@ with pkgs;
   });
 
   steam = steamPackages.steam-fhsenv;
+  steam-small = steamPackages.steam-fhsenv-small;
 
   steam-run = steam.run;
 
@@ -36442,11 +36465,11 @@ with pkgs;
 
   nest-mpi = callPackage ../applications/science/biology/nest { withMpi = true; };
 
-  neuron = callPackage ../applications/science/biology/neuron { python = null; };
+  neuron = callPackage ../applications/science/biology/neuron { };
 
   neuron-mpi = neuron.override {useMpi = true; };
 
-  neuron-full = neuron-mpi.override { python = python2; };
+  neuron-full = neuron-mpi.override { useCore = true; useRx3d = true; };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
@@ -39165,12 +39188,11 @@ with pkgs;
 
   btcdeb = callPackage ../applications/blockchains/btcdeb { };
 
-  jami = callPackages ../applications/networking/instant-messengers/jami {
+  jami = qt6Packages.callPackage ../applications/networking/instant-messengers/jami {
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
     jack = libjack2;
   };
-  inherit (jami) jami-daemon jami-client;
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
 
