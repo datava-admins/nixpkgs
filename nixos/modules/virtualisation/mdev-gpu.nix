@@ -15,7 +15,7 @@ in {
 
       config = mkOption {
         type = with types; lines;
-        description = "Configuration of mdev gpu options in YAML";
+        description = lib.mdDoc "Configuration of mdev gpu options in YAML";
       };
 
   };
