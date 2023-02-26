@@ -28,8 +28,8 @@ in {
       # target configuration
       packageNames = mkOption {
         type = types.listOf types.str;
-        description = "Nix top-level packages to be compiled using sccache";
-        default = [""];
+        description = mdDoc "Nix top-level packages to be compiled using sccache";
+        default = [];
       };
       # TODO: AWS credentials, secure Redis pw, GCS credentials, etc.
     };
