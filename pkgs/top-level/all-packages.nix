@@ -238,6 +238,8 @@ with pkgs;
 
   althttpd = callPackage ../servers/althttpd { };
 
+  amqpcat = callPackage ../development/tools/amqpcat { };
+
   anders = callPackage ../applications/science/logic/anders { };
 
   ankisyncd = callPackage ../servers/ankisyncd {
@@ -384,7 +386,11 @@ with pkgs;
 
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
 
+  catppuccin-papirus-folders = callPackage ../data/icons/catppuccin-papirus-folders { };
+
   btdu = callPackage ../tools/misc/btdu { };
+
+  ccal = callPackage ../tools/misc/ccal { };
 
   cereal = callPackage ../development/libraries/cereal { };
 
@@ -3501,6 +3507,8 @@ with pkgs;
 
   waypoint = callPackage ../applications/networking/cluster/waypoint { };
 
+  xc = callPackage ../development/tools/xc { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   gomobile = callPackage ../development/mobile/gomobile { };
@@ -4553,6 +4561,8 @@ with pkgs;
   elpa = callPackage ../development/libraries/elpa { };
 
   enca = callPackage ../tools/text/enca { };
+
+  engage = callPackage ../tools/misc/engage { };
 
   ent = callPackage ../tools/misc/ent { };
 
@@ -5989,13 +5999,9 @@ with pkgs;
   cirrusgo = callPackage ../tools/security/cirrusgo { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
-    citrix_workspace_21_09_0
-    citrix_workspace_21_12_0
-    citrix_workspace_22_05_0
-    citrix_workspace_22_07_0
-    citrix_workspace_22_12_0
+    citrix_workspace_23_02_0
   ;
-  citrix_workspace = citrix_workspace_22_12_0;
+  citrix_workspace = citrix_workspace_23_02_0;
 
   cmigemo = callPackage ../tools/text/cmigemo { };
 
@@ -8169,9 +8175,7 @@ with pkgs;
 
   hashrat = callPackage ../tools/security/hashrat { };
 
-  hash_extender = callPackage ../tools/security/hash_extender {
-    openssl = openssl_1_1;
-  };
+  hash_extender = callPackage ../tools/security/hash_extender { };
 
   hash-identifier = callPackage ../tools/security/hash-identifier { };
 
@@ -8769,6 +8773,8 @@ with pkgs;
 
   kakoune-cr = callPackage ../tools/misc/kakoune-cr { crystal = crystal_1_2; };
 
+  kaniko = callPackage ../applications/networking/cluster/kaniko { };
+
   katana = callPackage ../tools/security/katana { };
 
   katriawm = callPackage ../applications/window-managers/katriawm { };
@@ -8776,7 +8782,7 @@ with pkgs;
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kbs2 = callPackage ../tools/security/kbs2 {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin.apple_sdk.frameworks) AppKit SystemConfiguration;
   };
 
   kdash = callPackage ../development/tools/kdash {
@@ -9298,6 +9304,10 @@ with pkgs;
   openipmi = callPackage ../tools/system/openipmi { };
 
   ox = callPackage ../applications/editors/ox { };
+
+  oxigraph = callPackage ../servers/oxigraph {
+    inherit (darwin.apple_sdk.frameworks) IOKit Security;
+  };
 
   file-rename = callPackage ../tools/filesystems/file-rename { };
 
@@ -10134,6 +10144,8 @@ with pkgs;
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
+  nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
+
   ndstool = callPackage ../tools/archivers/ndstool { };
 
   nfs-ganesha = callPackage ../servers/nfs-ganesha { };
@@ -10904,8 +10916,6 @@ with pkgs;
 
   phodav = callPackage ../tools/networking/phodav { };
 
-  phodav_2_0 = callPackage ../tools/networking/phodav/2.0.nix { };
-
   photon-rss = callPackage ../applications/networking/feedreaders/photon { };
 
   pim6sd = callPackage ../servers/pim6sd { };
@@ -11305,7 +11315,9 @@ with pkgs;
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
-  qdrant = darwin.apple_sdk_11_0.callPackage ../servers/search/qdrant { };
+  qdrant = darwin.apple_sdk_11_0.callPackage ../servers/search/qdrant {
+    inherit (darwin.apple_sdk_11_0.frameworks) Security;
+  };
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
@@ -12900,6 +12912,8 @@ with pkgs;
   uair = callPackage ../tools/misc/uair { };
 
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
+
+  ubi_reader = callPackage ../tools/filesystems/ubi_reader { };
 
   ubridge = callPackage ../tools/networking/ubridge { };
 
@@ -17064,6 +17078,8 @@ with pkgs;
 
   ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
 
+  phpunit = callPackage ../development/tools/misc/phpunit { };
+
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
 
   ansible-language-server = callPackage ../development/tools/language-servers/ansible-language-server { };
@@ -17175,7 +17191,8 @@ with pkgs;
     electron_19
     electron_20
     electron_21
-    electron_22;
+    electron_22
+    electron_23;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -20626,6 +20643,8 @@ with pkgs;
 
   jbigkit = callPackage ../development/libraries/jbigkit { };
 
+  jefferson = callPackage ../tools/filesystems/jefferson { };
+
   jemalloc = callPackage ../development/libraries/jemalloc { };
 
   jose = callPackage ../development/libraries/jose { };
@@ -22272,8 +22291,8 @@ with pkgs;
 
   micropython = callPackage ../development/interpreters/micropython { };
 
-  MIDIVisualizer = callPackage ../applications/audio/midi-visualizer {
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Carbon CoreAudio CoreMIDI CoreServices Kernel;
+  MIDIVisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midi-visualizer {
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Carbon CoreAudio CoreMIDI CoreServices Kernel;
   };
 
   mimalloc = callPackage ../development/libraries/mimalloc { };
@@ -23431,8 +23450,6 @@ with pkgs;
 
   spice-gtk = callPackage ../development/libraries/spice-gtk { };
 
-  spice-gtk_libsoup2 = spice-gtk.override { withLibsoup2 = true; };
-
   spice-protocol = callPackage ../development/libraries/spice-protocol { };
 
   spice-up = callPackage ../applications/office/spice-up { };
@@ -24273,6 +24290,8 @@ with pkgs;
 
   _389-ds-base = callPackage ../servers/ldap/389 { };
 
+  _5etools = callPackage ../servers/web-apps/5etools {};
+
   adguardhome = callPackage ../servers/adguardhome {};
 
   alerta = callPackage ../servers/monitoring/alerta/client.nix { };
@@ -24574,6 +24593,8 @@ with pkgs;
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
 
   mimir = callPackage ../servers/monitoring/mimir { };
+
+  phlare = callPackage ../servers/monitoring/phlare { };
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
@@ -27063,6 +27084,8 @@ with pkgs;
 
   barlow = callPackage ../data/fonts/barlow { };
 
+  base16-schemes = callPackage ../data/themes/base16-schemes { };
+
   bgnet = callPackage ../data/documentation/bgnet { };
 
   bibata-cursors = callPackage ../data/icons/bibata-cursors { attrs = python3Packages.attrs; };
@@ -29339,9 +29362,7 @@ with pkgs;
 
   karlender = callPackage ../applications/office/karlender { };
 
-  keepassx = callPackage ../applications/misc/keepassx { };
-  keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
-  keepassxc = libsForQt5.callPackage ../applications/misc/keepassx/community.nix {
+  keepassxc = libsForQt5.callPackage ../applications/misc/keepassxc {
     inherit (darwin.apple_sdk_11_0.frameworks) LocalAuthentication;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
@@ -30315,7 +30336,7 @@ with pkgs;
   meerk40t-camera = callPackage ../applications/misc/meerk40t/camera.nix { };
 
   musikcube = callPackage ../applications/audio/musikcube {
-    inherit (darwin.apple_sdk.frameworks) Cocoa SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio SystemConfiguration;
   };
 
   libmt32emu = callPackage ../applications/audio/munt/libmt32emu.nix { };
@@ -30992,7 +31013,7 @@ with pkgs;
 
   kubernetes-helm-wrapped = wrapHelm kubernetes-helm {};
 
-  kubernetes-helmPlugins = dontRecurseIntoAttrs (callPackage ../applications/networking/cluster/helm/plugins { });
+  kubernetes-helmPlugins = recurseIntoAttrs (callPackage ../applications/networking/cluster/helm/plugins { });
 
   chart-testing = callPackage ../applications/networking/cluster/helm/chart-testing { };
 
@@ -31467,7 +31488,7 @@ with pkgs;
 
   xmrig = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig { };
 
-  xmrig-mo = callPackage ../applications/misc/xmrig/moneroocean.nix { };
+  xmrig-mo = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig/moneroocean.nix { };
 
   xmrig-proxy = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig/proxy.nix { };
 
@@ -32231,6 +32252,7 @@ with pkgs;
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon { };
+  palemoon-bin = callPackage ../applications/networking/browsers/palemoon/bin.nix { };
 
   pamix = callPackage ../applications/audio/pamix { };
 
@@ -33568,10 +33590,7 @@ with pkgs;
 
   transcribe = callPackage ../applications/audio/transcribe { };
 
-  transmission = callPackage ../applications/networking/p2p/transmission {
-    # https://github.com/NixOS/nixpkgs/issues/207047
-    openssl = openssl_legacy;
-  };
+  transmission = callPackage ../applications/networking/p2p/transmission { };
   libtransmission = transmission.override {
     installLib = true;
     enableDaemon = false;
@@ -35918,7 +35937,6 @@ with pkgs;
   };
 
   tengine = callPackage ../servers/http/tengine {
-    openssl = openssl_1_1;
     modules = with nginxModules; [ rtmp dav moreheaders modsecurity ];
   };
 
