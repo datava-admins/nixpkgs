@@ -5,33 +5,35 @@ let
   cfg = config.programs.sccache;
   port = 4226;
 in {
-  options.programs.sccache = {
-    # host configuration
-    enable = mkEnableOption (mdDoc "sccache");
-    service = mkEnableOption (mdDoc "sccache service");
-    cacheBackend = mkOption {
-      type = types.enum [ "local" "s3" "redis" "memcached" "gcs" "azure" ];
-      description = "cache backend for sccache";
-      default = "local";
+  options = {
+    programs.sccache = rec {
+      # host configuration
+      enable = mkEnableOption (lib.mdDoc "sccache");
+      service = mkEnableOption (lib.mdDoc "sccache service");
+      cacheBackend = mkOption {
+        type = types.enum [ "local" "s3" "redis" "memcached" "gcs" "azure" ];
+        description = "cache backend for sccache";
+        default = "local";
+      };
+      cacheUrl = mkOption {
+        type = types.str;
+        description = "cache path or primary URL e.g. SCCACHE_DIR, SCCACHE_BUCKET"; 
+        default = "/var/cache/sccache";
+      };
+      cacheSize = mkOption {
+        type = types.str;
+        description = "Size of cache (only local?)";
+        default = "10G";
+      };
+      # target configuration
+      packageNames = mkOption {
+        type = types.listOf types.str;
+        description = "Nix top-level packages to be compiled using sccache";
+        default = [];
+        example = [ "wxGTK30" "ffmpeg" "libav_all" ];
+      };
+      # TODO: AWS credentials, secure Redis pw, GCS credentials, etc.
     };
-    cacheUrl = mkOption {
-      type = types.str;
-      description = "cache path or primary URL e.g. SCCACHE_DIR, SCCACHE_BUCKET"; 
-      default = "/var/cache/sccache";
-    };
-    cacheSize = mkOption {
-      type = types.str;
-      description = "Size of cache (only local?)";
-      default = "10G";
-    };
-    # target configuration
-    packageNames = mkOption {
-      type = types.listOf types.str;
-      description = "Nix top-level packages to be compiled using sccache";
-      default = [];
-      example = [ "wxGTK30" "ffmpeg" "libav_all" ];
-    };
-    # TODO: AWS credentials, secure Redis pw, GCS credentials, etc.
   };
 
   config = mkMerge [
