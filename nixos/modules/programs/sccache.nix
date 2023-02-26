@@ -12,17 +12,17 @@ in {
       service = mkEnableOption (lib.mdDoc "sccache service");
       cacheBackend = mkOption {
         type = types.enum [ "local" "s3" "redis" "memcached" "gcs" "azure" ];
-        description = "cache backend for sccache";
+        description = mdDoc "cache backend for sccache";
         default = "local";
       };
       cacheUrl = mkOption {
         type = types.str;
-        description = "cache path or primary URL e.g. SCCACHE_DIR, SCCACHE_BUCKET"; 
+        description = mdDoc "cache path or primary URL e.g. SCCACHE_DIR, SCCACHE_BUCKET"; 
         default = "/var/cache/sccache";
       };
       cacheSize = mkOption {
         type = types.str;
-        description = "Size of cache (only local?)";
+        description = mdDoc "Size of cache (only local?)";
         default = "10G";
       };
       # target configuration
