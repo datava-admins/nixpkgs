@@ -30,7 +30,6 @@ in {
         type = types.listOf types.str;
         description = "Nix top-level packages to be compiled using sccache";
         default = [];
-        example = [ "wxGTK30" "ffmpeg" "libav_all" ];
       };
       # TODO: AWS credentials, secure Redis pw, GCS credentials, etc.
     };
