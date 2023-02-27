@@ -532,6 +532,8 @@ self: super: with self; {
 
   aplpy = callPackage ../development/python-modules/aplpy { };
 
+  app-model = callPackage ../development/python-modules/app-model { };
+
   appdirs = callPackage ../development/python-modules/appdirs { };
 
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
@@ -3866,8 +3868,6 @@ self: super: with self; {
 
   glances-api = callPackage ../development/python-modules/glances-api { };
 
-  glasgow = callPackage ../development/python-modules/glasgow { };
-
   glcontext = callPackage ../development/python-modules/glcontext { };
 
   glean-parser = callPackage ../development/python-modules/glean-parser { };
@@ -4641,6 +4641,8 @@ self: super: with self; {
   };
 
   imutils = callPackage ../development/python-modules/imutils { };
+
+  in-n-out = callPackage ../development/python-modules/in-n-out { };
 
   in-place = callPackage ../development/python-modules/in-place { };
 
@@ -6028,8 +6030,6 @@ self: super: with self; {
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 
   mohawk = callPackage ../development/python-modules/mohawk { };
-
-  moku = callPackage ../development/python-modules/moku { };
 
   monai = callPackage ../development/python-modules/monai { };
 
@@ -10070,6 +10070,8 @@ self: super: with self; {
   retry_decorator = callPackage ../development/python-modules/retry_decorator { };
 
   retrying = callPackage ../development/python-modules/retrying { };
+
+  returns = callPackage ../development/python-modules/returns { };
 
   retworkx = callPackage ../development/python-modules/retworkx { };
 

@@ -1054,6 +1054,7 @@
   ./services/search/kibana.nix
   ./services/search/meilisearch.nix
   ./services/search/opensearch.nix
+  ./services/search/qdrant.nix
   ./services/search/solr.nix
   ./services/security/aesmd.nix
   ./services/security/certmgr.nix

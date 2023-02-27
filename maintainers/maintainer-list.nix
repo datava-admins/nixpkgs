@@ -6903,6 +6903,12 @@
     githubId = 10786794;
     name = "Markus Hihn";
   };
+  jessemoore = {
+    email = "jesse@jessemoore.dev";
+    github = "jesseDMoore1994";
+    githubId = 30251156;
+    name = "Jesse Moore";
+  };
   jethro = {
     email = "jethrokuan95@gmail.com";
     github = "jethrokuan";
@@ -12193,6 +12199,7 @@
     github = "alyssais";
     githubId = 2768870;
     name = "Alyssa Ross";
+    matrix = "@qyliss:fairydust.space";
     keys = [{
       fingerprint = "7573 56D7 79BB B888 773E  415E 736C CDF9 EF51 BD97";
     }];
