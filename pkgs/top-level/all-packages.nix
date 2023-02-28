@@ -9658,22 +9658,12 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = nomad_1_3;
-
-  # Nomad never updates major go versions within a release series and is unsupported
-  # on Go versions that it did not ship with. Due to historic bugs when compiled
-  # with different versions we pin Go for all versions.
-  # Upstream partially documents used Go versions here
-  # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
-  nomad_1_2 = callPackage ../applications/networking/cluster/nomad/1.2.nix {
-    buildGoModule = buildGo119Module;
-  };
-  nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
-    buildGoModule = buildGo119Module;
-  };
-  nomad_1_4 = callPackage ../applications/networking/cluster/nomad/1.4.nix {
-    buildGoModule = buildGo119Module;
-  };
+  inherit (callPackage ../applications/networking/cluster/nomad { })
+    nomad
+    nomad_1_2
+    nomad_1_3
+    nomad_1_4
+    ;
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
 
@@ -23347,6 +23337,17 @@ with pkgs;
   };
   buildGo119Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_19;
+  };
+
+  # requires a newer Apple SDK
+  go_1_20 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.20.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
+  };
+  buildGo120Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
+    go = buildPackages.go_1_20;
+  };
+  buildGo120Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
+    go = buildPackages.go_1_20;
   };
 
   go2nix = callPackage ../development/tools/go2nix { };
