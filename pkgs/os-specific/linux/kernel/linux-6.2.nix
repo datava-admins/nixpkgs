@@ -13,6 +13,6 @@ buildLinux (args // rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
-    sha256 = "sha256-L8wH4ckOpM4Uj1D5vusNygtuSzeado3oq8ekom8lJTQ=";
+    sha256 = "0d154mps5967mgl8sxls6x5nw2ya1pmvxyahiwacx90fr7hhgk1g";
   };
 } // (args.argsOverride or { }))

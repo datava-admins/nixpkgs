@@ -3663,6 +3663,12 @@
     github = "Dettorer";
     githubId = 2761682;
   };
+  developer-guy = {
+    name = "Batuhan Apaydın";
+    email = "developerguyn@gmail.com";
+    github = "developer-guy";
+    githubId = 16693043;
+  };
   devhell = {
     email = ''"^"@regexmail.net'';
     github = "devhell";
@@ -4022,6 +4028,11 @@
     github = "dsferruzza";
     githubId = 1931963;
     name = "David Sferruzza";
+  };
+  dsymbol = {
+    name = "dsymbol";
+    github = "dsymbol";
+    githubId = 88138099;
   };
   dtzWill = {
     email = "w@wdtz.org";
@@ -9675,6 +9686,12 @@
     github = "michaelBelsanti";
     githubId = 62124625;
   };
+  michaelgrahamevans = {
+    email = "michaelgrahamevans@gmail.com";
+    name = "Michael Evans";
+    github = "michaelgrahamevans";
+    githubId = 5932424;
+  };
   michaelpj = {
     email = "michaelpj@gmail.com";
     github = "michaelpj";
@@ -10125,6 +10142,12 @@
     github = "mredaelli";
     githubId = 3073833;
     name = "Massimo Redaelli";
+  };
+  mrfreezeex = {
+    email = "arthur@cri.epita.fr";
+    github = "MrFreezeex";
+    name = "Arthur Outhenin-Chalandre";
+    githubId = 3845213;
   };
   mrityunjaygr8 = {
     email = "mrityunjaysaxena1996@gmail.com";
