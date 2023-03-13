@@ -318,7 +318,10 @@ self: super: ({
   # https://github.com/NixOS/nixpkgs/issues/149692
   Agda = removeConfigureFlag "-foptimise-heavily" super.Agda;
 
-  heystone = addBuildTool pkgs.fixDarwinDylibNames super.heystone;
+  # regex-rure's test suite fails with a dylib not loaded error due to some
+  # rpath issue.
+  regex-rure = dontDistribute (markBroken super.regex-rure);
+  jacinda = dontDistribute super.jacinda;
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 

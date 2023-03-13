@@ -108,6 +108,7 @@ in {
   breitbandmessung = handleTest ./breitbandmessung.nix {};
   brscan5 = handleTest ./brscan5.nix {};
   btrbk = handleTest ./btrbk.nix {};
+  btrbk-doas = handleTest ./btrbk-doas.nix {};
   btrbk-no-timer = handleTest ./btrbk-no-timer.nix {};
   btrbk-section-order = handleTest ./btrbk-section-order.nix {};
   buildbot = handleTest ./buildbot.nix {};
@@ -137,6 +138,7 @@ in {
   cntr = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cntr.nix {};
   cockpit = handleTest ./cockpit.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
+  coder = handleTest ./coder.nix {};
   collectd = handleTest ./collectd.nix {};
   connman = handleTest ./connman.nix {};
   consul = handleTest ./consul.nix {};
@@ -238,11 +240,13 @@ in {
   ft2-clone = handleTest ./ft2-clone.nix {};
   mimir = handleTest ./mimir.nix {};
   garage = handleTest ./garage {};
+  gemstash = handleTest ./gemstash.nix {};
   gerrit = handleTest ./gerrit.nix {};
   geth = handleTest ./geth.nix {};
   ghostunnel = handleTest ./ghostunnel.nix {};
   gitdaemon = handleTest ./gitdaemon.nix {};
   gitea = handleTest ./gitea.nix { giteaPackage = pkgs.gitea; };
+  github-runner = handleTest ./github-runner.nix {};
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
   gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix {};
@@ -307,6 +311,7 @@ in {
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrdNetwork = handleTest ./initrd-network.nix {};
   initrd-secrets = handleTest ./initrd-secrets.nix {};
+  initrd-secrets-changing = handleTest ./initrd-secrets-changing.nix {};
   input-remapper = handleTest ./input-remapper.nix {};
   inspircd = handleTest ./inspircd.nix {};
   installer = handleTest ./installer.nix {};
@@ -433,10 +438,8 @@ in {
   nagios = handleTest ./nagios.nix {};
   nar-serve = handleTest ./nar-serve.nix {};
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
-  nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
   nat.nftables.firewall = handleTest ./nat.nix { withFirewall = true; nftables = true; };
-  nat.nftables.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; nftables = true; };
   nat.nftables.standalone = handleTest ./nat.nix { withFirewall = false; nftables = true; };
   nats = handleTest ./nats.nix {};
   navidrome = handleTest ./navidrome.nix {};
@@ -688,6 +691,7 @@ in {
   terminal-emulators = handleTest ./terminal-emulators.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
   tigervnc = handleTest ./tigervnc.nix {};
+  timescaledb = handleTest ./timescaledb.nix {};
   timezone = handleTest ./timezone.nix {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
