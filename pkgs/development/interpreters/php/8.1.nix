@@ -8,6 +8,8 @@ let
 
 in
 base.withExtensions ({ all, ... }: with all; ([
+  # Load OpenSSL first so it's openssl.cnf is loaded.
+  openssl
   bcmath
   calendar
   curl
@@ -28,7 +30,6 @@ base.withExtensions ({ all, ... }: with all; ([
   mysqli
   mysqlnd
   opcache
-  openssl
   pcntl
   pdo
   pdo_mysql
