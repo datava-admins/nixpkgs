@@ -1,12 +1,12 @@
 { stdenv, buildPecl, mkDerivation, fetchurl, lib, autoPatchelfHook, libkrb5, linux-pam, libxml2, php, libxcrypt }:
 let
-  db2-odbc-cli = mkDerivation {
+  db2-odbc-cli = mkDerivation rec {
     pname = "db2-odbc-cli";
-    version = "11.5.8.0";
+    version = "11.5.8";
     dontConfigure = true;
 
     src = fetchurl {
-      url = "https://public.dhe.ibm.com/ibmdl/export/pub/software/data/db2/drivers/odbc_cli/linuxx64_odbc_cli.tar.gz";
+      url = "https://public.dhe.ibm.com/ibmdl/export/pub/software/data/db2/drivers/odbc_cli/v${version}/linuxx64_odbc_cli.tar.gz";
       sha256 = "0z6kzc3f39msfg41rsz9pj5hgjfdy1q8wn6w92v96261vhj90xiz";
     };
 
