@@ -1,20 +1,20 @@
-{ stdenv, buildPecl, mkDerivation, fetchurl, lib, autoPatchelfHook, libkrb5, linux-pam, libxml2, php }:
+{ stdenv, buildPecl, mkDerivation, fetchurl, lib, autoPatchelfHook, libkrb5, linux-pam, libxml2, php, libxcrypt }:
 let
   db2-odbc-cli = mkDerivation {
     pname = "db2-odbc-cli";
-    version = "11.5.6.0";
+    version = "11.5.8.0";
     dontConfigure = true;
 
     src = fetchurl {
       url = "https://public.dhe.ibm.com/ibmdl/export/pub/software/data/db2/drivers/odbc_cli/linuxx64_odbc_cli.tar.gz";
-      sha256 = "sha256-Cwx/qarZVEAkyvxyvNRP9wTcfsWUMc5/IZvx2ExYu7M=";
+      sha256 = "0z6kzc3f39msfg41rsz9pj5hgjfdy1q8wn6w92v96261vhj90xiz";
     };
 
     nativeBuildInputs = [
       autoPatchelfHook
     ];
 
-    buildInputs = [ libkrb5 stdenv.cc.cc.lib linux-pam libxml2 ];
+    buildInputs = [ libkrb5 stdenv.cc.cc.lib linux-pam libxml2 libxcrypt ];
 
     installPhase = ''
       runHook preInstall
