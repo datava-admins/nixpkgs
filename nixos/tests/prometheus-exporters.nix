@@ -209,6 +209,26 @@ let
         '';
     };
 
+    clamscan = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.clamav.daemon.enable = true;
+        services.clamav.scanner = {
+          enable = false;
+          interval = "now";
+        };
+      };
+      exporterTest = ''
+          wait_for_unit("prometheus-clamscan-exporter.service")
+          wait_for_open_port(9967)
+          wait_until_succeeds(
+            "curl -sSf 'http://localhost:9967/metrics' | grep 'clamscan'"
+          )
+      '';
+    };
+
     dnsmasq = {
       exporterConfig = {
         enable = true;

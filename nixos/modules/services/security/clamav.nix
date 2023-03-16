@@ -66,6 +66,24 @@ in
           '';
         };
       };
+      scanner = {
+        enable = mkEnableOption (lib.mdDoc "ClamAV Scheduled Scan");
+        sendToExporter = mkOption {
+          type = types.bool;
+          default = config.services.prometheus.exporters.clamscan.enable;
+          description = lib.mdDoc ''
+            Wether to send the scan results to the Prometheus clamscan exporter or just stdout.
+          '';
+        };
+        interval = mkOption {
+          type = types.str;
+          default = "hourly";
+          description = lib.mdDoc ''
+            How often clascan(d) is invoked. See systemd.time(7) for more
+            information about the format.
+          '';
+        };
+      };
     };
   };
 
@@ -145,6 +163,34 @@ in
         SuccessExitStatus = "1"; # if databases are up to date
         PrivateTmp = "yes";
         PrivateDevices = "yes";
+      };
+    };
+    
+    systemd.timers.clamav-scanner = mkIf cfg.updater.enable {
+      description = "Timer for ClamAV Scanner";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.scanner.interval;
+        Unit = "clamav-scanner.service";
+      };
+    };
+
+    systemd.services.clamav-scanner = mkIf cfg.scanner.enable {
+      description = "ClamAV Scanner";
+      requires = [ "clamav-daemon.service" ];
+      path = with pkgs; [ netcat ];
+
+      serviceConfig = let
+        # I guess if the daemon is not enabled then we need to call the regular clamscan.
+        # For now just require that the daemon is running.
+        scanCmd = "${pkg}/bin/clamdscan --stdout --no-summary --reload --infected --fdpass /" +
+        (if cfg.scanner.sendToExporter then " | tee | nc 127.0.0.1 9000 " else "");
+      in {
+        Type = "oneshot";
+        ExecStart = scanCmd;
+        PrivateTmp = "yes";
+        PrivateDevices = "yes";
+        DynamicUser = "yes";
       };
     };
   };
