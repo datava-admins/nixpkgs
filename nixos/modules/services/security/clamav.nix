@@ -184,14 +184,15 @@ in
       serviceConfig = let
         # I guess if the daemon is not enabled then we need to call the regular clamscan.
         # For now just require that the daemon is running.
-        scanCmd = "${pkg}/bin/clamdscan --stdout --no-summary --reload --infected --fdpass /" +
+        scanCmd = "${pkg}/bin/clamdscan --stdout --no-summary --fdpass /" +
         (if cfg.scanner.sendToExporter then " | tee | nc 127.0.0.1 9000 " else "");
       in {
         Type = "oneshot";
         ExecStart = scanCmd;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
-        DynamicUser = "yes";
+        # Needs read access to all files...TODO: restrict fs to RO
+        #DynamicUser = "yes";
       };
     };
   };
