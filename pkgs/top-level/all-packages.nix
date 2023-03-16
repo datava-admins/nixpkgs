@@ -12805,6 +12805,8 @@ with pkgs;
 
   vul = callPackage ../applications/misc/vul { };
 
+  vuls = callPackage ../tools/security/vuls { };
+
   xar = callPackage ../tools/compression/xar { };
 
   xarchive = callPackage ../tools/archivers/xarchive { };
