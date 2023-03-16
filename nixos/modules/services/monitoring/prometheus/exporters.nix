@@ -76,6 +76,7 @@ let
     "unifi-poller"
     "v2ray"
     "varnish"
+    "vuls"
     "wireguard"
     "flow"
     "zfs"

@@ -1390,6 +1390,27 @@ let
       '';
     };
 
+    vuls = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        systemd.services.prometheus-vuls-exporter.after = [
+          "vuls.service"
+        ];
+        systemd.services.vuls = {
+          enable = true;
+          startAt = "now";
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("vuls.service")
+        wait_for_unit("prometheus-vuls-exporter.service")
+        wait_for_open_port(8080)
+        wait_until_succeeds("curl -f localhost:8080/metrics | grep 'vuls'")
+      '';
+    };
+
     wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in
       {
         exporterConfig.enable = true;

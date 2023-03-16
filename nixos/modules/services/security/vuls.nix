@@ -61,6 +61,7 @@ in
 
     systemd.tmpfiles.rules = [
       "d ${cfg.stateDir} 0755 root root -"
+      "d ${cfg.stateDir}/reports 0755 root root -"
     ];
   };
 }
