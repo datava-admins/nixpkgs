@@ -144,6 +144,10 @@ in
         PrivateTmp = "yes";
         PrivateDevices = "yes";
         PrivateNetwork = "yes";
+        CPUSchedulingPolicy = "idle";
+        IOSchedulingClass = "idle";
+        IOSchedulingPriority = "2";
+        LimitNOFILE = 1048576;
       };
     };
 
@@ -202,6 +206,12 @@ in
         PrivateDevices = "yes";
         # Needs read access to all files...TODO: restrict fs to RO
         #DynamicUser = "yes";
+        CPUSchedulingPolicy = "idle";
+        IOSchedulingClass = "idle";
+        IOSchedulingPriority = "2";
+        LimitNOFILE = 1048576;
+        StandardOutput = "journal";
+        StandardError = "journal";
       };
     };
   };
