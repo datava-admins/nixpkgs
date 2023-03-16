@@ -79,6 +79,7 @@ let
     "unpoller"
     "v2ray"
     "varnish"
+    "vuls"
     "wireguard"
     "flow"
     "zfs"
