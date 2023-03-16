@@ -84,6 +84,13 @@ in
             information about the format.
           '';
         };
+        scanPaths = mkOption {
+          type = with types; listOf str;
+          default = [ "/" ];
+          description = lib.mdDoc ''
+            What directories/file patterns to scan (passed to find)
+          '';
+        };
       };
     };
   };
@@ -184,11 +191,13 @@ in
       serviceConfig = let
         # I guess if the daemon is not enabled then we need to call the regular clamscan.
         # For now just require that the daemon is running.
-        scanCmd = "${pkg}/bin/clamdscan --multiscan --stdout --no-summary --fdpass /" +
-        (if cfg.scanner.sendToExporter then " | tee | nc 127.0.0.1 9000 " else "");
+        scanCmd = ''
+          ${pkgs.findutils}/bin/find ${builtins.toString cfg.scanner.scanPaths} -xdev -type f | \
+          ${pkg}/bin/clamdscan --multiscan --stdout --no-summary --fdpass -f /dev/stdin ${(if cfg.scanner.sendToExporter then " | tee | nc -N 127.0.0.1 9000" else "")}
+          '';
       in {
-        Type = "oneshot";
-        ExecStart = scanCmd;
+        Type = "simple";
+        ExecStart = pkgs.writeShellScript "clamav-scanner" scanCmd;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
         # Needs read access to all files...TODO: restrict fs to RO
