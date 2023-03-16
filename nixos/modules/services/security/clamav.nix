@@ -71,6 +71,7 @@ in
         sendToExporter = mkOption {
           type = types.bool;
           default = config.services.prometheus.exporters.clamscan.enable;
+          defaultText = literalExpression "config.services.prometheus.exporters.clamscan.enable";
           description = lib.mdDoc ''
             Wether to send the scan results to the Prometheus clamscan exporter or just stdout.
           '';
