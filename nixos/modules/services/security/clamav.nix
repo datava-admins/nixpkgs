@@ -184,7 +184,7 @@ in
       serviceConfig = let
         # I guess if the daemon is not enabled then we need to call the regular clamscan.
         # For now just require that the daemon is running.
-        scanCmd = "${pkg}/bin/clamdscan --stdout --no-summary --fdpass /" +
+        scanCmd = "${pkg}/bin/clamdscan --multiscan --stdout --no-summary --fdpass /" +
         (if cfg.scanner.sendToExporter then " | tee | nc 127.0.0.1 9000 " else "");
       in {
         Type = "oneshot";
