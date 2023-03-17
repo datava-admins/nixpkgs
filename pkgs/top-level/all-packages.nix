@@ -3679,6 +3679,8 @@ with pkgs;
 
   crossplane = with python3Packages; toPythonApplication crossplane;
 
+  crowdsec = callPackage ../tools/security/crowdsec { };
+
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
