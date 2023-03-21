@@ -8647,7 +8647,9 @@ with pkgs;
 
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
-  mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
+  mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp {
+    buildGoModule = buildGo120Module;
+  };
 
   mcfly = callPackage ../tools/misc/mcfly { };
 
@@ -24626,7 +24628,10 @@ with pkgs;
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
-  tailscale = callPackage ../servers/tailscale { };
+  tailscale = callPackage ../servers/tailscale {
+    # Version 1.38.1 requires Go >= 1.20
+    buildGoModule = buildGo120Module;
+  };
 
   tailspin = callPackage ../tools/misc/tailspin { };
 
@@ -29953,6 +29958,8 @@ with pkgs;
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
   kubectl-convert = kubectl.convert;
+
+  kubernetes-metrics-server = callPackage ../applications/networking/cluster/kubernetes-metrics-server { };
 
   kubemqctl = callPackage ../applications/networking/cluster/kubemqctl { };
 
@@ -37182,7 +37189,7 @@ with pkgs;
     gtk2 = gtk2-x11;
   };
 
-  qMasterPassword = qt6Packages.callPackage ../applications/misc/qMasterPassword { };
+  qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
 
   qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
 
