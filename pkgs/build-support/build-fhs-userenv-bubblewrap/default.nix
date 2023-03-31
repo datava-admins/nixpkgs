@@ -2,6 +2,7 @@
 
 args @ {
   name
+, version ? null
 , runScript ? "bash"
 , extraInstallCommands ? ""
 , meta ? {}
@@ -14,21 +15,20 @@ args @ {
 , unshareUts ? true
 , unshareCgroup ? true
 , dieWithParent ? true
-, extraLdConf ? ""
 , ...
 }:
 
 with builtins;
 let
-  buildFHSEnv = callPackage ./env.nix { };
+  buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
-  env = buildFHSEnv (removeAttrs args [
+  fhsenv = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
-    "extraLdConf"
+    "version"
   ]);
 
-  etcBindFlags = let
+  etcBindEntries = let
     files = [
       # NixOS Compatibility
       "static"
@@ -71,22 +71,13 @@ let
       "ca-certificates"
       "pki"
     ];
-  in concatStringsSep "\n  "
-  (map (file: "--ro-bind-try $(${coreutils}/bin/readlink -m /etc/${file}) /etc/${file}") files);
+  in map (path: "/etc/${path}") files;
 
   # Create this on the fly instead of linking from /nix
   # The container might have to modify it and re-run ldconfig if there are
   # issues running some binary with LD_LIBRARY_PATH
   createLdConfCache = ''
     cat > /etc/ld.so.conf <<EOF
-    /run/opengl-driver/lib
-    /run/opengl-driver/lib/dri
-    /run/opengl-driver/lib/gbm
-    /run/opengl-driver/lib/vdpau
-    /run/opengl-driver-32/lib
-    /run/opengl-driver-32/lib/dri
-    /run/opengl-driver-32/lib/gbm
-    /run/opengl-driver-32/lib/vdpau
     /lib
     /lib/x86_64-linux-gnu
     /lib64
@@ -97,7 +88,8 @@ let
     /lib32
     /usr/lib/i386-linux-gnu
     /usr/lib32
-  '' + extraLdConf + ''
+    /run/opengl-driver/lib
+    /run/opengl-driver-32/lib
     EOF
     ldconfig &> /dev/null
   '';
@@ -108,26 +100,25 @@ let
   '';
 
   bwrapCmd = { initArgs ? "" }: ''
-    blacklist=(/nix /dev /proc /etc)
+    ignored=(/nix /dev /proc /etc)
     ro_mounts=()
     symlinks=()
-    graphics_share=()
-
-    for i in ${env}/*; do
+    etc_ignored=()
+    for i in ${fhsenv}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
         :
       elif [[ -L $i ]]; then
         symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$path")
-        blacklist+=("$path")
+        ignored+=("$path")
       else
         ro_mounts+=(--ro-bind "$i" "$path")
-        blacklist+=("$path")
+        ignored+=("$path")
       fi
     done
 
-    if [[ -d ${env}/etc ]]; then
-      for i in ${env}/etc/*; do
+    if [[ -d ${fhsenv}/etc ]]; then
+      for i in ${fhsenv}/etc/*; do
         path="/''${i##*/}"
         # NOTE: we're binding /etc/fonts and /etc/ssl/certs from the host so we
         # don't want to override it with a path from the FHS environment.
@@ -135,21 +126,26 @@ let
           continue
         fi
         ro_mounts+=(--ro-bind "$i" "/etc$path")
+        etc_ignored+=("/etc$path")
       done
     fi
 
-    declare -a graphics_share
-    for dir in /run/opengl-driver{,-32}/share/*; do
-      if [[ -d "$dir" ]]; then
-        graphics_share+=(--bind "$dir" "/usr/share/$(basename $dir)")
+    for i in ${lib.escapeShellArgs etcBindEntries}; do
+      if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
+        continue
+      fi
+      if [[ -L $i ]]; then
+        symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$i")
+      else
+        ro_mounts+=(--ro-bind-try "$i" "$i")
       fi
     done
 
     declare -a auto_mounts
     # loop through all directories in the root
     for dir in /*; do
-      # if it is a directory and it is not in the blacklist
-      if [[ -d "$dir" ]] && [[ ! "''${blacklist[@]}" =~ "$dir" ]]; then
+      # if it is a directory and it is not ignored
+      if [[ -d "$dir" ]] && [[ ! "''${ignored[@]}" =~ "$dir" ]]; then
         # add it to the mount list
         auto_mounts+=(--bind "$dir" "$dir")
       fi
@@ -187,19 +183,17 @@ let
       # settled on being mounting one via bwrap.
       # Also, the cache needs to go to both 32 and 64 bit glibcs, for games
       # of both architectures to work.
-      --tmpfs ${glibc}/etc
-      --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf
-      --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache
-      --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc
-      --remount-ro ${glibc}/etc
-      --tmpfs ${pkgsi686Linux.glibc}/etc
-      --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf
-      --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache
-      --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc
-      --remount-ro ${pkgsi686Linux.glibc}/etc
-      ${etcBindFlags}
+      --tmpfs ${glibc}/etc \
+      --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf \
+      --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
+      --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
+      --remount-ro ${glibc}/etc \
+      --tmpfs ${pkgsi686Linux.glibc}/etc \
+      --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
+      --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
+      --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc \
+      --remount-ro ${pkgsi686Linux.glibc}/etc \
       "''${ro_mounts[@]}"
-      "''${graphics_share[@]}"
       "''${symlinks[@]}"
       "''${auto_mounts[@]}"
       "''${x11_args[@]}"
@@ -211,7 +205,11 @@ let
 
   bin = writeShellScriptBin name (bwrapCmd { initArgs = ''"$@"''; });
 
-in runCommandLocal name {
+  versionStr = lib.optionalString (version != null) ("-" + version);
+
+  nameAndVersion = name + versionStr;
+
+in runCommandLocal nameAndVersion {
   inherit meta;
 
   passthru = passthru // {
@@ -223,6 +221,7 @@ in runCommandLocal name {
       echo >&2 ""
       exit 1
     '';
+    inherit args fhsenv;
   };
 } ''
   mkdir -p $out/bin

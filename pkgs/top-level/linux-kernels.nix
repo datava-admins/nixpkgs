@@ -34,8 +34,6 @@ let
       major = lib.versions.major version;
       sha256 = kernelPatches.hardened.${kernel.meta.branch}.sha256;
       modDirVersion' = builtins.replaceStrings [ kernel.version ] [ version ] kernel.modDirVersion;
-      # FIXME remove as soon as the revert happened upstream!
-      basePatches = lib.filter ({ name, ... }: name != "fix-brcmfmac") kernel.kernelPatches;
     in kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
         inherit stdenv lib version;
@@ -48,10 +46,13 @@ let
           inherit sha256;
         };
         extraMeta = {
-          broken = kernel.meta.broken || (stdenv.isx86_64 && lib.versions.majorMinor version == "5.4");
+          broken =
+            kernel.meta.broken ||
+            lib.versions.majorMinor version == "4.14" ||
+            (stdenv.isx86_64 && lib.versionAtLeast version "4.19" && lib.versionOlder version "5.5");
         };
       };
-      kernelPatches = basePatches ++ [
+      kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
       ];
       isHardened = true;
@@ -106,7 +107,6 @@ in {
           # when adding a new linux version
           kernelPatches.cpu-cgroup-v2."4.11"
           kernelPatches.modinst_arg_list_too_long
-          kernelPatches.fix-brcmfmac
         ];
     };
 
@@ -115,7 +115,6 @@ in {
         [ kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
           kernelPatches.modinst_arg_list_too_long
-          kernelPatches.fix-brcmfmac
         ];
     };
 
@@ -124,7 +123,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.rtl8761b_support
-        kernelPatches.fix-brcmfmac
       ];
     };
 
@@ -139,7 +137,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.fix-brcmfmac
       ];
     };
 
@@ -156,7 +153,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.fix-em-ice-bonding
-        kernelPatches.fix-brcmfmac
       ];
     };
 
@@ -173,7 +169,15 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.fix-em-ice-bonding
-        kernelPatches.fix-brcmfmac
+      ];
+    };
+
+    linux_rt_6_1 = callPackage ../os-specific/linux/kernel/linux-rt-6.1.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.fix-em-ice-bonding
+        kernelPatches.export-rt-sched-migrate
       ];
     };
 
@@ -182,7 +186,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.fix-em-ice-bonding
-        kernelPatches.fix-brcmfmac
       ];
     };
 
@@ -316,6 +319,8 @@ in {
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
+
+    ch9344 = callPackage ../os-specific/linux/ch9344 { };
 
     chipsec = callPackage ../tools/security/chipsec {
       inherit kernel;
@@ -572,6 +577,7 @@ in {
      linux_rt_5_4 = packagesFor kernels.linux_rt_5_4;
      linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
      linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
+     linux_rt_6_1 = packagesFor kernels.linux_rt_6_1;
   };
 
   rpiPackages = {
@@ -629,7 +635,7 @@ in {
     linux_latest = packages.linux_6_2;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
-    linux_rt_latest = packages.linux_rt_5_10;
+    linux_rt_latest = packages.linux_rt_6_1;
     linux_hardkernel_latest = packages.hardkernel_4_14;
   };
 
@@ -643,6 +649,7 @@ in {
   # Derive one of the default .config files
   linuxConfig = {
     src,
+    kernelPatches ? [],
     version ? (builtins.parseDrvName src.name).version,
     makeTarget ? "defconfig",
     name ? "kernel.config",
@@ -650,6 +657,7 @@ in {
     inherit name src;
     depsBuildBuild = [ buildPackages.stdenv.cc ]
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ buildPackages.bison buildPackages.flex ];
+    patches = map (p: p.patch) kernelPatches;  # Patches may include new configs.
     postPatch = ''
       patchShebangs scripts/
     '';

@@ -38,8 +38,7 @@
   buildPythonApplication = if isQt6 then python3Packages.buildPythonApplication else mkDerivationWith python3Packages.buildPythonApplication;
 
   pname = "qutebrowser";
-  version = if isQt6 then "unstable-2022-10-28" else "2.5.2";
-
+  version = if isQt6 then "unstable-2023-03-19" else "2.5.3";
 in
 
 assert withMediaPlayback -> gst_all_1 != null;
@@ -49,18 +48,19 @@ buildPythonApplication {
   inherit pname version;
 
   src = if isQt6 then
-    # comes from qt6-v2 branch of upstream
+    # comes from the master branch of upstream
     # https://github.com/qutebrowser/qutebrowser/issues/7202
+    # https://github.com/qutebrowser/qutebrowser/discussions/7628
     fetchFromGitHub {
       owner = "qutebrowser";
       repo = "qutebrowser";
-      rev = "d9a46b1a62792b3f74e428bbde852209328f1e8d";
-      sha256 = "sha256-WkicF+KdaP+Ub1zAJKWyU6gEljBR1FOy8y2UYO1sV9Q=";
+      rev = "294e73660c1f3d1aff50843c25e2f8f7574c4332";
+      sha256 = "sha256-vXMME9vqB4C4MScT9j7lOz4Bvu5R8nHFKi+uz9mbqtg=";
     }
   # the release tarballs are different from the git checkout!
    else fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-qb/OFN3EA94N6y7t+YPCMc4APgdZmV7H706jTkl06Qg=";
+    hash = "sha256-hF7yJDTQIztUcZJae20HVhfGlLprvz6GWrgpSwLJ14E=";
   };
 
   # Needs tox
@@ -143,6 +143,7 @@ buildPythonApplication {
       "''${qtWrapperArgs[@]}"
       --add-flags '--backend ${backend}'
       --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
+      ${lib.optionalString isQt6 ''--set QUTE_QT_WRAPPER "PyQt6"''}
       ${lib.optionalString (pipewireSupport && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
       ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
     )
