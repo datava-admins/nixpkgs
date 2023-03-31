@@ -11186,6 +11186,8 @@ with pkgs;
 
   podman-tui = callPackage ../applications/virtualization/podman-tui { };
 
+  podman-desktop = callPackage ../applications/virtualization/podman-desktop {};
+
   pods = callPackage ../applications/virtualization/pods { };
 
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
@@ -12822,6 +12824,10 @@ with pkgs;
   tmuxinator = callPackage ../tools/misc/tmuxinator { };
 
   tmux-mem-cpu-load = callPackage ../tools/misc/tmux-mem-cpu-load { };
+
+  tmux-sessionizer = callPackage ../tools/misc/tmux-sessionizer {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   tmux-xpanes = callPackage ../tools/misc/tmux-xpanes { };
 
@@ -19508,6 +19514,10 @@ with pkgs;
   scmccid = callPackage ../development/libraries/scmccid { };
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
+
+  cctag = callPackage ../development/libraries/cctag {
+    tbb = tbb_2021_8;
+  };
 
   cctz = callPackage ../development/libraries/cctz {
     inherit (darwin.apple_sdk.frameworks) Foundation;
@@ -30933,6 +30943,8 @@ with pkgs;
 
   ideamaker = libsForQt5.callPackage ../applications/misc/ideamaker { };
 
+  identity = callPackage ../applications/graphics/identity { };
+
   ifenslave = callPackage ../os-specific/linux/ifenslave { };
 
   ii = callPackage ../applications/networking/irc/ii {
@@ -32663,7 +32675,9 @@ with pkgs;
     enableDbusUi = false;
   };
 
-  parsec-bin = callPackage ../applications/misc/parsec/bin.nix { };
+  parsec-bin = callPackage ../applications/misc/parsec/bin.nix {
+    ffmpeg = ffmpeg_4;
+  };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
@@ -36156,6 +36170,8 @@ with pkgs;
   randtype = callPackage ../games/randtype { };
 
   raylib-games = callPackage ../games/raylib-games { };
+
+  raycast = callPackage ../os-specific/darwin/raycast { };
 
   redeclipse = callPackage ../games/redeclipse { };
 
@@ -39762,4 +39778,6 @@ with pkgs;
   duden = callPackage ../applications/misc/duden { };
 
   zf = callPackage ../tools/misc/zf { };
+
+  isolate = callPackage ../tools/security/isolate { };
 }

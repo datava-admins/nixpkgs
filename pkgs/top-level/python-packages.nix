@@ -985,6 +985,8 @@ self: super: with self; {
 
   azure-mgmt-extendedlocation = callPackage ../development/python-modules/azure-mgmt-extendedlocation { };
 
+  azure-mgmt-frontdoor = callPackage ../development/python-modules/azure-mgmt-frontdoor { };
+
   azure-mgmt-hanaonazure = callPackage ../development/python-modules/azure-mgmt-hanaonazure { };
 
   azure-mgmt-hdinsight = callPackage ../development/python-modules/azure-mgmt-hdinsight { };
@@ -2582,6 +2584,8 @@ self: super: with self; {
 
   django-celery-results = callPackage ../development/python-modules/django-celery-results { };
 
+  django-ckeditor = callPackage ../development/python-modules/django-ckeditor { };
+
   django_classytags = callPackage ../development/python-modules/django_classytags { };
 
   django-cleanup = callPackage ../development/python-modules/django-cleanup { };
@@ -2670,6 +2674,8 @@ self: super: with self; {
   django-otp = callPackage ../development/python-modules/django-otp { };
 
   django-paintstore = callPackage ../development/python-modules/django-paintstore { };
+
+  django-pattern-library = callPackage ../development/python-modules/django-pattern-library { };
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
@@ -2876,6 +2882,8 @@ self: super: with self; {
   dpcontracts = callPackage ../development/python-modules/dpcontracts { };
 
   dpkt = callPackage ../development/python-modules/dpkt { };
+
+  draftjs-exporter = callPackage ../development/python-modules/draftjs-exporter { };
 
   dragonfly = callPackage ../development/python-modules/dragonfly { };
 
@@ -3309,6 +3317,8 @@ self: super: with self; {
   faraday-agent-parameters-types = callPackage ../development/python-modules/faraday-agent-parameters-types { };
 
   faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
+
+  farama-notifications = callPackage ../development/python-modules/farama-notifications { };
 
   fastai = callPackage ../development/python-modules/fastai { };
 
@@ -4272,6 +4282,8 @@ self: super: with self; {
 
   gym-notices = callPackage ../development/python-modules/gym-notices { };
 
+  gymnasium = callPackage ../development/python-modules/gymnasium { };
+
   gyp = callPackage ../development/python-modules/gyp { };
 
   h11 = callPackage ../development/python-modules/h11 { };
@@ -4612,6 +4624,8 @@ self: super: with self; {
 
   icecream = callPackage ../development/python-modules/icecream { };
 
+  iceportal = callPackage ../development/python-modules/iceportal { };
+
   icmplib = callPackage ../development/python-modules/icmplib { };
 
   icnsutil = callPackage ../development/python-modules/icnsutil { };
@@ -4921,6 +4935,8 @@ self: super: with self; {
   javaproperties = callPackage ../development/python-modules/javaproperties { };
 
   jax = callPackage ../development/python-modules/jax { };
+
+  jax-jumpy = callPackage ../development/python-modules/jax-jumpy { };
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
@@ -5294,6 +5310,8 @@ self: super: with self; {
   krakenex = callPackage ../development/python-modules/krakenex { };
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };
+
+  l18n = callPackage ../development/python-modules/l18n { };
 
   labelbox = callPackage ../development/python-modules/labelbox { };
 
@@ -7146,6 +7164,8 @@ self: super: with self; {
   perfplot = callPackage ../development/python-modules/perfplot { };
 
   periodictable = callPackage ../development/python-modules/periodictable { };
+
+  permissionedforms = callPackage ../development/python-modules/permissionedforms { };
 
   persim = callPackage ../development/python-modules/persim { };
 
@@ -11483,6 +11503,8 @@ self: super: with self; {
 
   telegraph = callPackage ../development/python-modules/telegraph { };
 
+  telepath = callPackage ../development/python-modules/telepath { };
+
   telethon = callPackage ../development/python-modules/telethon {
     inherit (pkgs) openssl;
   };
@@ -12408,6 +12430,12 @@ self: super: with self; {
   w3lib = callPackage ../development/python-modules/w3lib { };
 
   wadllib = callPackage ../development/python-modules/wadllib { };
+
+  wagtail = callPackage ../development/python-modules/wagtail { };
+
+  wagtail-factories = callPackage ../development/python-modules/wagtail-factories { };
+
+  wagtail-localize = callPackage ../development/python-modules/wagtail-localize { };
 
   waitress = callPackage ../development/python-modules/waitress { };
 
