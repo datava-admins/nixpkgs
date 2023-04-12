@@ -3,7 +3,6 @@
 , profilingLibraries ? false
 , withGd ? false
 , withLibcrypt? false
-, withFHS ? false
 , buildPackages
 }:
 

@@ -99,6 +99,7 @@
   ./hardware/video/switcheroo-control.nix
   ./hardware/video/uvcvideo/default.nix
   ./hardware/video/webcam/facetimehd.nix
+  ./hardware/video/webcam/ipu6.nix
   ./hardware/wooting.nix
   ./hardware/xone.nix
   ./hardware/xpadneo.nix
@@ -180,6 +181,7 @@
   ./programs/haguichi.nix
   ./programs/hamster.nix
   ./programs/htop.nix
+  ./programs/hyprland.nix
   ./programs/iay.nix
   ./programs/iftop.nix
   ./programs/i3lock.nix
@@ -196,6 +198,7 @@
   ./programs/mdevctl.nix
   ./programs/mepo.nix
   ./programs/mininet.nix
+  ./programs/minipro.nix
   ./programs/miriway.nix
   ./programs/mosh.nix
   ./programs/msmtp.nix
@@ -1040,6 +1043,7 @@
   ./services/networking/wg-quick.nix
   ./services/networking/wireguard.nix
   ./services/networking/wpa_supplicant.nix
+  ./services/networking/wstunnel.nix
   ./services/networking/x2goserver.nix
   ./services/networking/xandikos.nix
   ./services/networking/xinetd.nix
@@ -1129,6 +1133,7 @@
   ./services/video/replay-sorcery.nix
   ./services/video/rtsp-simple-server.nix
   ./services/video/unifi-video.nix
+  ./services/video/v4l2-relayd.nix
   ./services/wayland/cage.nix
   ./services/web-apps/akkoma.nix
   ./services/web-apps/alps.nix
@@ -1139,6 +1144,7 @@
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/coder.nix
   ./services/web-apps/changedetection-io.nix
+  ./services/web-apps/chatgpt-retrieval-plugin.nix
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
   ./services/web-apps/convos.nix

@@ -39,7 +39,6 @@
 , withLibcrypt ? false
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
-, withFHS ? false # produce a glibc to be used in chroot environments
 , ...
 } @ args:
 
@@ -71,7 +70,6 @@ stdenv.mkDerivation ({
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
-    ] ++ lib.optionals (!withFHS) [
 
       /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
       ./dont-use-system-ld-so-cache.patch
@@ -79,7 +77,6 @@ stdenv.mkDerivation ({
       /* Don't use /etc/ld.so.preload, but /etc/ld-nix.so.preload.  */
       ./dont-use-system-ld-so-preload.patch
 
-    ] ++ [
       /* The command "getconf CS_PATH" returns the default search path
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
@@ -184,7 +181,7 @@ stdenv.mkDerivation ({
   passthru = { inherit version; minorRelease = version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" "withFHS" ]) //
+// (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
 
 {
   src = fetchurl {

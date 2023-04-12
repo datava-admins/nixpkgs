@@ -18,6 +18,8 @@ let
 
     alcotest-mirage = callPackage ../development/ocaml-modules/alcotest/mirage.nix {};
 
+    algaeff = callPackage ../development/ocaml-modules/algaeff { };
+
     alsa = callPackage ../development/ocaml-modules/alsa { };
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
@@ -1256,8 +1258,6 @@ let
     paf = callPackage ../development/ocaml-modules/paf { };
 
     paf-cohttp = callPackage ../development/ocaml-modules/paf/cohttp.nix { };
-
-    paf-le = callPackage ../development/ocaml-modules/paf/le.nix { };
 
     parany = callPackage ../development/ocaml-modules/parany { };
 

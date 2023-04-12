@@ -124,6 +124,7 @@ mapAliases ({
   hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
   IMAPClient = imapclient; # added 2021-10-28
   imdbpy = throw "imdbpy has been renamed to cinemagoer"; # added 2022-08-08
+  intreehook =  throw "intreehooks has been removed because it is obsolete as a backend-path key was added to PEP 517"; # added 2023-04-11
   ipaddress = throw "ipaddress has been removed because it is no longer required since python 2.7."; # added 2022-05-30
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
   itanium_demangler = itanium-demangler; # added 2022-1017
@@ -220,6 +221,7 @@ mapAliases ({
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
   pytestquickcheck = pytest-quickcheck; # added 2021-07-20
   pytestrunner = pytest-runner; # added 2021-01-04
+  python-forecastio = throw "python-forecastio has been removed, as the Dark Sky service was shut down."; # added 2023-04-05
   python-igraph = igraph; # added 2021-11-11
   solo-python = solo1-cli; # added 2022-07-11
   python_magic = python-magic; # added 2022-05-07

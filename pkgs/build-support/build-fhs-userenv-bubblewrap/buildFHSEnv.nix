@@ -41,18 +41,8 @@ let
   # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
   # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
   basePkgs = with pkgs;
-    let
-      # use FHS aware variant which will respect /etc/ld.so.cache
-      # avoids need for LD_LIBRARY_PATH in most cases
-      glibc_multi-fhs = if isMultiBuild then
-          pkgs.glibc_multi.override (_: {
-            glibc = pkgs.glibc.override(_: { withFHS = true;});
-            glibc32 = pkgs.pkgsi686Linux.glibc.override(_: { withFHS = true;});
-          })
-        else
-          glibc-fhs;
-    in [ glibcLocales
-      glibc_multi-fhs
+    [ glibcLocales
+      (if isMultiBuild then glibc_multi else glibc)
       (toString gcc.cc.lib) bashInteractiveFHS coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
       gnutar gzip bzip2 xz
@@ -71,7 +61,6 @@ let
     export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
     export TZDIR='/etc/zoneinfo'
-    export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}/run/opengl-driver/share:/run/opengl-driver-32/share
 
     # XDG_DATA_DIRS is used by pressure-vessel (steam proton) and vulkan loaders to find the corresponding icd
     export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}/run/opengl-driver/share:/run/opengl-driver-32/share
@@ -138,8 +127,6 @@ let
           # and compile them
           ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
       fi
-
-      ln -s ${ldconfig}/bin/ldconfig $out/sbin/ldconfig
     '';
   };
 
