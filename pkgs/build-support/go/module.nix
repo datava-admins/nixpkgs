@@ -107,7 +107,7 @@ let
 
     buildPhase = args.modBuildPhase or ''
       runHook preBuild
-    '' + lib.optionalString (deleteVendor == true) ''
+    '' + lib.optionalString deleteVendor ''
       if [ ! -d vendor ]; then
         echo "vendor folder does not exist, 'deleteVendor' is not needed"
         exit 10
@@ -145,6 +145,11 @@ let
       cp -r --reflink=auto vendor $out
     ''}
 
+      if ! [ "$(ls -A $out)" ]; then
+        echo "vendor folder is empty, please set 'vendorHash = null;' or 'vendorSha256 = null;' in your expression"
+        exit 10
+      fi
+
       runHook postInstall
     '';
 
@@ -169,7 +174,7 @@ let
 
     GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
-    inherit CGO_ENABLED;
+    inherit CGO_ENABLED enableParallelBuilding;
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -187,6 +192,12 @@ let
         cp -r --reflink=auto ${go-modules} vendor
       ''}
     '' + ''
+
+      # currently pie is only enabled by default in pkgsMusl
+      # this will respect the `hardening{Disable,Enable}` flags if set
+      if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
+        export GOFLAGS="-buildmode=pie $GOFLAGS"
+      fi
 
       runHook postConfigure
     '';
@@ -301,8 +312,6 @@ let
     disallowedReferences = lib.optional (!allowGoReference) go;
 
     passthru = passthru // { inherit go go-modules vendorSha256 vendorHash; };
-
-    enableParallelBuilding = enableParallelBuilding;
 
     meta = {
       # Add default meta information

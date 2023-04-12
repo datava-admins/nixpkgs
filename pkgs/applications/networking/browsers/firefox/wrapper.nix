@@ -1,4 +1,5 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
+, buildPackages
 , jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
@@ -31,7 +32,7 @@ let
       (lib.toUpper (lib.substring 0 1 applicationName) + lib.substring 1 (-1) applicationName)
     , nameSuffix ? ""
     , icon ? applicationName
-    , wmClass ? null
+    , wmClass ? applicationName
     , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
     , useGlvnd ? true
@@ -61,7 +62,7 @@ let
       smartcardSupport = cfg.smartcardSupport or false;
 
       nativeMessagingHosts =
-        ([ ]
+        [ ]
           ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
           ++ lib.optional (cfg.enableBukubrow or false) bukubrow
           ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
@@ -70,7 +71,7 @@ let
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5Packages.plasma-browser-integration
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
-        );
+        ;
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg_5
@@ -98,7 +99,7 @@ let
 
       usesNixExtensions = nixExtensions != null;
 
-      nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
+      nameArray = builtins.map(a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
       requiresSigning = browser ? MOZ_REQUIRE_SIGNING
                      -> toString browser.MOZ_REQUIRE_SIGNING != "";
@@ -114,7 +115,7 @@ let
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
         else
         a
-      ) (if usesNixExtensions then nixExtensions else []);
+      ) (lib.optionals usesNixExtensions nixExtensions);
 
       enterprisePolicies =
       {
@@ -168,10 +169,10 @@ let
       inherit pname version;
 
       desktopItem = makeDesktopItem ({
-        name = applicationName;
-        exec = "${launcherName} %U";
+        name = launcherName;
+        exec = "${launcherName} --name ${wmClass} %U";
         inherit icon;
-        desktopName = "${desktopName}${nameSuffix}";
+        inherit desktopName;
         startupNotify = true;
         startupWMClass = wmClass;
         terminal = false;
@@ -275,7 +276,7 @@ let
           # Symbolic link: wrap the link's target.
           oldExe="$(readlink -v --canonicalize-existing "$executablePath")"
           rm "$executablePath"
-        elif wrapperCmd=$(${makeBinaryWrapper.extractCmd} "$executablePath"); [[ $wrapperCmd ]]; then
+        elif wrapperCmd=$(${buildPackages.makeBinaryWrapper.extractCmd} "$executablePath"); [[ $wrapperCmd ]]; then
           # If the executable is a binary wrapper, we need to update its target to
           # point to $out, but we can't just edit the binary in-place because of length
           # issues. So we extract the command used to create the wrapper and add the
@@ -403,7 +404,7 @@ let
       disallowedRequisites = [ stdenv.cc ];
 
       meta = browser.meta // {
-        description = browser.meta.description;
+        inherit (browser.meta) description;
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };

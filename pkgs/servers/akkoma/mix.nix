@@ -8,6 +8,19 @@ let
   self = packages // (overrides self packages);
 
   packages = with beamPackages; with self; {
+    argon2_elixir = buildMix rec {
+      name = "argon2_elixir";
+      version = "3.0.0";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "0mywrvzzm76glvajzxrdg6ka49xby30fpk9zl4dxamzm18kknxcb";
+      };
+
+      beamDeps = [ comeonin elixir_make ];
+    };
+
     base62 = buildMix rec {
       name = "base62";
       version = "1.2.2";
@@ -75,12 +88,12 @@ let
 
     cachex = buildMix rec {
       name = "cachex";
-      version = "3.4.0";
+      version = "3.6.0";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1rfbbij81zmk6p75z33wg04mfcjqsxzzh67vclllvfjgmfqj609p";
+        sha256 = "1qp2r1f4hvpybhgi547p33ci7bh2w6xn6jl9il68xg4370vlxwpb";
       };
 
       beamDeps = [ eternal jumper sleeplocks unsafe ];
@@ -101,12 +114,12 @@ let
 
     castore = buildMix rec {
       name = "castore";
-      version = "0.1.19";
+      version = "0.1.22";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0291pdk3x7qzbv8laris1y90vi7g9akmykd23m2fz0nwlmhh2vp9";
+        sha256 = "1b1cl89fzkykimxwgm8mwb9wmxcrd8qk8hfc83pa2npb8zgpcxf1";
       };
 
       beamDeps = [];
@@ -229,19 +242,6 @@ let
       beamDeps = [];
     };
 
-    credo = buildMix rec {
-      name = "credo";
-      version = "1.6.7";
-
-      src = fetchHex {
-        pkg = "${name}";
-        version = "${version}";
-        sha256 = "1lvxzksdrc2lbl0rzrww4q5rmayf37q0phcpz2kyvxq7n2zi1qa1";
-      };
-
-      beamDeps = [ bunt file_system jason ];
-    };
-
     custom_base = buildMix rec {
       name = "custom_base";
       version = "0.2.1";
@@ -294,14 +294,27 @@ let
       beamDeps = [];
     };
 
-    earmark = buildMix rec {
-      name = "earmark";
-      version = "1.4.33";
+    dialyxir = buildMix rec {
+      name = "dialyxir";
+      version = "1.2.0";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "01mfb0c1vq72pira1622cmvaly2p6n4dxwmsrw10i9x0srii7cr1";
+        sha256 = "0qw4zyd86fjwsav744jvz1wpdbmy9nz645xqr9s1d1bs88v221v1";
+      };
+
+      beamDeps = [ erlex ];
+    };
+
+    earmark = buildMix rec {
+      name = "earmark";
+      version = "1.4.37";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "01mibj51iys1l289mk2adqs50hfbpfj643mh459nvf4dhq95wvfq";
       };
 
       beamDeps = [ earmark_parser ];
@@ -309,12 +322,12 @@ let
 
     earmark_parser = buildMix rec {
       name = "earmark_parser";
-      version = "1.4.29";
+      version = "1.4.31";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "00rmqvf3hkxfvkijqd624n0hn1xqims8h211xmm02fdi7qdsy0j9";
+        sha256 = "0nfhxyklbz0ixkl33xqkchqgdzk948dcjikym0vz0pikw1z3cz9i";
       };
 
       beamDeps = [];
@@ -335,12 +348,12 @@ let
 
     ecto = buildMix rec {
       name = "ecto";
-      version = "3.9.2";
+      version = "3.9.4";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "05cxg8rq6rawmn8ryfks5hj7h9b4k9bxxsn7k8l5b7p0fx8nsii1";
+        sha256 = "0xgfz1pzylj22k0qa8zh4idvd4139b1lwnmq33na8fia2j69hpyy";
       };
 
       beamDeps = [ decimal jason telemetry ];
@@ -374,12 +387,12 @@ let
 
     ecto_sql = buildMix rec {
       name = "ecto_sql";
-      version = "3.9.1";
+      version = "3.9.2";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "060iqmkqnsyy2kv05s218ady9lgnz7rvgknwz6xjks7jzyj71m2z";
+        sha256 = "0w1zplm8ndf10dwxffg60iwzvbz3hyyiy761x91cvnwg6nsfxd8y";
       };
 
       beamDeps = [ db_connection ecto postgrex telemetry ];
@@ -393,6 +406,19 @@ let
         pkg = "${name}";
         version = "${version}";
         sha256 = "05ppvbhqi5m9zk1c4xnrki814sqhxrc7d1dpvfmwm2v7qm8xdjzm";
+      };
+
+      beamDeps = [];
+    };
+
+    erlex = buildMix rec {
+      name = "erlex";
+      version = "0.2.6";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "0x8c1j62y748ldvlh46sxzv5514rpzm809vxn594vd7y25by5lif";
       };
 
       beamDeps = [];
@@ -426,12 +452,12 @@ let
 
     ex_aws_s3 = buildMix rec {
       name = "ex_aws_s3";
-      version = "2.3.3";
+      version = "2.4.0";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "017iswr9m2kwri2m5j3r9m0b7hk4vqqddbqy09k5d4nfz6vg0i00";
+        sha256 = "1fsngrldq2g3i2f7y5m4d85sd7hx4jiwnfcxhs14bnalfziadpc5";
       };
 
       beamDeps = [ ex_aws sweet_xml ];
@@ -452,12 +478,12 @@ let
 
     ex_doc = buildMix rec {
       name = "ex_doc";
-      version = "0.29.1";
+      version = "0.29.2";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1xkljn0ggg7fk8qv2dmr2m40h3lmfhi038p2hksdldja6yk5yx5p";
+        sha256 = "1bq37vm5sc46k75n1m6h1n42r3czj957xqjh68z7b2m1xlwp2pbb";
       };
 
       beamDeps = [ earmark_parser makeup_elixir makeup_erlang ];
@@ -491,12 +517,12 @@ let
 
     excoveralls = buildMix rec {
       name = "excoveralls";
-      version = "0.12.3";
+      version = "0.15.1";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1nnsr9dv7mybcxx3y5p2gqzyy3p479w21c55vvsq6hi6dihkx2jn";
+        sha256 = "1rq7vqvzw7sa2r7n59bhbxbhcnjr6z44dkvq45mdb0h01kcnnhgq";
       };
 
       beamDeps = [ hackney jason ];
@@ -543,12 +569,12 @@ let
 
     finch = buildMix rec {
       name = "finch";
-      version = "0.13.0";
+      version = "0.14.0";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1k56zfbadpppn8flavb4aczq0npcqnlhg993l51c1k8dw76pv5a9";
+        sha256 = "1pd805jyd4qbpb2md3kw443325yqynpkpyr2iixb9zf432psqnal";
       };
 
       beamDeps = [ castore mime mint nimble_options nimble_pool telemetry ];
@@ -569,12 +595,12 @@ let
 
     floki = buildMix rec {
       name = "floki";
-      version = "0.34.0";
+      version = "0.34.2";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1769xg2sqdh6s1j06l7gi98iy35ri79xk6sq58rh1phdyi1ryflw";
+        sha256 = "1j6ilik6pviff34rrqr8456h7pp0qlash731pv36ny811w7xbf96";
       };
 
       beamDeps = [];
@@ -593,17 +619,17 @@ let
       beamDeps = [];
     };
 
-    gun = buildRebar3 rec {
-      name = "gun";
-      version = "2.0.0-rc.2";
+    gettext = buildMix rec {
+      name = "gettext";
+      version = "0.20.0";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1z2lsbbpl2925z8x2ri0rhp30ccn9d08pgqd2hkxf4342jp1x7bb";
+        sha256 = "0ggb458h60ch3inndqp9xhbailhb0jkq3xnp85sa94sy8dvv20qw";
       };
 
-      beamDeps = [ cowlib ];
+      beamDeps = [];
     };
 
     hackney = buildRebar3 rec {
@@ -712,12 +738,12 @@ let
 
     joken = buildMix rec {
       name = "joken";
-      version = "2.5.0";
+      version = "2.6.0";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1rvlvwgxi7myg5mp1yb0f75gk82yl90660iigg5dhpkwc64mrci2";
+        sha256 = "19xanmavc4n5zzypxyi4qd93m8l7sjqswy2ksfmm82ydf5db15as";
       };
 
       beamDeps = [ jose ];
@@ -725,12 +751,12 @@ let
 
     jose = buildMix rec {
       name = "jose";
-      version = "1.11.2";
+      version = "1.11.5";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1lj715gzl022yc47qsg9712x8nc9wi7x70msv8c3lpym92y3y54q";
+        sha256 = "115k981kfg9jmafgs16rybc5qah6p0zgvni3bdyfl0pyp8av5lyw";
       };
 
       beamDeps = [];
@@ -744,6 +770,19 @@ let
         pkg = "${name}";
         version = "${version}";
         sha256 = "0cvlbfkapkvbwaijmjq3cxg5m6yv4rh69wvss9kfj862i83mk31i";
+      };
+
+      beamDeps = [];
+    };
+
+    mail = buildMix rec {
+      name = "mail";
+      version = "0.2.3";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "1xbbdkyar8h0pdihfnsd84j1w3vfh9sk3xkz1llxz7y6m67kjawk";
       };
 
       beamDeps = [];
@@ -855,12 +894,12 @@ let
 
     mint = buildMix rec {
       name = "mint";
-      version = "1.4.2";
+      version = "1.5.1";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "106x9nmzi4ji5cqaddn76pxiyxdihk12z2qgszcdgd2rrjxsaxff";
+        sha256 = "07jvgmggmv6bxhkmrskdjz1xvv0a1l53fby7sammcfbwdbky2qsa";
       };
 
       beamDeps = [ castore hpax ];
@@ -907,12 +946,12 @@ let
 
     nimble_options = buildMix rec {
       name = "nimble_options";
-      version = "0.4.0";
+      version = "0.5.2";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0bd0pi3sij9vxhiilv25x6n3jls75g3b38rljvm1x896ycd1qw76";
+        sha256 = "1q6wa2ljprybfb9w2zg0gbppiwsnimgw5kcvakdp3z8mp42gk9sd";
       };
 
       beamDeps = [];
@@ -959,12 +998,12 @@ let
 
     open_api_spex = buildMix rec {
       name = "open_api_spex";
-      version = "3.10.0";
+      version = "3.16.1";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0rc7q857b8zb9vc4c699arjihca353rzm3bfjc31z0ib7pg2pfrd";
+        sha256 = "1yyvvyzzi6k2l55fl4wijhrzzdjns95asxcbnikgh6hjmiwdfvzg";
       };
 
       beamDeps = [ jason plug poison ];
@@ -985,12 +1024,12 @@ let
 
     phoenix = buildMix rec {
       name = "phoenix";
-      version = "1.6.15";
+      version = "1.6.16";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0wh6s8id3b4c4hgiawq995p192wxsws4sr4bm1g7b55kyvxvj2np";
+        sha256 = "0fdca3h6k9plv1qvch6zyl6wbnfhp8jisvggjmmsjw7n6kzqjng1";
       };
 
       beamDeps = [ castore jason phoenix_pubsub phoenix_view plug plug_cowboy plug_crypto telemetry ];
@@ -1011,12 +1050,12 @@ let
 
     phoenix_html = buildMix rec {
       name = "phoenix_html";
-      version = "3.2.0";
+      version = "3.3.1";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0ky5idgid1psz6hmh2b2kmj6n974axww74hrxwv02p6jasx9gv1n";
+        sha256 = "1lyhagjpg4lran6431csgkvf28g50mdvh4mlsxgs21j9vmp91ldy";
       };
 
       beamDeps = [ plug ];
@@ -1024,12 +1063,12 @@ let
 
     phoenix_live_dashboard = buildMix rec {
       name = "phoenix_live_dashboard";
-      version = "0.6.5";
+      version = "0.7.2";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0lmq1m7k465i9mzw35l7bx69n85mibwzd76976840r43sw6sakzg";
+        sha256 = "1dq5vj1a6fzclr3fwj7y8rg2xq3yigvgqc3aaq664fvs7h3dypqf";
       };
 
       beamDeps = [ ecto ecto_psql_extras mime phoenix_live_view telemetry_metrics ];
@@ -1037,15 +1076,15 @@ let
 
     phoenix_live_view = buildMix rec {
       name = "phoenix_live_view";
-      version = "0.17.12";
+      version = "0.18.17";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1j4r1pjl60hphan7mf0fn60cnqkdc7hah9zmf4sz8vy1mbhdavdg";
+        sha256 = "0f6f7m2naw85qgzh3bsrnwy7l1lwffsbmx3s7g4qv6x234773dgl";
       };
 
-      beamDeps = [ jason phoenix phoenix_html telemetry ];
+      beamDeps = [ jason phoenix phoenix_html phoenix_template phoenix_view telemetry ];
     };
 
     phoenix_pubsub = buildMix rec {
@@ -1076,12 +1115,12 @@ let
 
     phoenix_template = buildMix rec {
       name = "phoenix_template";
-      version = "1.0.0";
+      version = "1.0.1";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0ms39n5s6kh532s20yxzj7sh0rz5lslh09ibq5j21lkglacny1hv";
+        sha256 = "1vlkd4z2bxinczwcysydidpnh49rpxjihb5k3k4k8qr2yrwc0z8m";
       };
 
       beamDeps = [ phoenix_html ];
@@ -1102,12 +1141,12 @@ let
 
     plug = buildMix rec {
       name = "plug";
-      version = "1.10.4";
+      version = "1.14.0";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1874ixvvjklg0hnxr6d990qzarvvfxhd4s35c5bfqbixwwzj67md";
+        sha256 = "056wkb1b17mh5h9ncs2vbswvpjsm2iqc580nmyrvgznlqwr080mz";
       };
 
       beamDeps = [ mime plug_crypto telemetry ];
@@ -1128,12 +1167,12 @@ let
 
     plug_crypto = buildMix rec {
       name = "plug_crypto";
-      version = "1.2.3";
+      version = "1.2.4";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "18plj2idhp3f0nmqyjjf2rzj849l3br0797m8ln20p5dqscj0rxm";
+        sha256 = "1k0sx7c64icxcvgvccnpcszqrjg9a75i535ym6flvjdf7zq1br2d";
       };
 
       beamDeps = [];
@@ -1204,19 +1243,6 @@ let
       beamDeps = [];
     };
 
-    quack = buildMix rec {
-      name = "quack";
-      version = "0.1.1";
-
-      src = fetchHex {
-        pkg = "${name}";
-        version = "${version}";
-        sha256 = "0hr5ppds4a9vih14hzs3lfj07r5069w8ifr7022fn4j18jkvydnp";
-      };
-
-      beamDeps = [ poison tesla ];
-    };
-
     ranch = buildRebar3 rec {
       name = "ranch";
       version = "1.8.0";
@@ -1232,15 +1258,28 @@ let
 
     recon = buildMix rec {
       name = "recon";
-      version = "2.5.2";
+      version = "2.5.3";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "070f4dgfp1vzvz0fxwavzv9bd7nl5fx3rmmkyr0zy7g9vv426x9c";
+        sha256 = "1mwr6267lwl4p7f8jfk14s4cszxwra6zgf84hkcxz8fldzs86rkc";
       };
 
       beamDeps = [];
+    };
+
+    remote_ip = buildMix rec {
+      name = "remote_ip";
+      version = "1.1.0";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "0x7d086iik0h5gcwn2bvx6cjlznqxr1bznj6qlpsgmmadbvgsvv1";
+      };
+
+      beamDeps = [ combine plug ];
     };
 
     sleeplocks = buildRebar3 rec {
@@ -1297,15 +1336,15 @@ let
 
     swoosh = buildMix rec {
       name = "swoosh";
-      version = "1.8.2";
+      version = "1.9.1";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1nxpcwq7ynvqjp65z544dvdfw7jx9k0m58w4kb0bdbdg1rsvln6h";
+        sha256 = "07ipsrp34s18c9zd5kglqsdc8z7gxa9aadsrklj0zf6azzrzzpvn";
       };
 
-      beamDeps = [ cowboy ex_aws finch gen_smtp hackney jason mime plug_cowboy telemetry ];
+      beamDeps = [ cowboy ex_aws finch gen_smtp hackney jason mail mime plug_cowboy telemetry ];
     };
 
     syslog = buildRebar3 rec {
@@ -1360,6 +1399,45 @@ let
       beamDeps = [ telemetry ];
     };
 
+    telemetry_metrics_prometheus = buildMix rec {
+      name = "telemetry_metrics_prometheus";
+      version = "1.1.0";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "09jdrv0ik5svi77djycva7a6a8sl05vp2nr7w17s8k94ndckcfyl";
+      };
+
+      beamDeps = [ plug_cowboy telemetry_metrics_prometheus_core ];
+    };
+
+    telemetry_metrics_prometheus_core = buildMix rec {
+      name = "telemetry_metrics_prometheus_core";
+      version = "1.1.0";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "0sd0j7arhf22ickzdfmq656258dh14kzi61p0vgra007x1zhxl8d";
+      };
+
+      beamDeps = [ telemetry telemetry_metrics ];
+    };
+
+    telemetry_poller = buildRebar3 rec {
+      name = "telemetry_poller";
+      version = "0.5.1";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "1m1zcq65yz0wp1wx7mcy2iq37cyizbzrmv0c11x6xg0hj8375asc";
+      };
+
+      beamDeps = [ telemetry ];
+    };
+
     tesla = buildMix rec {
       name = "tesla";
       version = "1.4.4";
@@ -1370,7 +1448,7 @@ let
         sha256 = "0mv48vgby1fv9b2npc0ird3y4isr10np3a3yas3v5hfyz54kll6m";
       };
 
-      beamDeps = [ castore finch gun hackney jason mime mint poison telemetry ];
+      beamDeps = [ castore finch hackney jason mime mint poison telemetry ];
     };
 
     timex = buildMix rec {
@@ -1414,12 +1492,12 @@ let
 
     ueberauth = buildMix rec {
       name = "ueberauth";
-      version = "0.10.3";
+      version = "0.10.5";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1lz660mr1sgv302f6qkr85swpd2jgs7255fg70h7zsb4dimg750k";
+        sha256 = "1qf97azn8064ymawfm58p2bqpmrigipr4fs5xp3jb8chshqizz9y";
       };
 
       beamDeps = [ plug ];

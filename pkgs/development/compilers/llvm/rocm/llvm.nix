@@ -24,6 +24,8 @@
 , targetDir ? "llvm"
 , targetProjects ? [ ]
 , targetRuntimes ? [ ]
+# "NATIVE" resolves into x86 or aarch64 depending on stdenv
+, llvmTargetsToBuild ? [ "NATIVE" ]
 , extraPatches ? [ ]
 , extraNativeBuildInputs ? [ ]
 , extraBuildInputs ? [ ]
@@ -46,9 +48,11 @@ let
     if stdenv.isx86_64 then "X86"
     else if stdenv.isAarch64 then "AArch64"
     else throw "Unsupported ROCm LLVM platform";
+  inferNativeTarget = t: if t == "NATIVE" then llvmNativeTarget else t;
+  llvmTargetsToBuild' = [ "AMDGPU" ] ++ builtins.map inferNativeTarget llvmTargetsToBuild;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-llvm-${targetName}";
-  version = "5.4.2";
+  version = "5.4.4";
 
   outputs = [
     "out"
@@ -65,7 +69,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "RadeonOpenCompute";
     repo = "llvm-project";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-iyr3cstC8CB1YaACadNqBs/oI8lh4bJzK0WtEB0wZvg=";
+    hash = "sha256-BDvC6QFDFtahA9hmJDLiM6K4mrO3j9E9rEXm7KulcuA=";
   };
 
   nativeBuildInputs = [
@@ -98,7 +102,7 @@ in stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/${targetDir}";
 
   cmakeFlags = [
-    "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
+    "-DLLVM_TARGETS_TO_BUILD=${builtins.concatStringsSep ";" llvmTargetsToBuild'}"
   ] ++ lib.optionals (finalAttrs.passthru.isLLVM && targetProjects != [ ]) [
     "-DLLVM_ENABLE_PROJECTS=${lib.concatStringsSep ";" targetProjects}"
   ] ++ lib.optionals ((finalAttrs.passthru.isLLVM || targetDir == "runtimes") && targetRuntimes != [ ]) [

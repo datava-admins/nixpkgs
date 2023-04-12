@@ -21,6 +21,7 @@
 , gobject-introspection-unwrapped
 , nixStoreDir ? builtins.storeDir
 , x11Support ? true
+, testers
 }:
 
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
@@ -29,7 +30,7 @@
 
 let
   pythonModules = pp: [
-    pp.Mako
+    pp.mako
     pp.markdown
   ];
 in
@@ -78,7 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Build definition checks for the Python modules needed at runtime by importing them.
     (buildPackages.python3.withPackages pythonModules)
     finalAttrs.setupHook # move .gir files
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
+    # can't use canExecute, we need prebuilt when cross
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
 
   buildInputs = [
     (python3.withPackages pythonModules)
@@ -105,8 +107,10 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (buildPackages) bash;
       buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
     }}"
-    "-Dgi_cross_use_prebuilt_gi=true"
     "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
+    # can't use canExecute, we need prebuilt when cross
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dgi_cross_use_prebuilt_gi=true"
   ];
 
   doCheck = !stdenv.isAarch64;
@@ -145,12 +149,14 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "gobject-introspection";
       versionPolicy = "odd-unstable";
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
     description = "A middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 artturin ]);
+    pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
 

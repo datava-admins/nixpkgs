@@ -1,26 +1,35 @@
-{ lib
-, stdenv
+{ bash
+, brotli
 , buildGoModule
+, common-updater-scripts
+, coreutils
+, curl
 , fetchurl
-, makeWrapper
+, forgejo
 , git
-, bash
-, openssh
 , gzip
+, jq
+, lib
+, makeWrapper
+, nix
+, nixosTests
+, openssh
 , pam
 , pamSupport ? true
 , sqliteSupport ? true
+, xorg
+, runCommand
+, stdenv
+, writeShellApplication
 }:
 
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.18.2-1";
+  version = "1.19.0-3";
 
   src = fetchurl {
-    name = "${pname}-src-${version}.tar.gz";
-    # see https://codeberg.org/forgejo/forgejo/releases
-    url = "https://codeberg.org/attachments/44ff6fcb-1515-4bba-85bf-3d3795ced2f7";
-    hash = "sha256-XSh17AwPtC+Y24lgjjXJzT/uBHg+0hWZ2RZ/eNF4mCY=";
+    url = "https://codeberg.org/forgejo/forgejo/releases/download/v${version}/forgejo-src-${version}.tar.gz";
+    hash = "sha256-u27DDw3JUtVJ2nvkKfaGzpYP8bpRnwc1LUVra8Epkjc=";
   };
 
   vendorHash = null;
@@ -59,12 +68,67 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
+  passthru = {
+    data-compressed = runCommand "forgejo-data-compressed" {
+      nativeBuildInputs = [ brotli xorg.lndir ];
+    } ''
+      mkdir $out
+      lndir ${forgejo.data}/ $out/
+
+      # Create static gzip and brotli files
+      find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
+        -exec gzip --best --keep --force {} ';' \
+        -exec brotli --best --keep --no-copy-stat {} ';'
+    '';
+
+    tests = nixosTests.forgejo;
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-forgejo";
+      runtimeInputs = [
+        common-updater-scripts
+        coreutils
+        curl
+        jq
+        nix
+      ];
+      text = ''
+        releases=$(curl "https://codeberg.org/api/v1/repos/forgejo/forgejo/releases?draft=false&pre-release=false&limit=1" \
+          --silent \
+          --header "accept: application/json")
+
+        stable=$(jq '.[0]
+          | .tag_name[1:] as $version
+          | ("forgejo-src-\($version).tar.gz") as $filename
+          | { $version, html_url } + (.assets | map(select(.name | startswith($filename)) | {(.name | split(".") | last): .browser_download_url}) | add)' \
+          <<< "$releases")
+
+        checksum_url=$(jq -r .sha256 <<< "$stable")
+        release_url=$(jq -r .html_url <<< "$stable")
+        version=$(jq -r .version <<< "$stable")
+
+        if [[ "${version}" = "$version" ]]; then
+          echo "No new version found (already at $version)"
+          exit 0
+        fi
+
+        echo "Release: $release_url"
+
+        sha256=$(curl "$checksum_url" --silent | cut --delimiter " " --fields 1)
+        sri_hash=$(nix hash to-sri --type sha256 "$sha256")
+
+        update-source-version "${pname}" "$version" "$sri_hash"
+      '';
+    });
+  };
+
   meta = with lib; {
     description = "A self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = with maintainers; [ indeednotjames urandom ];
     broken = stdenv.isDarwin;
+    mainProgram = "gitea";
   };
 }

@@ -21,17 +21,22 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.107.0";
+    version = "1.112.6";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      hash = "sha256-fjiS7GZy1BLgmxu4LFOWgucORcVx+9KleQcga+hRkSY=";
+      hash = "sha256-xadf6N5x3zdefwsKUFaVs71HmLMpJoUq5LL7IENsvC0=";
     };
-    cargoDeps = rustPlatform.fetchCargoTarball {
-      inherit src;
-      name = "${old.pname}-${version}";
-      hash = "sha256-7XhSI/C0GEmsaL0UupvufB1bfPGbzSQJH720Y4/Do3o=";
+    cargoDeps = rustPlatform.importCargoLock {
+      lockFile = ./Cargo.lock;
+      outputHashes = {
+        "async-imap-0.6.0" = "sha256-q6ZDm+4i+EtiMgkW/8LQ/TkDO/sj0p7KJhpYE76zAjo=";
+        "email-0.0.21" = "sha256-Ys47MiEwVZenRNfenT579Rb17ABQ4QizVFTWUq3+bAY=";
+        "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
+        "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
+        "quinn-proto-0.9.2" = "sha256-N1gD5vMsBEHO4Fz4ZYEKZA8eE/VywXNXssGcK6hjvpg=";
+      };
     };
   });
   esbuild' = esbuild.override {
@@ -48,16 +53,16 @@ let
   };
 in buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.34.3";
+  version = "1.36.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-6WZJD8lMsk1WNguMkXygBCTVpOzNkNuVZJ3Ygv6VBkM=";
+    hash = "sha256-dfDgUDGRYcJKi7X30jaYx0kqlSkDjfo83yaZ16Mrklk=";
   };
 
-  npmDepsHash = "sha256-B91yQ/xi8+uyOllqYR7lZTfLBpJvZat1cIIJk9TkM/c=";
+  npmDepsHash = "sha256-IQod8femD9yhM4c9mDfbpjmXdpLoWzOU0g3Z9g5DLQM=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -73,10 +78,12 @@ in buildNpmPackage rec {
     CoreServices
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-  ESBUILD_BINARY_PATH = "${esbuild'}/bin/esbuild";
-  USE_SYSTEM_LIBDELTACHAT = "true";
-  VERSION_INFO_GIT_REF = src.rev;
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    ESBUILD_BINARY_PATH = "${esbuild'}/bin/esbuild";
+    USE_SYSTEM_LIBDELTACHAT = "true";
+    VERSION_INFO_GIT_REF = src.rev;
+  };
 
   preBuild = ''
     rm -r node_modules/deltachat-node/node/prebuilds

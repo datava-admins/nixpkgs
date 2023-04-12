@@ -1,18 +1,19 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, nix-update-script
 , nixosTests
 , php}:
 
 stdenvNoCC.mkDerivation rec {
-  name = "cloudlog";
-  version = "2.3.3";
+  pname = "cloudlog";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "magicbug";
     repo = "Cloudlog";
     rev = version;
-    sha256 = "sha256-9m7BuUNdGeKqi8pzeW2J9zpxShulpynCwJJGkRFkBa4=";
+    sha256 = "sha256-tFerQJhe/FemtOaP56b2XhLtXH2a8CRT2E69v/77Qz0=";
   };
 
   postPath = ''
@@ -25,8 +26,11 @@ stdenvNoCC.mkDerivation rec {
     cp -R ./* $out
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) cloudlog;
+  passthru = {
+    tests = {
+      inherit (nixosTests) cloudlog;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

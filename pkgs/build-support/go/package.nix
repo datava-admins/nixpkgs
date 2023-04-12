@@ -92,7 +92,7 @@ let
     GOHOSTARCH = go.GOHOSTARCH or null;
     GOHOSTOS = go.GOHOSTOS or null;
 
-    inherit CGO_ENABLED;
+    inherit CGO_ENABLED enableParallelBuilding;
 
     GO111MODULE = "off";
     GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
@@ -107,7 +107,7 @@ let
       mkdir -p "go/src/$(dirname "$goPackagePath")"
       mv "$sourceRoot" "go/src/$goPackagePath"
 
-    '' + lib.optionalString (deleteVendor == true) ''
+    '' + lib.optionalString deleteVendor ''
       if [ ! -d "go/src/$goPackagePath/vendor" ]; then
         echo "vendor folder does not exist, 'deleteVendor' is not needed"
         exit 10
@@ -133,6 +133,12 @@ let
     '') + ''
       export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
       export GOCACHE=$TMPDIR/go-cache
+
+      # currently pie is only enabled by default in pkgsMusl
+      # this will respect the `hardening{Disable,Enable}` flags if set
+      if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
+        export GOFLAGS="-buildmode=pie $GOFLAGS"
+      fi
 
       runHook postConfigure
     '';
@@ -272,8 +278,6 @@ let
     passthru = passthru //
       { inherit go; } //
       lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
-
-    enableParallelBuilding = enableParallelBuilding;
 
     meta = {
       # Add default meta information

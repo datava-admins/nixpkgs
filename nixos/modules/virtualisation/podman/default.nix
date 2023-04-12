@@ -7,6 +7,8 @@ let
 
   podmanPackage = (pkgs.podman.override {
     extraPackages = cfg.extraPackages
+      # setuid shadow
+      ++ [ "/run/wrappers" ]
       ++ lib.optional (builtins.elem "zfs" config.boot.supportedFilesystems) config.boot.zfs.package;
   });
 
@@ -140,6 +142,7 @@ in
     defaultNetwork.settings = lib.mkOption {
       type = json.type;
       default = { };
+      example = lib.literalExpression "{ dns_enabled = true; }";
       description = lib.mdDoc ''
         Settings for podman's default network.
       '';
@@ -147,7 +150,7 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
+  config = lib.mkIf cfg.enable
     {
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
@@ -181,10 +184,6 @@ in
 
       systemd.packages = [ cfg.package ];
 
-      systemd.services.podman.serviceConfig = {
-        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
-      };
-
       systemd.services.podman-prune = {
         description = "Prune podman resources";
 
@@ -204,10 +203,6 @@ in
 
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
-
-      systemd.user.services.podman.serviceConfig = {
-        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
-      };
 
       systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 
@@ -241,6 +236,5 @@ in
           '';
         }
       ];
-    }
-  ]);
+    };
 }

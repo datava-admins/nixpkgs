@@ -2,26 +2,11 @@
 , lib
 , stdenv
 , fetchurl
-, fetchgit
 , fetchpatch
-, fetchFromGitHub
 , makeSetupHook
 , makeWrapper
-, bison
-, cups
-, harfbuzz
-, libGL
-, perl
 , cmake
-, ninja
-, writeText
-, gstreamer
-, gst-plugins-base
-, gst-plugins-good
-, gst-libav
-, gst-vaapi
-, gtk3
-, dconf
+, gst_all_1
 , libglvnd
 , darwin
 , buildPackages
@@ -37,28 +22,34 @@ let
     mirror = "mirror://qt";
   };
 
-  qtModule =
-    import ./qtModule.nix
-      { inherit stdenv lib perl cmake ninja writeText; }
-      { inherit self srcs; };
-
   addPackages = self: with self;
     let
-      callPackage = self.newScope ({ inherit qtModule stdenv srcs; });
+      callPackage = self.newScope ({
+        inherit qtModule srcs;
+        stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+        cmake = cmake.overrideAttrs (attrs: {
+          patches = attrs.patches ++ [
+            ./patches/cmake.patch
+          ];
+        });
+      });
     in
     {
 
-      inherit callPackage qtModule srcs;
+      inherit callPackage srcs;
+
+      qtModule = callPackage ./qtModule.nix { };
 
       qtbase = callPackage ./modules/qtbase.nix {
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
-        inherit bison cups harfbuzz libGL dconf gtk3 developerBuild cmake;
+        inherit developerBuild;
         inherit (darwin.apple_sdk_11_0.frameworks) AGL AVFoundation AppKit GSS MetalKit;
         patches = [
           ./patches/qtbase-qmake-mkspecs-mac.patch
           ./patches/qtbase-qmake-pkg-config.patch
           ./patches/qtbase-tzdir.patch
+          ./patches/qtbase-variable-fonts.patch
           # Remove symlink check causing build to bail out and fail.
           # https://gitlab.kitware.com/cmake/cmake/-/issues/23251
           (fetchpatch {
@@ -67,7 +58,7 @@ let
           })
         ];
       };
-      env = callPackage ./qt-env.nix {};
+      env = callPackage ./qt-env.nix { };
       full = env "qt-full-${qtbase.version}" ([
         qt3d
         qt5compat
@@ -110,7 +101,7 @@ let
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
-        inherit gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
+        inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
         inherit (darwin.apple_sdk_11_0.frameworks) VideoToolbox;
       };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
@@ -139,19 +130,21 @@ let
         inherit (darwin.apple_sdk_11_0.frameworks) WebKit;
       };
 
-      wrapQtAppsHook = makeSetupHook {
-        name = "wrap-qt6-apps-hook";
-          deps = [ buildPackages.makeWrapper ];
+      wrapQtAppsHook = makeSetupHook
+        {
+          name = "wrap-qt6-apps-hook";
+          propagatedBuildInputs = [ buildPackages.makeWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
 
-      qmake = makeSetupHook {
-        name = "qmake6-hook";
-        deps = [ self.qtbase.dev ];
-        substitutions = {
-          inherit debug;
-          fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
-        };
-      } ./hooks/qmake-hook.sh;
+      qmake = makeSetupHook
+        {
+          name = "qmake6-hook";
+          propagatedBuildInputs = [ self.qtbase.dev ];
+          substitutions = {
+            inherit debug;
+            fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
+          };
+        } ./hooks/qmake-hook.sh;
     };
 
   # TODO(@Artturin): convert to makeScopeWithSplicing

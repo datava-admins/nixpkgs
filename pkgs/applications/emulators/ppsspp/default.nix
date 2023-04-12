@@ -4,20 +4,18 @@
 , SDL2
 , cmake
 , copyDesktopItems
-, ffmpeg
+, ffmpeg_4
 , glew
 , libffi
+, libsForQt5
 , libzip
 , makeDesktopItem
 , makeWrapper
 , pkg-config
 , python3
-, qtbase
-, qtmultimedia
 , snappy
 , vulkan-loader
 , wayland
-, wrapQtAppsHook
 , zlib
 , enableQt ? false
 , enableVulkan ? true
@@ -27,6 +25,7 @@
 let
   # experimental, see https://github.com/hrydgard/ppsspp/issues/13845
   vulkanWayland = enableVulkan && forceWayland;
+  inherit (libsForQt5) qtbase qtmultimedia wrapQtAppsHook;
 in
 # Only SDL frontend needs to specify whether to use Wayland
 assert forceWayland -> !enableQt;
@@ -60,7 +59,7 @@ stdenv.mkDerivation (self: {
 
   buildInputs = [
     SDL2
-    ffmpeg
+    ffmpeg_4
     (glew.override { enableEGL = forceWayland; })
     libzip
     snappy

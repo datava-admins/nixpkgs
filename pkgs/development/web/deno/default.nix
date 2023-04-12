@@ -2,6 +2,7 @@
 , lib
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , installShellFiles
 , tinycc
@@ -17,15 +18,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.30.2";
+  version = "1.31.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WpS1pqy6o8FUWMdJpzG5T8xoCkQZ/SbWI4k9vellVb8=";
+    hash = "sha256-0S5BSXWnv4DMcc8cijRQx6NyDReg5aJJT65TeNFlkkw=";
   };
-  cargoSha256 = "sha256-RVoXHrEWMwuC+nD6ypiZzGsYEr/BFReE67z7gqqDOzA=";
+  cargoHash = "sha256-7Xfnc91yQiAwAF5fvtiwnELUDb7LJeye3GtXNzYkUo8=";
+
+  cargoPatches = [
+    # resolved in 1.31.2
+    (fetchpatch {
+      name = "CVE-2023-28446.patch";
+      url = "https://github.com/denoland/deno/commit/78d430103a8f6931154ddbbe19d36f3b8630286d.patch";
+      hash = "sha256-kXwr9wWxk1OaaubCr8pfmSp3TrJMQkbAg72nIHp/seA=";
+    })
+  ];
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds

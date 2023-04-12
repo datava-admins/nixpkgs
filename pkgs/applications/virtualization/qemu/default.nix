@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3, zlib, pkg-config, glib, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
 , makeWrapper, runtimeShell, removeReferencesTo
@@ -42,16 +42,22 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "7.2.0";
+  version = "7.2.1";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "sha256-W0nOJod0Ta1JSukKiYxSIEo0BuhNBySCoeG+hU7rIVc=";
+    sha256 = "jIVpms+dekOl/immTN1WNwsMLRrQdLr3CYqCTReq1zs=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3.pkgs.sphinx python3.pkgs.sphinx-rtd-theme ]
+  nativeBuildInputs = [
+    makeWrapper removeReferencesTo
+    pkg-config flex bison meson ninja perl
+
+    # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
+    python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
+  ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
@@ -123,7 +129,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
     # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
-    chmod +x ./scripts/shaderinclude.pl
+    chmod +x ./scripts/shaderinclude.py
     patchShebangs .
     # avoid conflicts with libc++ include for <version>
     mv VERSION QEMU_VERSION
@@ -143,7 +149,6 @@ stdenv.mkDerivation rec {
     # have our patches and will be subtly broken because of that.
     "--meson=meson"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
-    "--cpu=${stdenv.hostPlatform.uname.processor}"
     (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
@@ -226,8 +231,9 @@ stdenv.mkDerivation rec {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
-    ln -s $out/libexec/virtiofsd $out/bin
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+  '' + lib.optionalString stdenv.isLinux ''
+    ln -s $out/libexec/virtiofsd $out/bin
   '';
 
   passthru = {

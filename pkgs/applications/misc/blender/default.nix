@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
-, ilmbase, libXi, libX11, libXext, libXrender
+, ilmbase, libepoxy, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
@@ -27,11 +27,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.3.1";
+  version = "3.4.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-KtpI8L+KDKgCuYfXV0UgEuH48krPTSNFOwnC1ZURjMo=";
+    hash = "sha256-JHxMEignDJAQ9HIcmFy1tiirUKvPnyZ4Ywc3FC7rkcM=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -41,15 +41,19 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
-      opencolorio openexr openimagedenoise openimageio openjpeg python zlib zstd fftw jemalloc
+      opencolorio openexr openimageio openjpeg python zlib zstd fftw jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
-      embree
       gmp
       pugixml
       potrace
       libharu
+      libepoxy
+    ]
+    ++ lib.optional (!stdenv.isAarch64) [
+      openimagedenoise
+      embree
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
@@ -87,14 +91,17 @@ stdenv.mkDerivation rec {
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '') +
-    (if hipSupport then ''
+    (lib.optionalString hipSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${hip}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${hip}/bin"'
-    '' else "");
+    '');
 
   cmakeFlags =
     [
       "-DWITH_ALEMBIC=ON"
+      # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
+      "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
+      "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic.so"
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
@@ -117,6 +124,9 @@ stdenv.mkDerivation rec {
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
     ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      "-DWITH_CYCLES_EMBREE=OFF"
+    ]
     ++ lib.optionals stdenv.isDarwin [
       "-DWITH_CYCLES_OSL=OFF" # requires LLVM
       "-DWITH_OPENVDB=OFF" # OpenVDB currently doesn't build on darwin
@@ -132,7 +142,7 @@ stdenv.mkDerivation rec {
       "-DOPTIX_ROOT_DIR=${optix}"
     ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.
@@ -167,7 +177,7 @@ stdenv.mkDerivation rec {
     # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
     license = with licenses; [ gpl2Plus ] ++ optional cudaSupport unfree;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = with maintainers; [ goibhniu veprbl ];
   };
 }

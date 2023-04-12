@@ -17,24 +17,25 @@
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.3.2";
+  version = "0.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-oKkZC9fi5xPnLTI00MnG2gMjzMZHMNFI77ztbR4KQo4=";
+    hash = "sha256-c8X0kedfM8DPTEQAbh8cXIfEvxG2cdUD3twVHs0/k7U";
   };
 
   postPatch = ''
     patchShebangs build-aux
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-sbyAyjxpol2SBxoLUsiPGfkP2diBPgJW0vEDHYWgmLU=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tempfile-3.3.0" = "sha256-zVbGZOEYEmOJGtl5Ko8rYIW9NY16lq5+zMzJ/TSkfsc=";
+    };
   };
 
   nativeBuildInputs = [
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Fast and secure file transfer";
     homepage = "https://apps.gnome.org/app/app.drey.Warp";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
     platforms = lib.platforms.linux;
   };
 }

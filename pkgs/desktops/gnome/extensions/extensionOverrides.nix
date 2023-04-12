@@ -12,6 +12,7 @@
 , nvme-cli
 , procps
 , pulseaudio
+, libgtop
 , python3
 , smartmontools
 , substituteAll
@@ -110,6 +111,24 @@ super: lib.trivial.pipe super [
     ];
 
     meta.maintainers = with lib.maintainers; [ rhoriguchi ];
+  }))
+
+  (patchExtension "tophat@fflewddur.github.io" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/tophat_at_fflewddur.github.io.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
+      })
+    ];
+  }))
+
+  (patchExtension "Vitals@CoreCoding.com" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/vitals_at_corecoding.com.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
+      })
+    ];
   }))
 
   (patchExtension "unite@hardpixel.eu" (old: {

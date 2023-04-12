@@ -203,17 +203,6 @@ preInstall() {
         ln -s lib "$out/${targetConfig}/lib32"
         ln -s lib "${!outputLib}/${targetConfig}/lib32"
     fi
-
-    # cc-wrappers uses --sysroot=/nix/store/does/not/exist as a way to
-    # drop default sysheaders search path. Unfortunately that switches
-    # clang++ into searching libraries in gcc in cross-compiler paths:
-    #   from ${!outputLib}/lib (native)
-    #   to ${!outputLib}/${targetPlatformConfig}/lib
-    # We create the symlink to make both native and cross paths
-    # available even if the toolchain is not the cross-compiler.
-    if [ ! -e ${!outputLib}/${targetPlatformConfig} ] ; then
-        ln -s . ${!outputLib}/${targetPlatformConfig}
-    fi
 }
 
 
@@ -259,6 +248,17 @@ postInstall() {
               install_name_tool -change "$old_path" "$new_path" "$i" || true
             done
         done
+    fi
+
+    # Cross-compiler specific:
+    # --with-headers=$dir option triggers gcc to make a private copy
+    # of $dir headers and use it later as `-isysroot`. This prevents
+    # cc-wrapper from overriding libc headers with `-idirafter`.
+    # It should be safe to drop it and rely solely on the cc-wrapper.
+    local sysinc_dir=$out/${targetConfig+$targetConfig/}sys-include
+    if [ -d "$sysinc_dir" ]; then
+        chmod -R u+w "$out/${targetConfig+$targetConfig/}sys-include"
+        rm -rfv "$out/${targetConfig+$targetConfig/}sys-include"
     fi
 
     # Get rid of some "fixed" header files

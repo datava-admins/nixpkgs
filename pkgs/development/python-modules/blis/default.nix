@@ -10,8 +10,6 @@
 
 buildPythonPackage rec {
   pname = "blis";
-  # Do not update to BLIS 0.9.x until the following issue is resolved:
-  # https://github.com/explosion/thinc/issues/771#issuecomment-1255825935
   version = "0.7.9";
   format = "setuptools";
 
@@ -45,11 +43,16 @@ buildPythonPackage rec {
     "blis"
   ];
 
+  passthru = {
+    # Do not update to BLIS 0.9.x until the following issue is resolved:
+    # https://github.com/explosion/thinc/issues/771#issuecomment-1255825935
+    skipBulkUpdate = true;
+  };
+
   meta = with lib; {
     description = "BLAS-like linear algebra library";
     homepage = "https://github.com/explosion/cython-blis";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
-    platforms = platforms.x86_64;
   };
 }

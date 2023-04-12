@@ -3,20 +3,20 @@
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
 , openssl, libssh2 #build-in ssh
-, fcitx, ibus, uim #IME
+, fcitx5, fcitx5-gtk, ibus, uim #IME
 , wrapGAppsHook #color picker in mlconfig
 , Cocoa #Darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "mlterm";
-  version = "3.9.2";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "arakiken";
     repo = pname;
     rev = version;
-    sha256 = "sha256-DvGR3rDegInpnLp3H+rXNXktCGhpjsBBPTRMwodeTro=";
+    sha256 = "sha256-gfs5cdwUUwSBWwJJSaxrQGWJvLkI27RMlk5QvDALEDg=";
   };
 
   nativeBuildInputs = [ pkg-config autoconf wrapGAppsHook ];
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     vte
     m17n_lib
 
-    fcitx
+    fcitx5
+    fcitx5-gtk
     ibus
   ] ++ lib.optionals (stdenv.system != "aarch64-linux") [
     # FIXME Currently broken on aarch64-linux
@@ -80,15 +81,17 @@ stdenv.mkDerivation rec {
     "--enable-ind" #indic scripts
     "--enable-fribidi" #bidi scripts
     "--with-tools=mlclient,mlconfig,mlcc,mlterm-menu,mlimgloader,registobmp,mlfc"
-     #mlterm-menu and mlconfig depend on enabling gnome.at-spi2-core
-     #and configuring ~/.mlterm/key correctly.
- ] ++ lib.optionals (!stdenv.isDarwin) [
-   "--with-x=yes"
-   "--with-gui=xlib,fb"
+    #mlterm-menu and mlconfig depend on enabling gnome.at-spi2-core
+    #and configuring ~/.mlterm/key correctly.
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "--with-x=yes"
+    "--with-gui=xlib,fb"
     "--enable-m17nlib" #character encodings
- ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "--with-gui=quartz"
- ] ++ lib.optionals (libssh2 == null) [ " --disable-ssh2" ];
+  ] ++ lib.optionals (libssh2 == null) [ " --disable-ssh2" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"

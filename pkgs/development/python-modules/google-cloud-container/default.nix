@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.17.1";
+  version = "2.19.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PXDUjipUG7cYqeO2ivqrqLybHzDIssvBtdZixEMqXOA=";
+    hash = "sha256-2EsqTVf65OCvT1i0whgCSvKGGHuHHE27bEg1S4kb+a8=";
   };
 
   propagatedBuildInputs = [

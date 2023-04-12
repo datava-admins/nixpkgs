@@ -30,7 +30,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ipxe";
-  version = "unstable-2023-01-25";
+  version = "unstable-2023-03-30";
 
   nativeBuildInputs = [ gnu-efi mtools openssl perl xorriso xz ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -40,28 +40,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "4bffe0f0d9d0e1496ae5cfb7579e813277c29b0f";
-    sha256 = "oDQBJz6KKV72DfhNEXjAZNeolufIUQwhroczCuYnGQA=";
+    rev = "1d1cf74a5e58811822bee4b3da3cff7282fcdfca";
+    sha256 = "8pwoPrmkpL6jIM+Y/C0xSvyrBM/Uv0D1GuBwNm+0DHU=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     substituteInPlace src/util/genfsimg --replace "	syslinux " "	true "
   ''; # calling syslinux on a FAT image isn't going to work
 
-  # Workaround '-idirafter' ordering bug in staging-next:
-  #   https://github.com/NixOS/nixpkgs/pull/210004
-  # where libc '-idirafter' gets added after user's idirafter and
-  # breaks.
-  # TODO(trofi): remove it in staging once fixed in cc-wrapper.
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE_BEFORE_${lib.replaceStrings ["-" "."] ["_" "_"] buildPackages.stdenv.hostPlatform.config}=$(< ${buildPackages.stdenv.cc}/nix-support/libc-cflags)
-    export NIX_CFLAGS_COMPILE_BEFORE_${lib.replaceStrings ["-" "."] ["_" "_"]               stdenv.hostPlatform.config}=$(<               ${stdenv.cc}/nix-support/libc-cflags)
-  '';
-
   # not possible due to assembler code
   hardeningDisable = [ "pic" "stackprotector" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.

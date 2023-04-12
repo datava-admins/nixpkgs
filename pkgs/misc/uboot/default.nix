@@ -15,6 +15,7 @@
 , swig
 , which
 , armTrustedFirmwareAllwinner
+, armTrustedFirmwareAllwinnerH6
 , armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
@@ -91,16 +92,6 @@ let
     ] ++ extraMakeFlags;
 
     passAsFile = [ "extraConfig" ];
-
-    # Workaround '-idirafter' ordering bug in staging-next:
-    #   https://github.com/NixOS/nixpkgs/pull/210004
-    # where libc '-idirafter' gets added after user's idirafter and
-    # breaks.
-    # TODO(trofi): remove it in staging once fixed in cc-wrapper.
-    preConfigure = ''
-      export NIX_CFLAGS_COMPILE_BEFORE_${lib.replaceStrings ["-" "."] ["_" "_"] buildPackages.stdenv.hostPlatform.config}=$(< ${buildPackages.stdenv.cc}/nix-support/libc-cflags)
-      export NIX_CFLAGS_COMPILE_BEFORE_${lib.replaceStrings ["-" "."] ["_" "_"]               stdenv.hostPlatform.config}=$(<               ${stdenv.cc}/nix-support/libc-cflags)
-    '';
 
     configurePhase = ''
       runHook preConfigure
@@ -372,6 +363,13 @@ in {
     defconfig = "orangepi_zero2_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOrangePi3 = buildUBoot {
+    defconfig = "orangepi_3_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinnerH6}/bl31.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 

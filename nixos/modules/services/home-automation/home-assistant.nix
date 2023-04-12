@@ -35,7 +35,10 @@ let
   #   ...
   # } ];
   usedPlatforms = config:
-    if isAttrs config then
+    # don't recurse into derivations possibly creating an infinite recursion
+    if isDerivation config then
+      [ ]
+    else if isAttrs config then
       optional (config ? platform) config.platform
       ++ concatMap usedPlatforms (attrValues config)
     else if isList config then
@@ -362,7 +365,7 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.openFirewall -> !isNull cfg.config;
+        assertion = cfg.openFirewall -> cfg.config != null;
         message = "openFirewall can only be used with a declarative config";
       }
     ];
@@ -409,6 +412,7 @@ in {
         (optionalString (cfg.config != null) copyConfig) +
         (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig)
       ;
+      environment.PYTHONPATH = package.pythonPath;
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
         capabilities = lib.unique ([
@@ -504,6 +508,7 @@ in {
           "mysensors"
           "nad"
           "numato"
+          "otbr"
           "rflink"
           "rfxtrx"
           "scsgate"

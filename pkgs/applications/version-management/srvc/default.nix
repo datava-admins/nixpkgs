@@ -1,20 +1,21 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security, git }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin, git }:
 
 rustPlatform.buildRustPackage rec {
   pname = "srvc";
-  version = "0.13.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "insilica";
     repo = "rs-srvc";
     rev = "v${version}";
-    sha256 = "sha256-m4mN+vDEKPHRavtI9CbszOOdJcLYa+XqlzEyPvPXE0g=";
+    hash = "sha256-6cullXcSnFlGM5O/g/J5WwBBUPfg1cbvjyPcIZ6yjRE=";
   };
 
-  cargoHash = "sha256-USOYXb6/hEE9HVz5YcNZPY5yuvDxbrH4YyZxY7XNAto=";
+  cargoHash = "sha256-xmHCm4kH4y0ph0ssMXZn+TvLAciYrsggyjmar85zF74=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.CoreServices
+    darwin.apple_sdk.frameworks.Security
   ];
 
   nativeCheckInputs = [ git ];
