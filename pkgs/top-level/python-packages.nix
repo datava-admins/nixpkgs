@@ -258,6 +258,8 @@ self: super: with self; {
 
   aiomisc = callPackage ../development/python-modules/aiomisc { };
 
+  aiomisc-pytest = callPackage ../development/python-modules/aiomisc-pytest { };
+
   aiomodernforms = callPackage ../development/python-modules/aiomodernforms { };
 
   aiomultiprocess = callPackage ../development/python-modules/aiomultiprocess { };
@@ -9747,8 +9749,6 @@ self: super: with self; {
   pytm = callPackage ../development/python-modules/pytm { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };
-
-  pytoml = callPackage ../development/python-modules/pytoml { };
 
   pytomlpp = callPackage ../development/python-modules/pytomlpp { };
 
