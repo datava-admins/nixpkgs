@@ -1,5 +1,5 @@
 { stdenv
-, buildFHSUserEnv
+, buildFHSEnv
 , fetchurl
 , lib
 , zlib
@@ -65,7 +65,7 @@ let
     '';
   });
 
-  vmware-unpack-env = buildFHSUserEnv rec {
+  vmware-unpack-env = buildFHSEnv rec {
     name = "vmware-unpack-env";
     targetPkgs = pkgs: [ zlib ];
   };
