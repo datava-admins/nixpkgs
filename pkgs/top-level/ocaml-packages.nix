@@ -66,6 +66,8 @@ let
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
+    bdd = callPackage ../development/ocaml-modules/bdd { };
+
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
     bheap = callPackage ../development/ocaml-modules/bheap { };
@@ -288,6 +290,8 @@ let
     dap =  callPackage ../development/ocaml-modules/dap { };
 
     data-encoding = callPackage ../development/ocaml-modules/data-encoding { };
+
+    dates_calc = callPackage ../development/ocaml-modules/dates_calc {  };
 
     dbf =  callPackage ../development/ocaml-modules/dbf { };
 
@@ -1345,6 +1349,8 @@ let
 
     ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix { };
 
+    ppx_monad = callPackage ../development/ocaml-modules/ppx_monad { };
+
     ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
 
     ppx_tools =
@@ -1496,6 +1502,8 @@ let
 
     simple-diff = callPackage ../development/ocaml-modules/simple-diff { };
 
+    slug = callPackage ../development/ocaml-modules/slug {  };
+
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
     sosa = callPackage ../development/ocaml-modules/sosa { };
@@ -1623,6 +1631,8 @@ let
     uri = callPackage ../development/ocaml-modules/uri { };
 
     uri-sexp = callPackage ../development/ocaml-modules/uri/sexp.nix { };
+
+    uring = callPackage ../development/ocaml-modules/uring { };
 
     utop = callPackage ../development/tools/ocaml/utop { };
 

@@ -8076,7 +8076,7 @@ with pkgs;
 
   robodoc = callPackage ../tools/text/robodoc { };
 
-  ucg = callPackage ../tools/text/ucg { stdenv = gcc10StdenvCompat; };
+  ucg = callPackage ../tools/text/ucg { };
 
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
@@ -13478,6 +13478,8 @@ with pkgs;
   wstunnel = haskell.lib.compose.justStaticExecutables haskellPackages.wstunnel;
 
   wolfebin = callPackage ../tools/networking/wolfebin { };
+
+  wthrr = callPackage ../applications/misc/wthrr { };
 
   xautoclick = callPackage ../applications/misc/xautoclick { };
 
@@ -19102,6 +19104,8 @@ with pkgs;
     guile = null;
   };
 
+  gdbHostCpuOnly = gdb.override { hostCpuOnly = true; };
+
   gf = callPackage ../development/tools/misc/gf { };
 
   java-language-server = callPackage ../development/tools/java/java-language-server { };
@@ -21661,6 +21665,8 @@ with pkgs;
 
   libmaxminddb = callPackage ../development/libraries/libmaxminddb { };
 
+  libmcfp = callPackage ../development/libraries/libmcfp { };
+
   libmcrypt = callPackage ../development/libraries/libmcrypt { };
 
   libmediaart = callPackage ../development/libraries/libmediaart { };
@@ -23433,6 +23439,8 @@ with pkgs;
   round = callPackage ../applications/graphics/round { };
 
   ronn = callPackage ../development/tools/ronn { };
+
+  router = callPackage ../servers/http/router { };
 
   rover = callPackage ../development/tools/rover { };
 
@@ -25246,6 +25254,8 @@ with pkgs;
     mullvad;
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
+
+  mullvad-browser = callPackage ../applications/networking/browsers/mullvad-browser { };
 
   mycorrhiza = callPackage ../servers/mycorrhiza { };
 
@@ -30978,6 +30988,8 @@ with pkgs;
   sway-contrib = recurseIntoAttrs (callPackages ../applications/window-managers/sway/contrib.nix { });
 
   swaycons = callPackage ../applications/window-managers/sway/swaycons.nix { };
+
+  swayfx = callPackage ../applications/window-managers/sway/fx.nix { };
 
   swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
 

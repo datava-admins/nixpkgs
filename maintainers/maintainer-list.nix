@@ -8135,6 +8135,12 @@
     githubId = 843652;
     name = "Kim Burgess";
   };
+  kindrowboat = {
+    email = "hello@kindrobot.ca";
+    github = "kindrowboat";
+    githubId = 777773;
+    name = "Stef Dunlap";
+  };
   kini = {
     email = "keshav.kini@gmail.com";
     github = "kini";
@@ -11436,6 +11442,15 @@
       fingerprint = "939E F8A5 CED8 7F50 5BB5  B2D0 24BC 2738 5F70 234F";
     }];
   };
+  oddlama = {
+    email = "oddlama@oddlama.org";
+    github = "oddlama";
+    githubId = 31919558;
+    name = "oddlama";
+    keys = [{
+      fingerprint = "680A A614 E988 DE3E 84E0  DEFA 503F 6C06 8410 4B0A";
+    }];
+  };
   odi = {
     email = "oliver.dunkl@gmail.com";
     github = "odi";
@@ -11511,6 +11526,12 @@
     github = "OmnipotentEntity";
     githubId = 1538622;
     name = "Michael Reilly";
+  };
+  onedragon = {
+    name = "YiLong Liu";
+    email = "18922251299@163.com";
+    github = "jackyliu16";
+    githubId = 50787361;
   };
   onixie = {
     email = "onixie@gmail.com";
@@ -13027,6 +13048,12 @@
     email = "jeffrey.lau@ribose.com";
     github = "ribose-jeffreylau";
     githubId = 2649467;
+  };
+  ricarch97 = {
+    email = "ricardo.steijn97@gmail.com";
+    github = "RicArch97";
+    githubId = 61013287;
+    name = "Ricardo Steijn";
   };
   richardipsum = {
     email = "richardipsum@fastmail.co.uk";
