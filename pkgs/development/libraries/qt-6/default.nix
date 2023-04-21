@@ -65,6 +65,7 @@ let
         qtlocation
         qtlottie
         qtmultimedia
+        qtmqtt
         qtnetworkauth
         qtpositioning
         qtsensors
@@ -107,6 +108,7 @@ let
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
         inherit (darwin.apple_sdk_11_0.frameworks) VideoToolbox;
       };
+      qtmqtt = callPackage ./modules/qtmqtt.nix { };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
       qtpositioning = callPackage ./modules/qtpositioning.nix { };
       qtsensors = callPackage ./modules/qtsensors.nix { };
@@ -137,6 +139,9 @@ let
           GameController ImageCaptureCore LocalAuthentication
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
           ReplayKit SecurityInterface Vision;
+        xcbuild = buildPackages.xcbuild.override {
+          productBuildVer = "20A2408";
+        };
       };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix {
