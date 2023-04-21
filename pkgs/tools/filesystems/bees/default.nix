@@ -5,7 +5,6 @@
 , bash
 , btrfs-progs
 , coreutils
-, linuxHeaders_5_19
 , python3Packages
 , util-linux
 , nixosTests
@@ -15,15 +14,13 @@ let
 
   bees = stdenv.mkDerivation rec {
     pname = "bees";
-    version = "0.8-dev";
+    version = "0.9.3";
 
     src = fetchFromGitHub {
       owner = "Zygo";
       repo = "bees";
-      #rev = "v${version}";
-      # 2023-01-04
-      rev = "d27621b779e05471fbf65eda13cf51dc382d61b1";
-      hash = "sha256-oJMTC6fH5JfDE5PfdJM3EVg7rk7FjJ2qA8SMKqNGaC4=";
+      rev = "v${version}";
+      sha256 = "sha256-krG8TzfOz3m7h3GfkBU+NJz7EdlXiWOOXY8bQRq9z4Q=";
     };
 
     buildInputs = [
