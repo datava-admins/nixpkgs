@@ -5135,6 +5135,12 @@
     github = "fkautz";
     githubId = 135706;
   };
+  FlafyDev = {
+    name = "Flafy Arazi";
+    email = "flafyarazi@gmail.com";
+    github = "FlafyDev";
+    githubId = 44374434;
+  };
   Flakebi = {
     email = "flakebi@t-online.de";
     github = "Flakebi";
@@ -5585,6 +5591,12 @@
     keys = [{
       fingerprint = "D0CF 440A A703 E0F9 73CB  A078 82BB 70D5 41AE 2DB4";
     }];
+  };
+  geri1701 = {
+    email = "geri@sdf.org";
+    github = "geri1701";
+    githubId = 67984144;
+    name = "Gerhard Schwanzer";
   };
   gerschtli = {
     email = "tobias.happ@gmx.de";
@@ -6111,6 +6123,12 @@
     github = "Helkafen";
     githubId = 2405974;
     name = "Sébastian Méric de Bellefon";
+  };
+  hellwolf = {
+    email = "zhicheng.miao@gmail.com";
+    github = "hellwolf";
+    githubId = 186660;
+    name = "Miao, ZhiCheng";
   };
   henkery = {
     email = "jim@reupload.nl";
@@ -11299,6 +11317,12 @@
     githubId = 3521180;
     name = "Tom Sydney Kerckhove";
   };
+  NotAShelf = {
+    name = "NotAShelf";
+    email = "itsashelf@gmail.com";
+    github = "NotAShelf";
+    githubId = 62766066;
+  };
   notbandali = {
     name = "Amin Bandali";
     email = "bandali@gnu.org";
@@ -11970,6 +11994,12 @@
     github = "notpeelz";
     githubId = 920910;
     name = "peelz";
+  };
+  pelme = {
+    email = "andreas@pelme.se";
+    github = "pelme";
+    githubId = 20529;
+    name = "Andreas Pelme";
   };
   penalty1083 = {
     email = "penalty1083@outlook.com";
