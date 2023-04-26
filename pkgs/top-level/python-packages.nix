@@ -22,6 +22,8 @@ self: super: with self; {
 
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
 
+  accelerate = callPackage ../development/python-modules/accelerate { };
+
   accuweather = callPackage ../development/python-modules/accuweather { };
 
   accupy = callPackage ../development/python-modules/accupy { };
@@ -5430,7 +5432,11 @@ self: super: with self; {
 
   ledger_agent = callPackage ../development/python-modules/ledger_agent { };
 
+  ledger-bitcoin = callPackage ../development/python-modules/ledger-bitcoin { };
+
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
+
+  ledgercomm = callPackage ../development/python-modules/ledgercomm { };
 
   ledgerwallet = callPackage ../development/python-modules/ledgerwallet {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
@@ -7210,6 +7216,8 @@ self: super: with self; {
   peewee-migrate = callPackage ../development/python-modules/peewee-migrate { };
 
   pefile = callPackage ../development/python-modules/pefile { };
+
+  peft = callPackage ../development/python-modules/peft { };
 
   pelican = callPackage ../development/python-modules/pelican {
     inherit (pkgs) glibcLocales git;
@@ -10536,6 +10544,8 @@ self: super: with self; {
   safe-pysha3 = callPackage ../development/python-modules/safe-pysha3 { };
 
   safeio = callPackage ../development/python-modules/safeio { };
+
+  safetensors = callPackage ../development/python-modules/safetensors { };
 
   safety = callPackage ../development/python-modules/safety { };
 
