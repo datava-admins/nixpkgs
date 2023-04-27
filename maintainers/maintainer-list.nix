@@ -4534,6 +4534,7 @@
   };
   elvishjerricco = {
     email = "elvishjerricco@gmail.com";
+    matrix = "@elvishjerricco:matrix.org";
     github = "ElvishJerricco";
     githubId = 1365692;
     name = "Will Fancher";
@@ -5175,6 +5176,13 @@
     github = "flexagoon";
     githubId = 66178592;
     name = "Pavel Zolotarevskiy";
+  };
+  flexiondotorg = {
+    name = "Martin Wimpress";
+    email = "martin@wimpress.org";
+    matrix = "@wimpress:matrix.org";
+    github = "flexiondotorg";
+    githubId = 304639;
   };
   fliegendewurst = {
     email = "arne.keller@posteo.de";
