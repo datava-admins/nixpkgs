@@ -397,6 +397,7 @@
   ./services/databases/hbase-standalone.nix
   ./services/databases/influxdb.nix
   ./services/databases/influxdb2.nix
+  ./services/databases/lldap.nix
   ./services/databases/memcached.nix
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
@@ -961,6 +962,7 @@
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
   ./services/networking/peroxide.nix
+  ./services/networking/picosnitch.nix
   ./services/networking/pixiecore.nix
   ./services/networking/pleroma.nix
   ./services/networking/polipo.nix
@@ -1108,6 +1110,7 @@
   ./services/security/torsocks.nix
   ./services/security/usbguard.nix
   ./services/security/vault.nix
+  ./services/security/vault-agent.nix
   ./services/security/vaultwarden/default.nix
   ./services/security/yubikey-agent.nix
   ./services/system/automatic-timezoned.nix
