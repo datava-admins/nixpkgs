@@ -1,4 +1,4 @@
-{ stdenv, buildPecl, mkDerivation, fetchurl, lib, autoPatchelfHook, libkrb5, linux-pam, libxml2, php, libxcrypt }:
+{ stdenv, buildPecl, mkDerivation, fetchurl, lib, autoPatchelfHook, libkrb5, linux-pam, libxml2, php, libxcrypt-legacy }:
 let
   db2-odbc-cli = mkDerivation rec {
     pname = "db2-odbc-cli";
@@ -14,7 +14,7 @@ let
       autoPatchelfHook
     ];
 
-    buildInputs = [ libkrb5 stdenv.cc.cc.lib linux-pam libxml2 libxcrypt ];
+    buildInputs = [ libkrb5 stdenv.cc.cc.lib linux-pam libxml2 libxcrypt-legacy ];
 
     installPhase = ''
       runHook preInstall
