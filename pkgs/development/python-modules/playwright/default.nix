@@ -83,6 +83,7 @@ buildPythonPackage rec {
 
   passthru = {
     inherit driver;
+    browsers = driver.browsers;
     tests = {
       driver = playwright-driver;
       browsers = playwright-driver.browsers;
