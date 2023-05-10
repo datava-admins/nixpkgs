@@ -499,8 +499,6 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
-  databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
-
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
