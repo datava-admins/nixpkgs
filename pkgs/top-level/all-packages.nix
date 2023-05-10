@@ -13365,8 +13365,6 @@ with pkgs;
 
   versus = callPackage ../applications/networking/versus { };
 
-  vuls = callPackage ../tools/security/vuls { };
-
   vexctl = callPackage ../tools/security/vexctl { };
 
   vgrep = callPackage ../tools/text/vgrep { };
