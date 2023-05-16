@@ -138,7 +138,11 @@ let
         };
       };
 
+  # TODO: refactor datava-esp module to support passing in modules instead of needing
+  # this system-prebuilt option... since using it means the network config has to be
+  # manually outside of this module.
   mkImage = name: config:
+  if (config.system-prebuilt != null) then { container = config.system-prebuilt; inherit config; } else
     { container = import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
         system = pkgs.stdenv.hostPlatform.system;
         modules = [
@@ -433,6 +437,17 @@ in {
               name = "NixOS configuration";
               merge = const (map (x: rec { imports = [ x.value ]; key = _file; _file = x.file; }));
             };
+          };
+          system-prebuilt = mkOption {
+            type = types.path;
+            example = "nixosConfigurations.<name>";
+            default = null;
+            description = lib.mdDoc ''
+              As an alternative to specifying
+              {option}`config`, you can specify the path to
+              the evaluated NixOS system configuration, typically a
+              symlink to a system profile.
+            '';
           };
         };
       });
