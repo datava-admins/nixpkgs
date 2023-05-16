@@ -140,7 +140,7 @@ let
         };
       };
 
-  mkImage = name: config: { container = config.system-config; inherit config; };
+  mkImage = name: config: { container = if (config.system-prebuilt != null) then config.system-prebuilt else config.system-config; inherit config; };
 
   mkContainer = cfg: let inherit (cfg) container config; in mkMerge [
     {
@@ -367,6 +367,17 @@ in {
               ] ++ x;
               prefix = [ "nixos" "containers" "instances" name "system-config" ];
             };
+          };
+          system-prebuilt = mkOption {
+            type = types.path;
+            example = "nixosConfigurations.<name>";
+            default = null;
+            description = lib.mdDoc ''
+              As an alternative to specifying
+              {option}`config`, you can specify the path to
+              the evaluated NixOS system configuration, typically a
+              symlink to a system profile.
+            '';
           };
         };
       }));
