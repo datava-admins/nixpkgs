@@ -154,6 +154,7 @@
   ./programs/cnping.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/criu.nix
+  ./programs/darling.nix
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
   ./programs/dmrconfig.nix
@@ -235,6 +236,7 @@
   ./programs/singularity.nix
   ./programs/skim.nix
   ./programs/slock.nix
+  ./programs/sniffnet.nix
   ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/starship.nix
@@ -307,6 +309,7 @@
   ./services/audio/alsa.nix
   ./services/audio/botamusique.nix
   ./services/audio/gmediarender.nix
+  ./services/audio/gonic.nix
   ./services/audio/hqplayerd.nix
   ./services/audio/icecast.nix
   ./services/audio/jack.nix
@@ -372,6 +375,7 @@
   ./services/continuous-integration/buildbot/master.nix
   ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agents.nix
+  ./services/continuous-integration/gitea-actions-runner.nix
   ./services/continuous-integration/github-runner.nix
   ./services/continuous-integration/github-runners.nix
   ./services/continuous-integration/gitlab-runner.nix
@@ -874,6 +878,7 @@
   ./services/networking/gobgpd.nix
   ./services/networking/gvpe.nix
   ./services/networking/hans.nix
+  ./services/networking/harmonia.nix
   ./services/networking/haproxy.nix
   ./services/networking/headscale.nix
   ./services/networking/hostapd.nix
@@ -1191,6 +1196,7 @@
   ./services/web-apps/komga.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/limesurvey.nix
+  ./services/web-apps/mainsail.nix
   ./services/web-apps/mastodon.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/mattermost.nix
