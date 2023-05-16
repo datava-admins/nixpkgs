@@ -4875,6 +4875,8 @@ self: super: with self; {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+  inquirerpy = callPackage ../development/python-modules/inquirerpy { };
+
   inscriptis = callPackage ../development/python-modules/inscriptis { };
 
   insegel = callPackage ../development/python-modules/insegel { };
@@ -7380,6 +7382,8 @@ self: super: with self; {
 
   pexpect = callPackage ../development/python-modules/pexpect { };
 
+  pfzy = callPackage ../development/python-modules/pfzy { };
+
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
   pgcli = callPackage ../development/python-modules/pgcli { };
@@ -9755,7 +9759,7 @@ self: super: with self; {
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik rec {
     inherit (pkgs) pkg-config cairo icu libjpeg libpng libtiff libwebp proj zlib;
-    boost = pkgs.boost.override {
+    boost182 = pkgs.boost182.override {
       enablePython = true;
       inherit python;
     };
@@ -10467,8 +10471,6 @@ self: super: with self; {
   retrying = callPackage ../development/python-modules/retrying { };
 
   returns = callPackage ../development/python-modules/returns { };
-
-  retworkx = callPackage ../development/python-modules/retworkx { };
 
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 
@@ -11566,6 +11568,8 @@ self: super: with self; {
   stdlib-list = callPackage ../development/python-modules/stdlib-list { };
 
   steamodd = callPackage ../development/python-modules/steamodd { };
+
+  steamship = callPackage ../development/python-modules/steamship { };
 
   stem = callPackage ../development/python-modules/stem { };
 
