@@ -369,7 +369,7 @@ in {
             };
           };
           system-prebuilt = mkOption {
-            type = types.path;
+            type = types.attrs;
             example = "nixosConfigurations.<name>";
             default = null;
             description = lib.mdDoc ''
