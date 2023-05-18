@@ -3117,6 +3117,8 @@ self: super: with self; {
 
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
+  edk2-pytool-library = callPackage ../development/python-modules/edk2-pytool-library { };
+
   edlib = callPackage ../development/python-modules/edlib {
     inherit (pkgs) edlib;
   };
@@ -5323,7 +5325,7 @@ self: super: with self; {
   jxmlease = callPackage ../development/python-modules/jxmlease { };
 
   k5test = callPackage ../development/python-modules/k5test {
-    inherit (pkgs) krb5 findutils which;
+    inherit (pkgs) krb5 findutils;
   };
 
   kaa-base = callPackage ../development/python-modules/kaa-base { };
@@ -6111,6 +6113,8 @@ self: super: with self; {
 
   meld3 = callPackage ../development/python-modules/meld3 { };
 
+  memestra = callPackage ../development/python-modules/memestra { };
+
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
@@ -6398,6 +6402,8 @@ self: super: with self; {
   msal = callPackage ../development/python-modules/msal { };
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
+
+  mscerts = callPackage ../development/python-modules/mscerts { };
 
   msgpack = callPackage ../development/python-modules/msgpack { };
 
@@ -8710,9 +8716,13 @@ self: super: with self; {
 
   pyls-isort = callPackage ../development/python-modules/pyls-isort { };
 
+  pyls-memestra = callPackage ../development/python-modules/pyls-memestra { };
+
   pyls-spyder = callPackage ../development/python-modules/pyls-spyder { };
 
   pylsp-mypy = callPackage ../development/python-modules/pylsp-mypy { };
+
+  pylsp-rope = callPackage ../development/python-modules/pylsp-rope { };
 
   pylpsd = callPackage ../development/python-modules/pylpsd { };
 
@@ -9733,8 +9743,6 @@ self: super: with self; {
   python-json-logger = callPackage ../development/python-modules/python-json-logger { };
 
   python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server { };
-
-  python_keyczar = callPackage ../development/python-modules/python_keyczar { };
 
   python-ldap = callPackage ../development/python-modules/python-ldap {
     inherit (pkgs) openldap cyrus_sasl;
