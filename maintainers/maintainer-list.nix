@@ -1067,6 +1067,12 @@
     githubId = 1342360;
     name = "Andrew Morgan";
   };
+  anomalocaris = {
+    email = "duncan@anomalocaris.xyz";
+    github = "Anomalocaridid";
+    githubId = 29845794;
+    name = "Duncan Russell";
+  };
   anpin = {
     email = "pavel@anpin.fyi";
     github = "anpin";
@@ -6612,6 +6618,12 @@
     github = "Icy-Thought";
     githubId = 53710398;
   };
+  idlip = {
+    name = "Dilip";
+    email = "igoldlip@gmail.com";
+    github = "idlip";
+    githubId = 117019901;
+  };
   idontgetoutmuch = {
     email = "dominic@steinitz.org";
     github = "idontgetoutmuch";
@@ -8261,6 +8273,12 @@
     github = "KibaFox";
     githubId = 16481032;
     name = "Kiba Fox";
+  };
+  kidanger = {
+    email = "angerj.dev@gmail.com";
+    github = "kidanger";
+    githubId = 297479;
+    name = "Jérémy Anger";
   };
   kidd = {
     email = "raimonster@gmail.com";
@@ -11268,6 +11286,11 @@
     email = "nickcao@nichi.co";
     github = "NickCao";
     githubId = 15247171;
+  };
+  nickgerace = {
+    name = "Nick Gerace";
+    github = "nickgerace";
+    githubId = 39320683;
   };
   nickhu = {
     email = "me@nickhu.co.uk";
