@@ -54,11 +54,6 @@ let
       };
       kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
-      ] ++ lib.optionals (lib.versionAtLeast version "5.15") [
-        # Needed as long as hardened kernels are behind the first patch release
-        # containing the fix for CVE-2023-32233. Can most likely be removed after the
-        # next hardened kernel update.
-        kernelPatches.CVE-2023-32233
       ];
       isHardened = true;
   };
@@ -120,7 +115,6 @@ in {
         [ kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
           kernelPatches.modinst_arg_list_too_long
-          kernelPatches.CVE-2023-32233
         ];
     };
 
@@ -129,7 +123,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.rtl8761b_support
-        kernelPatches.CVE-2023-32233
       ];
     };
 
@@ -145,7 +138,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.CVE-2023-32233
       ];
     };
 
@@ -178,6 +170,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.make-maple-state-reusable-after-mas_empty_area
         kernelPatches.fix-em-ice-bonding
       ];
     };
@@ -186,9 +179,9 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.make-maple-state-reusable-after-mas_empty_area
         kernelPatches.fix-em-ice-bonding
         kernelPatches.export-rt-sched-migrate
-        kernelPatches.CVE-2023-32233
       ];
     };
 
@@ -196,6 +189,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.make-maple-state-reusable-after-mas_empty_area
         kernelPatches.fix-em-ice-bonding
       ];
     };
@@ -204,6 +198,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.make-maple-state-reusable-after-mas_empty_area
         kernelPatches.fix-em-ice-bonding
       ];
     };
@@ -213,6 +208,7 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
+          kernelPatches.make-maple-state-reusable-after-mas_empty_area
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -558,10 +554,14 @@ in {
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
 
-    inherit (callPackage ../os-specific/linux/zfs {
-        configFile = "kernel";
-        inherit pkgs kernel;
-      }) zfsStable zfsUnstable;
+    zfsStable = callPackage ../os-specific/linux/zfs/stable.nix {
+      configFile = "kernel";
+      inherit pkgs kernel;
+    };
+    zfsUnstable = callPackage ../os-specific/linux/zfs/unstable.nix {
+      configFile = "kernel";
+      inherit pkgs kernel;
+    };
     zfs = zfsStable;
 
     can-isotp = callPackage ../os-specific/linux/can-isotp { };

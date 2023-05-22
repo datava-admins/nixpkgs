@@ -1,12 +1,11 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper
 , cacert, moreutils, jq, git, pkg-config, yarn, python3
-, esbuild, nodejs_16, libsecret, xorg, ripgrep
-, AppKit, Cocoa, Security, cctools }:
+, esbuild, nodejs, libsecret, xorg, ripgrep
+, AppKit, Cocoa, Security, cctools, nixosTests }:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs_16;
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
 
@@ -108,9 +107,6 @@ in stdenv.mkDerivation rec {
 
     # set offline mirror to yarn cache we created in previous steps
     yarn --offline config set yarn-offline-mirror "${yarnCache}"
-
-    # set nodedir, so we can build binaries later
-    npm config set nodedir "${nodejs}"
   '';
 
   buildPhase = ''
@@ -147,7 +143,7 @@ in stdenv.mkDerivation rec {
     # rebuild binaries, we use npm here, as yarn does not provide an alternative
     # that would not attempt to try to reinstall everything and break our
     # patching attempts
-    npm --prefix ./remote rebuild --build-from-source
+    npm --prefix ./remote rebuild --build-from-source --nodedir ${nodejs}
 
     # run postinstall scripts after patching
     find . -path "*node_modules" -prune -o \
@@ -163,6 +159,10 @@ in stdenv.mkDerivation rec {
     cp -R -T ../vscode-reh-web-${vsBuildTarget} $out
     ln -s ${nodejs}/bin/node $out
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) openvscode-server;
+  };
 
   meta = with lib; {
     description = "Run VS Code on a remote machine";

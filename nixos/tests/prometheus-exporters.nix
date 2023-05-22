@@ -368,9 +368,13 @@ let
         enable = true;
         url = "http://localhost";
         configFile = pkgs.writeText "json-exporter-conf.json" (builtins.toJSON {
-          metrics = [
-            { name = "json_test_metric"; path = "{ .test }"; }
-          ];
+          modules = {
+            default = {
+              metrics = [
+                { name = "json_test_metric"; path = "{ .test }"; }
+              ];
+            };
+          };
         });
       };
       metricProvider = {
@@ -1437,7 +1441,10 @@ let
       '';
     };
 
-    wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in
+    wireguard = let
+      snakeoil = import ./wireguard/snakeoil-keys.nix;
+      publicKeyWithoutNewlines = replaceStrings [ "\n" ] [ "" ] snakeoil.peer1.publicKey;
+    in
       {
         exporterConfig.enable = true;
         metricProvider = {
@@ -1459,7 +1466,7 @@ let
           wait_for_unit("prometheus-wireguard-exporter.service")
           wait_for_open_port(9586)
           wait_until_succeeds(
-              "curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'"
+              "curl -sSf http://localhost:9586/metrics | grep '${publicKeyWithoutNewlines}'"
           )
         '';
       };
