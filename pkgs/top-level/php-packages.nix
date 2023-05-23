@@ -299,7 +299,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     swoole = callPackage ../development/php-packages/swoole { };
 
-    xdebug = callPackage ../development/php-packages/xdebug { };
+    xdebug = if (lib.versionOlder php.version "8.0") then
+      callPackage ../development/php-packages/xdebug_74 { }
+      else callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
 
