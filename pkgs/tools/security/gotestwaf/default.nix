@@ -24,6 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-X github.com/wallarm/gotestwaf/internal/version.Version=v${version}"
   ];
+  patches = [ ./blockstatuscodes_first.patch ];
 
   postFixup = ''
     # Rename binary

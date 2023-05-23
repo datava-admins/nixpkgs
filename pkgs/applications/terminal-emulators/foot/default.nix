@@ -38,8 +38,8 @@ let
     name = "foot-generate-alt-random-writes";
 
     src = fetchurl {
-      url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      sha256 = "0w4d0rxi54p8lvbynypcywqqwbbzmyyzc0svjab27ngmdj1034ii";
+      url = "https://codeberg.org/dnkl/foot/raw/commit/${version}/scripts/generate-alt-random-writes.py";
+      sha256 = "sha256-MZIBgmz12SOWklsD9r2vfy2OMffseuvXpuiSEnsGjXA=";
     };
 
     dontUnpack = true;

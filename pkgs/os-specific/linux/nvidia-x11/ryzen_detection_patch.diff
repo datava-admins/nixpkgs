@@ -1,0 +1,13 @@
+diff --git a/src/nvidia/src/kernel/platform/cpu.c b/src/nvidia/src/kernel/platform/cpu.c
+index 53534b2..b82ed6b 100644
+--- a/src/nvidia/src/kernel/platform/cpu.c
++++ b/src/nvidia/src/kernel/platform/cpu.c
+@@ -1402,7 +1402,7 @@ static void cpuidInfoAMD(OBJSYS *pSys, PCPUIDINFO pCpuidInfo)
+             default:
+                 NV_PRINTF(LEVEL_ERROR,
+                           "Unrecognized AMD processor in cpuidInfoAMD\n");
+-                pSys->cpuInfo.type = NV0000_CTRL_SYSTEM_CPU_TYPE_K8;
++                pSys->cpuInfo.type = NV0000_CTRL_SYSTEM_CPU_TYPE_RYZEN;
+                 break;
+         }
+     }

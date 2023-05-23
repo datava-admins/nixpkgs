@@ -146,6 +146,7 @@
   ./programs/calls.nix
   ./programs/captive-browser.nix
   ./programs/ccache.nix
+  ./programs/sccache.nix
   ./programs/cdemu.nix
   ./programs/cfs-zen-tweaks.nix
   ./programs/chromium.nix
@@ -1124,6 +1125,7 @@
   ./services/security/vault.nix
   ./services/security/vault-agent.nix
   ./services/security/vaultwarden/default.nix
+  ./services/security/vuls.nix
   ./services/security/yubikey-agent.nix
   ./services/system/automatic-timezoned.nix
   ./services/system/cachix-agent/default.nix
@@ -1412,6 +1414,8 @@
   ./virtualisation/container-config.nix
   ./virtualisation/containerd.nix
   ./virtualisation/containers.nix
+  ./virtualisation/containers-next
+  ./virtualisation/nixos-containers.nix
   ./virtualisation/cri-o.nix
   ./virtualisation/docker-rootless.nix
   ./virtualisation/docker.nix
@@ -1422,6 +1426,10 @@
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix
   ./virtualisation/lxd.nix
+  ./virtualisation/mdev-gpu.nix
+  ./virtualisation/amazon-options.nix
+  ./virtualisation/hyperv-guest.nix
+  ./virtualisation/kvmgt.nix
   ./virtualisation/multipass.nix
   ./virtualisation/nixos-containers.nix
   ./virtualisation/oci-containers.nix

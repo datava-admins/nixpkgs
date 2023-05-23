@@ -214,6 +214,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     apcu = callPackage ../development/php-packages/apcu { };
 
+    apcu_bc = callPackage ../development/php-packages/apcu_bc { };
+
     ast = callPackage ../development/php-packages/ast { };
 
     blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
@@ -234,6 +236,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     imagick = callPackage ../development/php-packages/imagick { };
 
+    # Check PHP74 compat
     inotify = callPackage ../development/php-packages/inotify { };
 
     mailparse = callPackage ../development/php-packages/mailparse { };
@@ -274,6 +277,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
 
+    pdo_ibm = callPackage ../development/php-packages/pdo_ibm { };
+
+    php_excel = callPackage ../development/php-packages/php_excel { };
+
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
@@ -295,6 +302,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
+
+    zstd = callPackage ../development/php-packages/zstd { };
   } // (
     let
       # This list contains build instructions for different modules that one may
@@ -357,6 +366,13 @@ lib.makeScope pkgs.newScope (self: with self; {
           configureFlags = [
             "--with-iconv${lib.optionalString stdenv.isDarwin "=${libiconv}"}"
           ];
+          patches = lib.optionals (lib.versionOlder php.version "8.0") [
+            # Header path defaults to FHS location, preventing the configure script from detecting errno support.
+            (fetchpatch {
+              url = "https://github.com/fossar/nix-phps/raw/263861a8c9bdafd7abe44db6db4ef0179643680c/pkgs/iconv-header-path.patch";
+              sha256 = "7GHnEUu+hcsQ4h3itDwk6p46ZKfib9JZ2XpWlXrdn6E=";
+            })
+          ];
           doCheck = false;
         }
         {
@@ -368,6 +384,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           name = "intl";
           buildInputs = [ icu64 ];
         }
+        { name = "json"; enable = lib.versionOlder php.version "8.0"; }
         {
           name = "ldap";
           buildInputs = [ openldap cyrus_sasl ];
@@ -383,7 +400,9 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "mbstring";
-          buildInputs = [ oniguruma pcre2 ];
+          buildInputs = [ oniguruma ] ++ lib.optionals (lib.versionAtLeast php.version "8.0") [
+            pcre2
+          ];
           doCheck = false;
         }
         {
@@ -418,7 +437,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "opcache";
-          buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [
+          buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin && lib.versionAtLeast php.version "8.0") [
             valgrind.dev
           ];
           zendExtension = true;
@@ -515,7 +534,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           '';
           doCheck = false;
         }
-        { name = "session"; doCheck = false; }
+        { name = "session"; doCheck = lib.versionOlder php.version "8.0"; }
         { name = "shmop"; }
         {
           name = "simplexml";
@@ -574,6 +593,15 @@ lib.makeScope pkgs.newScope (self: with self; {
           ];
         }
         {
+          name = "xmlrpc";
+          buildInputs = [ libxml2 libiconv ];
+          # xmlrpc was unbundled in 8.0 https://php.watch/versions/8.0/xmlrpc
+          enable = lib.versionOlder php.version "8.0";
+          configureFlags = [
+            "--with-xmlrpc"
+          ];
+        }
+        {
           name = "xmlwriter";
           buildInputs = [ libxml2 ];
           configureFlags = [
@@ -583,7 +611,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "xsl";
           buildInputs = [ libxslt libxml2 ];
-          doCheck = false;
+          doCheck = lib.versionOlder php.version "8.0";
           configureFlags = [ "--with-xsl=${libxslt.dev}" ];
         }
         { name = "zend_test"; }

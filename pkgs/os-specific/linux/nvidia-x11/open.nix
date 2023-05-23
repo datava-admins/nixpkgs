@@ -17,7 +17,6 @@ stdenv.mkDerivation ({
     rev = nvidia_x11.version;
     inherit hash;
   };
-
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = kernel.makeFlags ++ [

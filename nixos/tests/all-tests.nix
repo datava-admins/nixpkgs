@@ -175,6 +175,7 @@ in {
   connman = handleTest ./connman.nix {};
   consul = handleTest ./consul.nix {};
   consul-template = handleTest ./consul-template.nix {};
+  containers-next = handleTest ./containers-next {};
   containers-bridge = handleTest ./containers-bridge.nix {};
   containers-custom-pkgs.nix = handleTest ./containers-custom-pkgs.nix {};
   containers-ephemeral = handleTest ./containers-ephemeral.nix {};

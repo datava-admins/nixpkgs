@@ -99,7 +99,7 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
   # either "efi" or "hybrid"
   # This will be undersized slightly, as this is actually the offset of
   # the end of the partition. Generally it will be 1MiB smaller.
-  bootSize ? "256M"
+  bootSize ? "1G"
 
 , # The files and directories to be placed in the target file system.
   # This is a list of attribute sets {source, target, mode, user, group} where
@@ -143,6 +143,9 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
 
 , # The root file system type.
   fsType ? "ext4"
+
+, # Subvolumes to create if using Btrfs
+  btrfsSubvolumes ? []
 
 , # Filesystem label
   label ? if onlyNixStore then "nix-store" else "nixos"
@@ -196,7 +199,7 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
 assert (lib.assertOneOf "partitionTableType" partitionTableType [ "legacy" "legacy+gpt" "efi" "hybrid" "none" ]);
 assert (lib.assertMsg (fsType == "ext4" && deterministic -> rootFSUID != null) "In deterministic mode with a ext4 partition, rootFSUID must be non-null, by default, it is equal to rootGPUID.");
   # We use -E offset=X below, which is only supported by e2fsprogs
-assert (lib.assertMsg (partitionTableType != "none" -> fsType == "ext4") "to produce a partition table, we need to use -E offset flag which is support only for fsType = ext4");
+#assert (lib.assertMsg (partitionTableType != "none" -> fsType == "ext4") "to produce a partition table, we need to use -E offset flag which is support only for fsType = ext4");
 assert (lib.assertMsg (touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt") "EFI variables can be used only with a partition table of type: hybrid, efi or legacy+gpt.");
   # If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
 assert (lib.assertMsg (onlyNixStore -> contents == [] && configFile == null && !installBootLoader) "In a only Nix store image, the contents must be empty, no configuration must be provided and no bootloader should be installed.");
@@ -205,6 +208,10 @@ assert (lib.assertMsg (lib.all
          (attrs: ((attrs.user  or null) == null)
               == ((attrs.group or null) == null))
         contents) "Contents of the disk image should set none of {user, group} or both at the same time.");
+
+assert (btrfsSubvolumes != []) -> fsType == "btrfs";
+
+assert (btrfsSubvolumes != []) -> fsType == "btrfs";
 
 with lib;
 
@@ -232,7 +239,7 @@ let format' = format; in let
     legacy = ''
       parted --script $diskImage -- \
         mklabel msdos \
-        mkpart primary ext4 1MiB -1
+        mkpart primary ${fsType} 1MiB -1
     '';
     "legacy+gpt" = ''
       parted --script $diskImage -- \
@@ -240,7 +247,7 @@ let format' = format; in let
         mkpart no-fs 1MB 2MB \
         set 1 bios_grub on \
         align-check optimal 1 \
-        mkpart primary ext4 2MB -1 \
+        mkpart primary ${fsType} 2MB -1 \
         align-check optimal 2 \
         print
       ${optionalString deterministic ''
@@ -257,7 +264,7 @@ let format' = format; in let
         mklabel gpt \
         mkpart ESP fat32 8MiB ${bootSize} \
         set 1 boot on \
-        mkpart primary ext4 ${bootSize} -1
+        mkpart primary ${fsType} ${bootSize} -1
       ${optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
@@ -273,7 +280,7 @@ let format' = format; in let
         set 1 boot on \
         mkpart no-fs 0 1024KiB \
         set 2 bios_grub on \
-        mkpart primary ext4 ${bootSize} -1
+        mkpart primary ${fsType }${bootSize} -1
       ${optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
@@ -308,6 +315,8 @@ let format' = format; in let
       parted
       e2fsprogs
       lkl
+      btrfs-progs
+      multipath-tools
       config.system.build.nixos-install
       config.system.build.nixos-enter
       nix
@@ -368,7 +377,12 @@ let format' = format; in let
 
     mkdir $out
 
-    root="$PWD/root"
+    realroot="$PWD/root"
+    ${ if fsType == "btrfs" then ''
+      root="$PWD/root/roottmp"
+    '' else ''
+      root="$PWD/root"
+    ''}
     mkdir -p $root
 
     # Copy arbitrary other files into the image
@@ -490,21 +504,40 @@ let format' = format; in let
 
     ${partitionDiskScript}
 
-    ${if partitionTableType != "none" then ''
-      # Get start & length of the root partition in sectors to $START and $SECTORS.
-      eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
-
+    # Get start & length of the root partition in sectors to $START and $SECTORS.
+    eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
+    rootDir=$root${optionalString onlyNixStore builtins.storeDir}
+    realrootDir=$realroot${optionalString onlyNixStore builtins.storeDir}
+    ${if partitionTableType != "none" && fsType == "ext4" then ''
       mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+    '' else if fsType == "btrfs" then ''
+      SECTORS=$(($SECTORS-1))
+      fdisk -l ./$diskImage
+      truncate -s $(sectorsToBytes $SECTORS) btrfs.img
+      mkfs.${fsType} -f --rootdir=$realrootDir --shrink -L ${label} btrfs.img
+      dd if=./btrfs.img of=./$diskImage seek=$START count=$SECTORS bs=512 conv=notrunc
+      rm btrfs.img
+      fdisk -l ./$diskImage
     '' else ''
       mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
     ''}
 
+    echo "partitionTableType ${partitionTableType}"
+    echo "partitionTableType ${rootPartition}"
+    echo "fsType ${fsType}"
+    echo "diskImage " $diskImage
+    echo "root " $root
+    echo "rootDir " $rootDir
+    echo "realrootDir " $realrootDir
+
+    ${optionalString (fsType != "btrfs") ''
     echo "copying staging root to image..."
     cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
            -t ${fsType} \
            -i $diskImage \
            $root${optionalString onlyNixStore builtins.storeDir}/* / ||
       (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
+    ''}
   '';
 
   moveOrConvertImage = ''
@@ -516,6 +549,8 @@ let format' = format; in let
     diskImage=$out/${filename}
   '';
 
+  createSubvolumes = map (vol: "mkdir -p $(dirname /mnt${vol}) && btrfs subvolume create /mnt${vol}") btrfsSubvolumes;
+
   createEFIVars = ''
     efiVars=$out/efi-vars.fd
     cp ${efiVariables} $efiVars
@@ -525,7 +560,7 @@ let format' = format; in let
   buildImage = pkgs.vmTools.runInLinuxVM (
     pkgs.runCommand name {
       preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
-      buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
+      buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools btrfs-progs ];
       postVM = moveOrConvertImage + postVM;
       QEMU_OPTS =
         concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
@@ -562,8 +597,42 @@ let format' = format; in let
 
         ${optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
+      ${optionalString (fsType == "btrfs") ''
+        echo "Creating Btrfs subvolumes and moving files..."
+        ${concatStringsSep "\n" createSubvolumes}
+        #mv -u /mnt/roottmp/* /mnt/
+        cp --reflink=always --archive /mnt/roottmp/* /mnt/
+        chown root:root /nix
+        chown -R root:root /nix/store
+        chown root:nixbld /nix/store
+        btrfs subvolume list /mnt
+        rm -rf /mnt/roottmp
+        btrfs filesystem resize max /mnt
+      ''}
+      ${optionalString (fsType == "btrfs") ''
+        echo "Creating Btrfs subvolumes and moving files..."
+        ${concatStringsSep "\n" createSubvolumes}
+        df -h
+        du -shx /mnt/roottmp/*
+        btrfs filesystem resize max /mnt/
+        cp --reflink=always --archive /mnt/roottmp/* /mnt/
+        btrfs subvolume list /mnt
+        rm -rf /mnt/roottmp
+        nixos-enter --root $mountPoint -- chown "root:users" "/etc/NIXOS"
+        nixos-enter --root $mountPoint -- chown "root:root" "/etc"
+        nixos-enter --root $mountPoint -- chown "root:root" "/root"
+        nixos-enter --root $mountPoint -- chown "root:root" "/nix"
+        nixos-enter --root $mountPoint -- chown -R "root:root" "/nix/store"
+        nixos-enter --root $mountPoint -- chown "root:nixbld" "/nix/store"
+        nixos-enter --root $mountPoint -- ls -lha /
+        nixos-enter --root $mountPoint -- ls -lha /nix
+        ls -lha /mnt/
+        ls -lha /mnt/nix/
+        ls -lha /mnt/etc/
+        ls -lha /mnt/root/
+      ''}
 
-      # Install a configuration.nix
+      echo "Install a configuration.nix"
       mkdir -p /mnt/etc/nixos
       ${optionalString (configFile != null) ''
         cp ${configFile} /mnt/etc/nixos/configuration.nix
@@ -594,6 +663,7 @@ let format' = format; in let
         group="''${groups_[$i]}"
         if [ -n "$user$group" ]; then
           # We have to nixos-enter since we need to use the user and group of the VM
+          echo nixos-enter --root $mountPoint -- chown -R "$user:$group" "$target"
           nixos-enter --root $mountPoint -- chown -R "$user:$group" "$target"
         fi
       done

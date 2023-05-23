@@ -209,6 +209,26 @@ let
         '';
     };
 
+    clamscan = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.clamav.daemon.enable = true;
+        services.clamav.scanner = {
+          enable = false;
+          interval = "now";
+        };
+      };
+      exporterTest = ''
+          wait_for_unit("prometheus-clamscan-exporter.service")
+          wait_for_open_port(9967)
+          wait_until_succeeds(
+            "curl -sSf 'http://localhost:9967/metrics' | grep 'clamscan'"
+          )
+      '';
+    };
+
     dnsmasq = {
       exporterConfig = {
         enable = true;
@@ -1397,6 +1417,27 @@ let
         wait_for_open_port(6081)
         wait_for_open_port(9131)
         succeed("curl -sSf http://localhost:9131/metrics | grep 'varnish_up 1'")
+      '';
+    };
+
+    vuls = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        systemd.services.prometheus-vuls-exporter.after = [
+          "vuls.service"
+        ];
+        systemd.services.vuls = {
+          enable = true;
+          startAt = "now";
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("vuls.service")
+        wait_for_unit("prometheus-vuls-exporter.service")
+        wait_for_open_port(8080)
+        wait_until_succeeds("curl -f localhost:8080/metrics | grep 'vuls'")
       '';
     };
 

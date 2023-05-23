@@ -511,6 +511,8 @@ with pkgs;
 
   dae = callPackage ../tools/networking/dae { };
 
+  db-derby = callPackage ../servers/sql/db-derby { };
+
   darling = callPackage ../applications/emulators/darling { };
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
@@ -11307,6 +11309,7 @@ with pkgs;
   playwright = with python3Packages; toPythonApplication playwright;
 
   playwright-driver = callPackage ../development/web/playwright/driver.nix { };
+
   playwright-test = callPackage ../development/web/playwright-test/wrapped.nix { };
 
   please = callPackage ../tools/security/please { };
@@ -12644,6 +12647,8 @@ with pkgs;
 
   sudo = callPackage ../tools/security/sudo { };
 
+  sudo-nspawn = sudo.override { withStaticSudoers = true; };
+
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
   sundtek = callPackage ../misc/drivers/sundtek { };
@@ -13831,6 +13836,8 @@ with pkgs;
   uptime-kuma = callPackage ../servers/monitoring/uptime-kuma { };
 
   vul = callPackage ../applications/misc/vul { };
+
+  vuls = callPackage ../tools/security/vuls { };
 
   xar = callPackage ../tools/compression/xar { };
 
@@ -17111,6 +17118,16 @@ with pkgs;
   php80Packages = recurseIntoAttrs php80.packages;
 
   phpactor = callPackage ../development/tools/phpactor { };
+
+  # Import PHP74 interpreter, extensions and packages
+  php74 = callPackage ../development/interpreters/php/7.4.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    pcre2 = pcre2.override {
+      withJitSealloc = !stdenv.isDarwin;
+    };
+  };
+  php74Extensions = recurseIntoAttrs php74.extensions;
+  php74Packages = recurseIntoAttrs php74.packages;
 
   picoc = callPackage ../development/interpreters/picoc { };
 
@@ -25874,6 +25891,13 @@ with pkgs;
   # removed in a few releases.
   influxdb2 = callPackage ../servers/nosql/influxdb2/combined.nix { };
 
+  mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
+    inherit (darwin) cctools developer_cmds;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    boost = boost159;
+    openssl = openssl_1_1;
+  };
+
   mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -25886,6 +25910,9 @@ with pkgs;
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
   mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
+
+  mssql-cli = callPackage ../development/tools/mssql-cli { };
+
   jtds_jdbc = callPackage ../servers/sql/mssql/jdbc/jtds.nix { };
 
   azuredatastudio = callPackage ../applications/misc/azuredatastudio { };
@@ -26030,6 +26057,7 @@ with pkgs;
   prometheus-bitcoin-exporter = callPackage ../servers/monitoring/prometheus/bitcoin-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-cloudflare-exporter = callPackage ../servers/monitoring/prometheus/cloudflare-exporter.nix { };
+  prometheus-clamscan-exporter = callPackage ../servers/monitoring/prometheus/clamscan-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
   prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
@@ -26092,6 +26120,7 @@ with pkgs;
   };
   prometheus-v2ray-exporter = callPackage ../servers/monitoring/prometheus/v2ray-exporter.nix { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
+  prometheus-vuls-exporter = callPackage ../servers/monitoring/prometheus/vuls-exporter.nix { };
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -26548,8 +26577,6 @@ with pkgs;
   b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };
 
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
-
-  below = callPackage ../os-specific/linux/below { };
 
   bt-fw-converter = callPackage ../os-specific/linux/firmware/bt-fw-converter { };
 
@@ -32318,6 +32345,8 @@ with pkgs;
   mcpp = callPackage ../development/compilers/mcpp { };
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
+
+  mdev-gpu = callPackage ../applications/virtualization/mdev-gpu/default.nix { };
 
   mdzk = callPackage ../applications/misc/mdzk {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -39346,6 +39375,8 @@ with pkgs;
   nixos-grub2-theme = callPackage ../data/misc/nixos-artwork/grub2-theme.nix { };
 
   nixos-bgrt-plymouth = callPackage ../data/themes/nixos-bgrt-plymouth { };
+
+  nixos-nspawn = callPackage ../tools/virtualization/nixos-nspawn { };
 
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
 

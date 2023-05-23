@@ -25,6 +25,20 @@ in {
           Free space in the VirtualBox base image in MiB.
         '';
       };
+      baseImageFsType = mkOption {
+        type = with types; enum [ "ext4" "btrfs" ];
+        default = "ext4";
+        description = ''
+          File system type for root disk image.
+        '';
+      };
+      baseImageVolumes = mkOption {
+        type = with types; listOf str;
+        default = [];
+        description = ''
+          Currently only for btrfs root volumes; list of subvolues.
+        '';
+      };
       memorySize = mkOption {
         type = types.int;
         default = 1536;
@@ -174,7 +188,9 @@ in {
       name = cfg.vmDerivationName;
 
       inherit pkgs lib config;
-      partitionTableType = "legacy";
+      fsType = cfg.baseImageFsType;
+      btrfsSubvolumes = cfg.baseImageVolumes;
+      partitionTableType = "hybrid";
       diskSize = cfg.baseImageSize;
       additionalSpace = "${toString cfg.baseImageFreeSpace}M";
 
@@ -232,7 +248,7 @@ in {
       "/" = {
         device = "/dev/disk/by-label/nixos";
         autoResize = true;
-        fsType = "ext4";
+        fsType = cfg.baseImageFsType;
       };
     } // (lib.optionalAttrs (cfg.extraDisk != null) {
       ${cfg.extraDisk.mountPoint} = {

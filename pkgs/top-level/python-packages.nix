@@ -2263,6 +2263,8 @@ self: super: with self; {
 
   dacite = callPackage ../development/python-modules/dacite { };
 
+  damo = callPackage ../tools/system/damo {};
+
   daemonize = callPackage ../development/python-modules/daemonize { };
 
   daemonocle = callPackage ../development/python-modules/daemonocle { };
@@ -11231,6 +11233,8 @@ self: super: with self; {
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
 
+  lolviz = callPackage ../development/python-modules/lolviz{ };
+
   snapcast = callPackage ../development/python-modules/snapcast { };
 
   snapshottest = callPackage ../development/python-modules/snapshottest { };
@@ -11289,7 +11293,7 @@ self: super: with self; {
 
   solc-select = callPackage ../development/python-modules/solc-select { };
 
-  solo-python = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
+  solo1-cli = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo1-cli { });
 
   somajo = callPackage ../development/python-modules/somajo { };
 

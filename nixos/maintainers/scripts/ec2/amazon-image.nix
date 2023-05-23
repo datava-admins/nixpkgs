@@ -23,7 +23,7 @@ in {
   options.amazonImage = {
     name = mkOption {
       type = types.str;
-      description = lib.mdDoc "The name of the generated derivation";
+      description = "The name of the generated derivation";
       default = "nixos-amazon-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
     };
 
@@ -35,7 +35,7 @@ in {
         ]
       '';
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         This option lists files to be copied to fixed locations in the
         generated image. Glob patterns work.
       '';
@@ -45,13 +45,13 @@ in {
       type = with types; either (enum [ "auto" ]) int;
       default = 2048;
       example = 8192;
-      description = lib.mdDoc "The size in MB of the image";
+      description = "The size in MB of the image";
     };
 
     format = mkOption {
       type = types.enum [ "raw" "qcow2" "vpc" ];
       default = "vpc";
-      description = lib.mdDoc "The image format to output";
+      description = "The image format to output";
     };
   };
 
@@ -125,8 +125,8 @@ in {
       inherit (cfg) contents format name;
       pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
 
-      fsType = "ext4";
-      partitionTableType = if config.ec2.efi then "efi" else "legacy+gpt";
+      fsType = if config.ec2.btrfs.enable then "btrfs" else "ext4";
+      partitionTableType = if config.ec2.efi || config.ec2.btrfs.enable then "efi" else "legacy+gpt";
 
       diskSize = cfg.sizeMB;
 

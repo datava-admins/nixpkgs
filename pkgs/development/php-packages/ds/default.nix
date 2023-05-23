@@ -15,6 +15,8 @@ in buildPecl {
 
   buildInputs = [ pcre2 ];
 
+  internalDeps = lib.optionals (lib.versionOlder php.version "8.0") [ php.extensions.json ];
+
   meta = with lib; {
     changelog = "https://github.com/php-ds/ext-ds/releases/tag/v${version}";
     description = "An extension providing efficient data structures for PHP";

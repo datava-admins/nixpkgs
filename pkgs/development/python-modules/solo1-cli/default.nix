@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchPypi
 , pythonOlder
 , click
 , cryptography
@@ -12,8 +13,19 @@
 , requests
 }:
 
+let
+  # TODO remove this once https://github.com/solokeys/solo1-cli/issues/157 is addressed
+  fido2-old = fido2.overrideAttrs (x: rec {
+    version = "0.9.3";
+    src = fetchPypi {
+      inherit (x) pname;
+      inherit version;
+      sha256 = "sha256-tF6JphCc/Lfxu1E3dqotZAjpXEgi+DolORi5RAg0Zuw=";
+    };
+  });
+in
 buildPythonPackage rec {
-  pname = "solo-python";
+  pname = "solo1-cli";
   version = "0.1.1";
   format = "flit";
 
@@ -30,7 +42,7 @@ buildPythonPackage rec {
     click
     cryptography
     ecdsa
-    fido2
+    fido2-old
     intelhex
     pyserial
     pyusb

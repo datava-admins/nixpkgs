@@ -16,6 +16,7 @@ buildPecl {
   configureFlags = [ "--with-couchbase" ];
 
   buildInputs = [ libcouchbase zlib ];
+  internalDeps = lib.optionals (lib.versionOlder php.version "8.0") [ php.extensions.json ];
 
   patches = [
     (substituteAll {

@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/mopidy/mopidy-local";
     description = "Mopidy extension for playing music from your local music archive";
     license = licenses.asl20;

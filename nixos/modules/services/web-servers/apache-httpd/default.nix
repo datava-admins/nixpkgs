@@ -10,6 +10,8 @@ let
 
   runtimeDir = "/run/httpd";
 
+  stateDir = "/var/lib/httpd";
+
   pkg = cfg.package.out;
 
   apachectl = pkgs.runCommand "apachectl" { meta.priority = -1; } ''
@@ -111,6 +113,13 @@ let
         SSLProtocol ${cfg.sslProtocols}
         SSLCipherSuite ${cfg.sslCiphers}
         SSLHonorCipherOrder on
+    </IfModule>
+  '';
+
+  mdConf = ''
+    <IfModule mod_md.c>
+        MDStapling on
+        MDStoreDir ${stateDir}/md
     </IfModule>
   '';
 
@@ -337,6 +346,8 @@ let
     TraceEnable off
 
     ${sslConf}
+
+    ${mdConf}
 
     ${optionalString cfg.package.luaSupport luaSetPaths}
 
@@ -769,6 +780,8 @@ in
         [
           "d '${cfg.logDir}' 0700 ${svc.User} ${svc.Group}"
           "Z '${cfg.logDir}' - ${svc.User} ${svc.Group}"
+          "d '${stateDir}' 0700 ${svc.User} ${svc.Group}"
+          "Z '${stateDir}' - ${svc.User} ${svc.Group}"
         ];
 
     systemd.services.httpd = {

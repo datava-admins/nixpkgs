@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
+, jansson, curl
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = [ perl libxcrypt ] ++
+  buildInputs = [ perl libxcrypt jansson curl ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
     lib.optional modTlsSupport rustls-ffi ++

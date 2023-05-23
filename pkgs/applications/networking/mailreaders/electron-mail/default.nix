@@ -2,12 +2,12 @@
 
 let
   pname = "electron-mail";
-  version = "5.1.6";
+  version = "5.1.7";
   name = "ElectronMail-${version}";
 
   src = fetchurl {
     url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-lsXVsx7U43czWFWxAgwTUYTnUXSL4KPFnXLzUklieAo=";
+    sha256 = "sha256-4emQ48fjBWAwZjbePzr0pfs/9qG1iIF/va02MtVR+78=";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
@@ -24,13 +24,12 @@ in appimageTools.wrapType2 {
 
   extraPkgs = pkgs: with pkgs; [
     libsecret
-    libappindicator-gtk3
   ];
 
   meta = with lib; {
     description = "ElectronMail is an Electron-based unofficial desktop client for ProtonMail";
     homepage = "https://github.com/vladimiry/ElectronMail";
-    license = licenses.gpl3;
+    license = licenses.mit;
     maintainers = [ maintainers.princemachiavelli ];
     platforms = [ "x86_64-linux" ];
   };
