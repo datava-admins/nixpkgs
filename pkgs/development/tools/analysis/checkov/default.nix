@@ -22,14 +22,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.3.246";
+  version = "2.3.261";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-IDyDvwpCB/rZkaAWmAvudctT3FDDCKentqJVfM/YV7s=";
+    hash = "sha256-GRP9crehMlU+T2Iss0fUh00M6nD7dJYDtagDvBakipo=";
   };
 
   patches = [
@@ -74,6 +74,7 @@ buildPythonApplication rec {
     jmespath
     jsonschema
     junit-xml
+    license-expression
     networkx
     openai
     packaging
@@ -82,6 +83,7 @@ buildPythonApplication rec {
     pycep-parser
     pyyaml
     semantic-version
+    spdx-tools
     tabulate
     termcolor
     tqdm
