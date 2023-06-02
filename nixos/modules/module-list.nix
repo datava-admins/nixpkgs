@@ -778,6 +778,7 @@
   ./services/monitoring/uptime-kuma.nix
   ./services/monitoring/uptime.nix
   ./services/monitoring/vmagent.nix
+  ./services/monitoring/vmalert.nix
   ./services/monitoring/vnstat.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-proxy.nix
@@ -808,6 +809,7 @@
   ./services/network-filesystems/xtreemfs.nix
   ./services/network-filesystems/yandex-disk.nix
   ./services/networking/3proxy.nix
+  ./services/networking/acme-dns.nix
   ./services/networking/adguardhome.nix
   ./services/networking/alice-lg.nix
   ./services/networking/amuled.nix
