@@ -36,6 +36,7 @@ let
     "dovecot"
     "fastly"
     "fritzbox"
+    "graphite"
     "influxdb"
     "ipmi"
     "json"
