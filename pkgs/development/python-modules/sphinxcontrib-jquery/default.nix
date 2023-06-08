@@ -20,6 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
+    sphinx
   ];
 
   pythonImportsCheck = [
