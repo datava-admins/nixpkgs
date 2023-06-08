@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-jquery";
-  version = "3.0.0";
+  version = "4.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "jquery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-argG+jMUqLiWo4lKWAmHmUxotHl+ddJuJZ/zcUl9u5Q=";
+    hash = "sha256-ZQGQcVmhWREFa2KyaOKdTz5W2AS2ur7pFp8qZ2IkxSE=";
   };
 
   nativeBuildInputs = [
