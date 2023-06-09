@@ -20,6 +20,7 @@
 , torch
 , tokenizers
 , tqdm
+, safetensors
 }:
 
 buildPythonPackage rec {
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     requests
     tokenizers
     tqdm
+    safetensors
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
