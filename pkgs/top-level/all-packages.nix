@@ -1456,6 +1456,8 @@ with pkgs;
 
   aide = callPackage ../tools/security/aide { };
 
+  ain = callPackage ../tools/networking/ain { };
+
   aioblescan = with python3Packages; toPythonApplication aioblescan;
 
   aiodnsbrute = callPackage ../tools/security/aiodnsbrute { };
@@ -4809,7 +4811,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_24;
+    electron = electron_25;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -16491,6 +16493,9 @@ with pkgs;
   cargo-pgrx = callPackage ../development/tools/rust/cargo-pgrx/default.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  buildPgrxExtension = callPackage ../development/tools/rust/cargo-pgrx/buildPgrxExtension.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-release = callPackage ../development/tools/rust/cargo-release { };
   cargo-rr = callPackage ../development/tools/rust/cargo-rr { };
   cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin {
@@ -25153,10 +25158,12 @@ with pkgs;
   sbcl_2_3_4 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.4"; };
     faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
   };
   sbcl_2_3_5 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.5"; };
     faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
   };
   sbcl = sbcl_2_3_5;
 
@@ -31137,6 +31144,8 @@ with pkgs;
   moe =  callPackage ../applications/editors/moe { };
 
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
+
+  muzika = callPackage ../applications/audio/muzika { };
 
   pattypan = callPackage ../applications/misc/pattypan {
     jdk = jdk.override { enableJavaFX = true; };
@@ -39488,7 +39497,7 @@ with pkgs;
   dnadd = callPackage ../tools/nix/dnadd { };
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_14;
+    nix = nixVersions.nix_2_16;
   };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };

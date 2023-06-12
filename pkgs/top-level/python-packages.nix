@@ -7825,6 +7825,8 @@ self: super: with self; {
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
+  python-opensky = callPackage ../development/python-modules/python-opensky { };
+
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
 
   python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
@@ -11235,6 +11237,8 @@ self: super: with self; {
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 
+  sisyphus-control = callPackage ../development/python-modules/sisyphus-control { };
+
   siuba = callPackage ../development/python-modules/siuba { };
 
   six = callPackage ../development/python-modules/six { };
@@ -11846,6 +11850,8 @@ self: super: with self; {
   svg-path = callPackage ../development/python-modules/svg-path { };
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
+
+  sv-ttk = callPackage ../development/python-modules/sv-ttk { };
 
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
