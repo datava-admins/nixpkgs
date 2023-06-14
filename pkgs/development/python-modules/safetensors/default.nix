@@ -3,7 +3,6 @@
 , buildPythonPackage
 , cargo
 , fetchFromGitHub
-, fetchpatch
 , h5py
 , numpy
 , pythonOlder
