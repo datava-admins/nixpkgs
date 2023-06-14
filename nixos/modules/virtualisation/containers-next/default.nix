@@ -142,12 +142,18 @@ let
 
   mkImage = name: config: { container = if (config.system-prebuilt != null) then config.system-prebuilt else config.system-config; inherit config; };
 
-  mkContainer = cfg: let inherit (cfg) container config; in mkMerge [
+  mkContainer = cfg: let
+    inherit (cfg) container config;
+    topLevelPath = if config.specialisation == null then
+      container.config.system.build.toplevel
+    else
+      container.config.specialisation.${config.specialisation}.configuration.system.build.toplevel;
+  in mkMerge [
     {
       execConfig = mkMerge [
         {
           Boot = false;
-          Parameters = "${container.config.system.build.toplevel}/init";
+          Parameters = "${topLevelPath}/init";
           Ephemeral = yesNo config.ephemeral;
           KillSignal = "SIGRTMIN+3";
           X-ActivationStrategy = config.activation.strategy;
@@ -179,7 +185,7 @@ let
     (mkIf (!config.sharedNix) {
       extraDrvConfig = let
         info = pkgs.closureInfo {
-          rootPaths = [ container.config.system.build.toplevel ];
+          rootPaths = [ topLevelPath ];
         };
       in pkgs.runCommand "bindmounts.nspawn" { }
         ''
@@ -317,6 +323,13 @@ in {
                 Script to run when a container is supposed to be reloaded.
               '';
             };
+          };
+          specialisation = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = ''
+              Load specialistion of system instead of toplevel;
+            '';
           };
 
           network = mkOption {
@@ -471,7 +484,7 @@ in {
 
       nspawn = mapAttrs (const mkContainer) images;
       targets.machines.wants = map (x: "systemd-nspawn@${x}.service") (attrNames cfg);
-      services = flip mapAttrs' cfg (container: { activation, timeoutStartSec, credentials, ... }:
+      services = flip mapAttrs' cfg (container: { activation, timeoutStartSec, credentials, specialisation, ... }:
         nameValuePair "systemd-nspawn@${container}" {
           preStart = mkBefore ''
             if [ ! -d /var/lib/machines/${container} ]; then
@@ -513,12 +526,17 @@ in {
               ];
             }
             (mkIf (elem activation.strategy [ "reload" "dynamic" ]) {
-              ExecReload = if activation.reloadScript != null
+              ExecReload = let
+                topLevelPath = if specialisation == null then
+                    images.${container}.container.config.system.build.toplevel
+                    else images.${container}.container.config.specialisation.${specialisation}.configuration.system.build.toplevel;
+              in
+              if activation.reloadScript != null
                 then "${activation.reloadScript}"
                 else "${pkgs.writeShellScript "activate" ''
                   pid=$(machinectl show ${container} --value --property Leader)
                   ${pkgs.util-linux}/bin/nsenter -t "$pid" -m -u -U -i -n -p \
-                    -- ${images.${container}.container.config.system.build.toplevel}/bin/switch-to-configuration test
+                    -- ${topLevelPath}/bin/switch-to-configuration test
                 ''}";
             })
           ];
