@@ -537,6 +537,7 @@ in {
 
           partOf = [ "machines.target" ];
           before = [ "machines.target" ];
+          unitConfig.RequiresMountsFor = [ "/var/lib/machines/${container}" ];
 
           environment = {
             SYSTEMD_NSPAWN_UNIFIED_HIERARCHY = "1";
