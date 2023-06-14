@@ -495,6 +495,7 @@ in {
 
           partOf = [ "machines.target" ];
           before = [ "machines.target" ];
+          unitConfig.RequiresMountsFor = [ "/var/lib/machines/${container}" ];
 
           serviceConfig = mkMerge [
             { TimeoutStartSec = timeoutStartSec;
