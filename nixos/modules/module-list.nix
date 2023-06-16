@@ -329,6 +329,8 @@
   ./services/audio/spotifyd.nix
   ./services/audio/squeezelite.nix
   ./services/audio/tts.nix
+  ./services/audio/wyoming/faster-whisper.nix
+  ./services/audio/wyoming/piper.nix
   ./services/audio/ympd.nix
   ./services/backup/automysqlbackup.nix
   ./services/backup/bacula.nix
@@ -1190,6 +1192,7 @@
   ./services/web-apps/galene.nix
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
+  ./services/web-apps/gotosocial.nix
   ./services/web-apps/grocy.nix
   ./services/web-apps/pixelfed.nix
   ./services/web-apps/healthchecks.nix

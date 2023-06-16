@@ -522,6 +522,12 @@
     githubId = 44871469;
     name = "Etienne Wodey";
   };
+  aither64 = {
+    email = "aither@havefun.cz";
+    github = "aither64";
+    githubId = 4717906;
+    name = "Jakub Skokan";
+  };
   ajgrf = {
     email = "a@ajgrf.com";
     github = "ajgrf";
@@ -2221,6 +2227,13 @@
     github = "bootstrap-prime";
     githubId = 68566724;
     name = "bootstrap-prime";
+  };
+  boozedog = {
+    email = "code@booze.dog";
+    github = "boozedog";
+    githubId = 1410808;
+    matrix = "@boozedog:matrix.org";
+    name = "David A. Buser";
   };
   borisbabic = {
     email = "boris.ivan.babic@gmail.com";
@@ -10810,6 +10823,12 @@
     keys = [{
       fingerprint = "6460 4147 C434 F65E C306  A21F 135E EDD0 F719 34F3";
     }];
+  };
+  moody = {
+    email = "moody@posixcafe.org";
+    github = "majiru";
+    githubId = 3579600;
+    name = "Jacob Moody";
   };
   moosingin3space = {
     email = "moosingin3space@gmail.com";

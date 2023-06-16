@@ -41,6 +41,7 @@ let
     "ipmi"
     "json"
     "jitsi"
+    "junos-czerwonk"
     "kea"
     "keylight"
     "knot"
