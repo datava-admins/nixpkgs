@@ -12232,6 +12232,8 @@ self: super: with self; {
     pythonSupport = true;
   });
 
+  tiny-proxy = callPackage ../development/python-modules/tiny-proxy { };
+
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
 
   tinycss = callPackage ../development/python-modules/tinycss { };
