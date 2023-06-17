@@ -435,6 +435,8 @@ with pkgs;
 
   checkpwn = callPackage ../tools/misc/checkpwn { };
 
+  banana-vera = callPackage ../development/tools/analysis/banana-vera { };
+
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
   ciel = callPackage ../tools/package-management/ciel { };
@@ -534,6 +536,10 @@ with pkgs;
   dhallToNix = callPackage ../build-support/dhall/to-nix.nix { };
 
   dinghy = with python3Packages; toPythonApplication dinghy;
+
+  djgpp = djgpp_i586;
+  djgpp_i586 = callPackage ../development/compilers/djgpp { targetArchitecture = "i586"; };
+  djgpp_i686 = lowPrio (callPackage ../development/compilers/djgpp { targetArchitecture = "i686"; });
 
   djhtml = python3Packages.callPackage ../development/tools/djhtml { };
 
@@ -10514,15 +10520,18 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud24 nextcloud25 nextcloud26;
+    nextcloud24 nextcloud25 nextcloud26 nextcloud27;
 
   nextcloud24Packages = throw "Nextcloud24 is EOL!";
-  nextcloud25Packages = ( callPackage ../servers/nextcloud/packages {
+  nextcloud25Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/25.json;
-  });
-  nextcloud26Packages = ( callPackage ../servers/nextcloud/packages {
+  };
+  nextcloud26Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/26.json;
-  });
+  };
+  nextcloud27Packages = callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/27.json;
+  };
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
@@ -11533,9 +11542,7 @@ with pkgs;
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
-  povray = callPackage ../tools/graphics/povray {
-    boost = boost175;
-  };
+  povray = callPackage ../tools/graphics/povray { };
 
   power-profiles-daemon = callPackage ../os-specific/linux/power-profiles-daemon { };
 
@@ -12179,6 +12186,8 @@ with pkgs;
 
   rustypaste-cli = callPackage ../tools/misc/rustypaste-cli { };
 
+  rustywind = callPackage ../development/tools/misc/rustywind { };
+
   rw = callPackage ../tools/misc/rw { };
 
   rwc = callPackage ../tools/system/rwc { };
@@ -12330,6 +12339,10 @@ with pkgs;
   seexpr = callPackage ../development/compilers/seexpr { };
 
   selectdefaultapplication = libsForQt5.callPackage ../applications/misc/selectdefaultapplication { };
+
+  semantic-release = callPackage ../development/tools/semantic-release {
+    inherit (darwin) cctools;
+  };
 
   semgrep = python3.pkgs.callPackage ../tools/security/semgrep { };
   semgrep-core = callPackage ../tools/security/semgrep/semgrep-core.nix { };
@@ -17085,7 +17098,7 @@ with pkgs;
   };
 
   inherit (beam.interpreters)
-    erlang erlang_25 erlang_24 erlang_23
+    erlang erlang_26 erlang_25 erlang_24 erlang_23
     erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10
     elixir-ls;
@@ -20137,6 +20150,8 @@ with pkgs;
 
   clipper = callPackage ../development/libraries/clipper { };
 
+  clipper2 = callPackage ../development/libraries/clipper2 { };
+
   cln = callPackage ../development/libraries/cln { };
 
   clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix {
@@ -22079,9 +22094,7 @@ with pkgs;
 
   liblscp = callPackage ../development/libraries/liblscp { };
 
-  libe-book = callPackage ../development/libraries/libe-book {
-    icu = icu67;
-  };
+  libe-book = callPackage ../development/libraries/libe-book { };
 
   libemf2svg = callPackage ../development/libraries/libemf2svg { };
 
@@ -23471,6 +23484,8 @@ with pkgs;
 
   oneDNN = callPackage ../development/libraries/oneDNN { };
 
+  oneDNN_2 = callPackage ../development/libraries/oneDNN/2.nix { };
+
   onedrive = callPackage ../applications/networking/sync/onedrive { };
 
   oneko = callPackage ../applications/misc/oneko { };
@@ -24470,6 +24485,8 @@ with pkgs;
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
   taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
+
+  tanidvr = callPackage ../applications/video/tanidvr { };
 
   talloc = callPackage ../development/libraries/talloc { };
 
@@ -26387,6 +26404,8 @@ with pkgs;
   qpid-cpp = callPackage ../servers/amqp/qpid-cpp { };
 
   qremotecontrol-server = libsForQt5.callPackage ../servers/misc/qremotecontrol-server { };
+
+  questdb = callPackage ../servers/nosql/questdb { };
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
@@ -31460,6 +31479,8 @@ with pkgs;
   hledger-web = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
+  hmm = callPackage ../applications/misc/hmm { };
+
   homebank = callPackage ../applications/office/homebank {
     gtk = gtk3;
   };
@@ -35895,6 +35916,8 @@ with pkgs;
 
   yuview = libsForQt5.yuview;
 
+  wallust = callPackage ../applications/misc/wallust { };
+
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zammad = callPackage ../applications/networking/misc/zammad { };
@@ -36219,9 +36242,7 @@ with pkgs;
 
   wasabibackend = callPackage ../applications/blockchains/wasabibackend { };
 
-  wownero = callPackage ../applications/blockchains/wownero {
-    boost = boost175;
-  };
+  wownero = callPackage ../applications/blockchains/wownero { };
 
   zcash = callPackage ../applications/blockchains/zcash {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -37919,6 +37940,8 @@ with pkgs;
   iv = callPackage ../applications/science/biology/iv {
     neuron-version = neuron.version;
   };
+
+  kalign = callPackage ../applications/science/biology/kalign { };
 
   kallisto = callPackage ../applications/science/biology/kallisto {
     autoconf = buildPackages.autoconf269;

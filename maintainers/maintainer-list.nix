@@ -7109,6 +7109,12 @@
     github = "j4m3s-s";
     githubId = 9413812;
   };
+  jacfal = {
+    name = "Jakub Pravda";
+    email = "me@jakubpravda.net";
+    github = "jakub-pravda";
+    githubId = 16310411;
+  };
   jacg = {
     name = "Jacek Generowicz";
     email = "jacg@my-post-office.net";
@@ -12050,6 +12056,15 @@
     github = "jackyliu16";
     githubId = 50787361;
   };
+  onemoresuza = {
+    name = "Coutinho de Souza";
+    email = "dev@onemoresuza.mailer.me";
+    github = "onemoresuza";
+    githubId = 106456302;
+    keys = [{
+      fingerprint = "484F D3B8 BAD7 BF5D 8B68  2AEA A2ED 1159 935E 4D7E";
+    }];
+  };
   onixie = {
     email = "onixie@gmail.com";
     github = "onixie";
@@ -12613,6 +12628,12 @@
     github = "Phlogistique";
     githubId = 421510;
     name = "Noé Rubinstein";
+  };
+  pho = {
+    email = "phofin@gmail.com";
+    github = "pho";
+    githubId = 88469;
+    name = "Jaime Breva";
   };
   photex = {
     email = "photex@gmail.com";
@@ -13675,7 +13696,7 @@
     name = "Riley Inman";
   };
   riotbib = {
-    email = "github-nix@lnrt.de";
+    email = "lennart@cope.cool";
     github = "riotbib";
     githubId = 43172581;
     name = "Lennart Mühlenmeier";
@@ -14543,6 +14564,12 @@
       fingerprint = "A317 37B3 693C 921B 480C  C629 4A2A AAA3 82F8 294C";
     }];
   };
+  sestrella = {
+    email = "sestrella.me@gmail.com";
+    github = "sestrella";
+    githubId = 2049686;
+    name = "Sebastián Estrella";
+  };
   seylerius = {
     name = "Sable Seyler";
     email = "sable@seyleri.us";
@@ -14766,6 +14793,12 @@
     github = "sigma";
     githubId = 16090;
     name = "Yann Hodique";
+  };
+  sigmanificient = {
+    email = "sigmanificient@gmail.com";
+    github = "Sigmanificient";
+    githubId = 53050011;
+    name = "Yohann Boniface";
   };
   sikmir = {
     email = "sikmir@disroot.org";
