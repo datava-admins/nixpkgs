@@ -676,7 +676,7 @@ been removed, in this case, it's recommended to use `pytestCheckHook`.
 `test` command for a `checkPhase` which runs `pytest`. This is also beneficial
 when a package may need many items disabled to run the test suite.
 
-Using the example above, the analagous `pytestCheckHook` usage would be:
+Using the example above, the analogous `pytestCheckHook` usage would be:
 
 ```
   nativeCheckInputs = [
@@ -700,7 +700,7 @@ Using the example above, the analagous `pytestCheckHook` usage would be:
   ];
 ```
 
-This is expecially useful when tests need to be conditionally disabled,
+This is especially useful when tests need to be conditionally disabled,
 for example:
 
 ```
