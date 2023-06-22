@@ -141,6 +141,25 @@ in
       path = optional cfg.enableNotifications pkgs.dbus;
       serviceConfig = {
         StandardError = "journal";
+        # Run as an unprivileged user with random user id
+        # BUG: TODO: Might break dbus notifications.
+        DynamicUser = true;
+        # Allow killing processes and calling mlockall()
+        AmbientCapabilities = [ "CAP_KILL" "CAP_IPC_LOCK" ];
+        # Give priority to our process
+        Nice = -20;
+        # Avoid getting killed by OOM
+        OOMScoreAdjust = -100;
+        # We don't need write access anywhere
+        ProtectSystem = "strict";
+        # We don't need /home at all, make it inaccessible
+        ProtectHome = true;
+        # earlyoom never exits on it's own, so have systemd
+        # restart it should it get killed for some reason.
+        Restart = "on-failure";
+        # set memory limits and max tasks number
+        TasksMax = 10;
+        MemoryMax = "50M";
         ExecStart = concatStringsSep " " ([
           "${pkgs.earlyoom}/bin/earlyoom"
           ("-m ${toString cfg.freeMemThreshold}"
