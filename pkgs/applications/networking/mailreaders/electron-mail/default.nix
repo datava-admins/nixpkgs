@@ -2,12 +2,12 @@
 
 let
   pname = "electron-mail";
-  version = "5.1.7";
+  version = "5.1.8";
   name = "ElectronMail-${version}";
 
   src = fetchurl {
     url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-4emQ48fjBWAwZjbePzr0pfs/9qG1iIF/va02MtVR+78=";
+    sha256 = "sha256-btqlxFrQUyb728i99IE65A9jwEFNvJ5b6zji0kwwATU=";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
