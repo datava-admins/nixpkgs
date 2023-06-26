@@ -158,6 +158,7 @@ let
           KillSignal = "SIGRTMIN+3";
           X-ActivationStrategy = config.activation.strategy;
           PrivateUsers = mkDefault "pick";
+          Timezone = "off";
         }
         (mkIf (!config.ephemeral) {
           LinkJournal = mkDefault "guest";
