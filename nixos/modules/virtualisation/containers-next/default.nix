@@ -497,6 +497,10 @@ in {
           before = [ "machines.target" ];
           unitConfig.RequiresMountsFor = [ "/var/lib/machines/${container}" ];
 
+          environment = {
+            SYSTEMD_NSPAWN_UNIFIED_HIERARCHY = "1";
+          };
+
           serviceConfig = mkMerge [
             { TimeoutStartSec = timeoutStartSec;
               # Inherit settings from `systemd-nspawn@.service`.
