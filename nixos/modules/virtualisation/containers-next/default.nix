@@ -524,6 +524,10 @@ in {
           partOf = [ "machines.target" ];
           before = [ "machines.target" ];
 
+          environment = {
+            SYSTEMD_NSPAWN_UNIFIED_HIERARCHY = "1";
+          };
+
           serviceConfig = mkMerge [
             {
               # Inherit settings from `systemd-nspawn@.service`.
