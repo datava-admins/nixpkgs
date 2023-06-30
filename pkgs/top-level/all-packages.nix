@@ -11343,6 +11343,8 @@ with pkgs;
 
   sewer = callPackage ../tools/admin/sewer { };
 
+  sexp = callPackage ../development/libraries/sexp { };
+
   sfeed = callPackage ../tools/misc/sfeed { };
 
   sftpman = callPackage ../tools/filesystems/sftpman { };
