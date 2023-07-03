@@ -207,7 +207,7 @@ class ManualDocBookRenderer(RendererMixin, DocBookRenderer):
                 raise RuntimeError(f"rendering {path}") from e
         return "".join(result)
     def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        conv = options.DocBookConverter(self._manpage_urls, self._revision, False, 'fragment',
+        conv = options.DocBookConverter(self._manpage_urls, self._revision, 'fragment',
                                         token.meta['list-id'], token.meta['id-prefix'])
         conv.add_options(token.meta['source'])
         return conv.finalize(fragment=True)
@@ -304,7 +304,8 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"',
             '  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
             '<html xmlns="http://www.w3.org/1999/xhtml">',
-            ' <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
+            ' <head>',
+            '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
             f' <title>{toc.target.title}</title>',
             "".join((f'<link rel="stylesheet" type="text/css" href="{html.escape(style, True)}" />'
                      for style in self._html_params.stylesheets)),
@@ -408,7 +409,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             ]
             examples = (
                 '<div class="list-of-examples">'
-                '<p><strong>List of Examples</strong><p>'
+                '<p><strong>List of Examples</strong></p>'
                 f'<dl>{"".join(examples_entries)}</dl>'
                 '</div>'
             )
@@ -469,7 +470,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         return "".join(outer)
 
     def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        conv = options.HTMLConverter(self._manpage_urls, self._revision, False,
+        conv = options.HTMLConverter(self._manpage_urls, self._revision,
                                      token.meta['list-id'], token.meta['id-prefix'],
                                      self._xref_targets)
         conv.add_options(token.meta['source'])

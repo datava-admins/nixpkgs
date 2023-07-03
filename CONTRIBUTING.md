@@ -61,6 +61,15 @@ Pull requests should not be squash merged in order to keep complete commit messa
 This means that, when addressing review comments in order to keep the pull request in an always mergeable status, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
 Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`. For more details consult the git man pages or online resources like [git-rebase.io](https://git-rebase.io/) or [The Pro Git Book](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
 
+## Testing changes
+
+To run the main types of tests locally:
+
+- Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`
+- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTest.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
+- Run [global package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests) with `nix-build --attr tests.PACKAGE`, where `PACKAGE` is the name of the test listed in `pkgs/test/default.nix`
+- See `lib/tests/NAME.nix` for instructions on running specific library tests
+
 ## Rebasing between branches (i.e. from master to staging)
 
 From time to time, changes between branches must be rebased, for example, if the
@@ -160,19 +169,6 @@ Anything that does not cause user or downstream dependency regressions can be ba
 - Version updates which include new functionality (but no breaking changes)
 - Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
 - Security critical applications (E.g. `firefox`)
-
-## Generating 23.11 Release Notes
-<!--
-note: title unchanged even though we don't need regeneration because extant
-PRs will link here. definitely change the title for 23.11 though.
--->
-
-Documentation in nixpkgs is transitioning to a markdown-centric workflow. In the past release notes required a translation step to convert from markdown to a compatible docbook document, but this is no longer necessary.
-
-Steps for updating 23.11 Release notes:
-
-1. Edit `nixos/doc/manual/release-notes/rl-2311.section.md` with the desired changes
-2. Commit changes to `rl-2311.section.md`.
 
 ## Reviewing contributions
 

@@ -55,6 +55,7 @@
 , nodejs
 , xdotool
 , xorg
+, xxd
 , zathura
 , zsh
 
@@ -127,6 +128,12 @@
 }:
 
 self: super: {
+  alpha-nvim = super.alpha-nvim.overrideAttrs(oa: {
+    dependencies = [
+      self.nvim-web-devicons # required by the startify theme
+    ];
+    nvimRequireCheck = "alpha";
+  });
 
   autosave-nvim = super.autosave-nvim.overrideAttrs(old: {
     dependencies = with super; [ plenary-nvim ];
@@ -165,6 +172,12 @@ self: super: {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
         -i "$out"/plugin/clighter8.vim
+    '';
+  });
+
+  clipboard-image-nvim = super.clipboard-image-nvim.overrideAttrs (old: {
+    postPatch = ''
+      sed -i -e 's/require "health"/vim.health/' lua/clipboard-image/health.lua
     '';
   });
 
@@ -459,6 +472,10 @@ self: super: {
     '';
   });
 
+  executor-nvim = super.executor-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nui-nvim ];
+  });
+
   fcitx-vim = super.fcitx-vim.overrideAttrs (old: {
     passthru.python3Dependencies = ps: with ps; [ dbus-python ];
     meta = {
@@ -567,6 +584,12 @@ self: super: {
 
   harpoon = super.harpoon.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
+  });
+
+  hex-nvim = super.hex-nvim.overrideAttrs (old: {
+    postPatch = ''
+      substituteInPlace lua/hex.lua --replace xxd ${xxd}/bin/xxd
+    '';
   });
 
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
@@ -787,6 +810,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  neorg = super.neorg.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim nui-nvim ];
   });
@@ -796,6 +823,10 @@ self: super: {
   });
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
+  nvim-coverage = super.nvim-coverage.overrideAttrs(old: {
     dependencies = with self; [ plenary-nvim ];
   });
 
@@ -912,7 +943,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-9iXKVlhoyyRXCP4Bx9rCHljETdE9UD9PNWqPYDurQnI=";
+        cargoHash = "sha256-IRp4avOvM2tz2oC1Cwr4W/d4i0pzawcZLP+c1+jnm+I=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -946,24 +977,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.3.3";
+      version = "1.3.4";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        hash = "sha256-my06P2fqWjZAnxVjVzIV8q+FQOlxRLVZs3OZ0XBR6N0=";
+        hash = "sha256-H1PmjiNyUp+fTDqnfppFii+aDh8gPD/ALHFNWVXch3w=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoLock = {
-          lockFile = ./sniprun/Cargo.lock;
-        };
-
-        postPatch = ''
-          ln -s ${./sniprun/Cargo.lock} Cargo.lock
-        '';
+        cargoHash = "sha256-WXhH0zqGj/D83AoEfs0kPqW7UXIAkURTJ+/BKbuUvss=";
 
         nativeBuildInputs = [ makeWrapper ];
 
