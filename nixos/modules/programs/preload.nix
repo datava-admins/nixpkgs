@@ -35,6 +35,9 @@ in {
         type = types.submodule {
           freeformType = settingsFormat.type;
         };
+
+        default = {};
+
         apply = recursiveUpdate default;
 
         description = ''
