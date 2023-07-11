@@ -8,6 +8,25 @@ let
   cfg = config.programs.preload;
   settingsFormat = pkgs.formats.ini {};
   configFile = settingsFormat.generate "preload.conf" cfg.settings;
+  default = {
+    model = {
+      cycle = 20;
+      usecorrelation = "true";
+      minsize = 2000000;
+      memtotal = -10;
+      memfree = 50;
+      memcached = 0;
+    };
+    system = {
+      doscan = "true";
+      dopredict = "true";
+      autosave = 3600;
+      mapprefix = "/run/current-system/sw/share;/run/current-system/sw/lib;!/";
+      exeprefix = "!/run/current-system/sw/sbin/;/run/current-system/sw/bin;!/";
+      processes = 30;
+      sortstrategy = 3;
+    };
+  };
 in {
   options = {
     programs.preload = {
@@ -18,25 +37,6 @@ in {
         };
         apply = recursiveUpdate default;
 
-        default = {
-          model = {
-            cycle = 20;
-            usecorrelation = "true";
-            minsize = 2000000;
-            memtotal = -10;
-            memfree = 50;
-            memcached = 0;
-          };
-          system = {
-            doscan = "true";
-            dopredict = "true";
-            autosave = 3600;
-            mapprefix = "/run/current-system/sw/share;/run/current-system/sw/lib;!/";
-            exeprefix = "!/run/current-system/sw/sbin/;/run/current-system/sw/bin;!/";
-            processes = 30;
-            sortstrategy = 3;
-          };
-        };
         description = ''
           Configuration for preload
         '';
