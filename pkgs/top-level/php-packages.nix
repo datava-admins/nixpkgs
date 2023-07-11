@@ -203,7 +203,17 @@ lib.makeScope pkgs.newScope (self: with self; {
   # This is a set of PHP extensions meant to be used in php.buildEnv
   # or php.withExtensions to extend the functionality of the PHP
   # interpreter.
-  extensions = {
+  # The extensions attributes is composed of three sections:
+  # 1. The contrib conditional extensions, which are only available on specific PHP versions
+  # 2. The contrib extensions available
+  # 3. The core extensions
+  extensions =
+  # Contrib conditional extensions
+   lib.optionalAttrs (!(lib.versionAtLeast php.version "8.3")) {
+    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
+  } //
+  # Contrib extensions
+  {
     amqp = callPackage ../development/php-packages/amqp { };
 
     apcu = callPackage ../development/php-packages/apcu { };
@@ -214,7 +224,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
-    datadog_trace = callPackage ../development/php-packages/datadog_trace { };
+    datadog_trace = pkgs.darwin.apple_sdk_11_0.callPackage ../development/php-packages/datadog_trace {
+      inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security CoreFoundation;
+      inherit (pkgs.darwin.apple_sdk_11_0) Libsystem;
+    };
 
     ds = callPackage ../development/php-packages/ds { };
 
@@ -237,7 +250,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     memcached = callPackage ../development/php-packages/memcached { };
 
-    mongodb = callPackage ../development/php-packages/mongodb { };
+    mongodb = pkgs.darwin.apple_sdk_11_0.callPackage ../development/php-packages/mongodb {
+      inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
+      inherit (pkgs.darwin.apple_sdk_11_0) Libsystem;
+    };
 
     msgpack = callPackage ../development/php-packages/msgpack { };
 
@@ -301,6 +317,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     zstd = callPackage ../development/php-packages/zstd { };
   } // (
+    # Core extensions
     let
       # This list contains build instructions for different modules that one may
       # want to build.
@@ -336,12 +353,6 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "fileinfo";
           buildInputs = [ pcre2 ];
-          patches = lib.optionals (lib.versionAtLeast php.version "8.3") [
-            # Fix the extension unable to be loaded due to missing `get_module` function.
-            # `ZEND_GET_MODULE` macro that creates it is conditional on `COMPILE_DL_FILEINFO` being defined.
-            # https://github.com/php/php-src/issues/11408#issuecomment-1602106200
-            ../development/interpreters/php/fix-fileinfo-ext-php83.patch
-          ];
         }
         { name = "filter"; buildInputs = [ pcre2 ]; }
         { name = "ftp"; buildInputs = [ openssl ]; }
@@ -541,15 +552,6 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         { name = "session";
           doCheck = false;
-          patches = lib.optionals (lib.versionAtLeast php.version "8.3") [
-            # Fix GH-11529: Crash after dealing with an Apache request
-            # To be removed in next alpha
-            # See https://github.com/php/php-src/issues/11529
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/8d4370954ec610164a4503431bb0c52da6954aa7.patch";
-              hash = "sha256-w1uF9lRdfhz9I0gux0J4cvMzNS93uSHL1fYG23VLDPc=";
-            })
-          ];
         }
         { name = "shmop"; }
         {
@@ -665,7 +667,5 @@ lib.makeScope pkgs.newScope (self: with self; {
       # Produce the final attribute set of all extensions defined.
     in
     builtins.listToAttrs namedExtensions
-  ) // lib.optionalAttrs (!(lib.versionAtLeast php.version "8.3")) {
-    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
-  };
+  );
 })
