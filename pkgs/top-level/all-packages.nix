@@ -11712,6 +11712,8 @@ with pkgs;
 
   pre-commit-hook-ensure-sops = callPackage ../tools/misc/pre-commit-hook-ensure-sops { };
 
+  preload = callPackage ../misc/preload {};
+
   pretender = callPackage ../tools/security/pretender { };
 
   prettierd = callPackage ../development/tools/prettierd { };

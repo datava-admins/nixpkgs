@@ -227,6 +227,7 @@
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
   ./programs/proxychains.nix
+  ./programs/preload.nix
   ./programs/qdmr.nix
   ./programs/qt5ct.nix
   ./programs/regreet.nix
