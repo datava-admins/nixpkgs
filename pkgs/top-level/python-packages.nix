@@ -488,6 +488,8 @@ self: super: with self; {
 
   annexremote = callPackage ../development/python-modules/annexremote { };
 
+  annotated-types = callPackage ../development/python-modules/annotated-types { };
+
   annoy = callPackage ../development/python-modules/annoy { };
 
   anonip = callPackage ../development/python-modules/anonip { };
@@ -3455,6 +3457,8 @@ self: super: with self; {
 
   expecttest = callPackage ../development/python-modules/expecttest { };
 
+  experiment-utilities = callPackage ../development/python-modules/experiment-utilities { };
+
   expiring-dict = callPackage ../development/python-modules/expiring-dict { };
 
   expiringdict = callPackage ../development/python-modules/expiringdict { };
@@ -4951,8 +4955,6 @@ self: super: with self; {
 
   img2pdf = callPackage ../development/python-modules/img2pdf { };
 
-  imgaug = callPackage ../development/python-modules/imgaug { };
-
   imgdiff = callPackage ../development/python-modules/imgdiff { };
 
   imgsize = callPackage ../development/python-modules/imgsize { };
@@ -6181,8 +6183,6 @@ self: super: with self; {
 
   mashumaro = callPackage ../development/python-modules/mashumaro { };
 
-  mask-rcnn = callPackage ../development/python-modules/mask-rcnn { };
-
   masky = callPackage ../development/python-modules/masky { };
 
   mastodon-py = callPackage ../development/python-modules/mastodon-py { };
@@ -6627,6 +6627,8 @@ self: super: with self; {
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
   mullvad-api = callPackage ../development/python-modules/mullvad-api { };
+
+  mullvad-closest = callPackage ../development/python-modules/mullvad-closest { };
 
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
@@ -7674,6 +7676,8 @@ self: super: with self; {
 
   pfzy = callPackage ../development/python-modules/pfzy { };
 
+  ping3 = callPackage ../development/python-modules/ping3 { };
+
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
   pgcli = callPackage ../development/python-modules/pgcli { };
@@ -7968,6 +7972,8 @@ self: super: with self; {
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
   pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
+
+  pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
@@ -9198,6 +9204,8 @@ self: super: with self; {
   pynrrd = callPackage ../development/python-modules/pynrrd { };
 
   pynvim = callPackage ../development/python-modules/pynvim { };
+
+  pynvim-pp = callPackage ../development/python-modules/pynvim-pp { };
 
   pynvml = callPackage ../development/python-modules/pynvml { };
 
@@ -10502,6 +10510,8 @@ self: super: with self; {
   qdrant-client = callPackage ../development/python-modules/qdrant-client { };
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
+
+  qgrid = callPackage ../development/python-modules/qgrid { };
 
   qiling = callPackage ../development/python-modules/qiling { };
 
@@ -11942,6 +11952,8 @@ self: super: with self; {
   statsd = callPackage ../development/python-modules/statsd { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
+
+  std2 = callPackage ../development/python-modules/std2 { };
 
   stdiomask = callPackage ../development/python-modules/stdiomask { };
 
