@@ -1,6 +1,6 @@
 { lib
 , rustPlatform
-, fetchFromGitHub
+, fetchCrate
 , installShellFiles
 , stdenv
 , nix-update-script
@@ -8,17 +8,15 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "cargo-asm";
-  version = "0.2.0";
+  pname = "cargo-show-asm";
+  version = "0.2.19";
 
-  src = fetchFromGitHub {
-    owner = "pacak";
-    repo = "cargo-show-asm";
-    rev = version;
-    hash = "sha256-qsr28zuvu+i7P/MpwhDKQFFXTyFFo+vWrjBrpD1V8PY=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-bIaEXlMIEQ2pnzjp7ll6iJFGAQjGb3HVBTbfGSPHrvg=";
   };
 
-  cargoHash = "sha256-IL+BB08uZr5fm05ITxpm66jTb+pYYlLKOwQ8uf5rKSs=";
+  cargoHash = "sha256-qmxd6qt8pL/5TWPDCiBQrvqb6r7VAJOrSR1OSpibQFU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -43,5 +41,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pacak/cargo-show-asm";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda oxalica ];
+    mainProgram = "cargo-asm";
   };
 }

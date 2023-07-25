@@ -5,22 +5,22 @@
 
 buildGoModule rec {
   pname = "mediamtx";
-  version = "0.22.2";
+  version = "0.23.7";
 
   src = fetchFromGitHub {
     owner = "aler9";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NGUEDOME6jzckHrzOboQr5KrZ8Z4iLCTHGCRGhbQThU=";
+    hash = "sha256-kkB4OuBBz9kdymUmXSkr3alE62O1T0woK5BNAwRBN4o=";
   };
 
-  vendorHash = "sha256-7+0+F1dW70GXjOzJ/+KTFZPp8o1w2wDvQlX0Zrrx7qU=";
+  vendorHash = "sha256-LCdMSyCbndus+VviT4Zp3mZ4ZzpF0F+ONroJsayb5lo=";
 
   # Tests need docker
   doCheck = false;
 
   ldflags = [
-    "-X github.com/aler9/mediamtx/internal/core.version=v${version}"
+    "-X github.com/bluenviron/mediamtx/internal/core.version=v${version}"
   ];
 
   meta = with lib; {

@@ -10,7 +10,7 @@
 
 let
   pname = "surrealdb-migrations";
-  version = "0.9.5";
+  version = "0.9.11";
 in
 rustPlatform.buildRustPackage rec {
   inherit pname version;
@@ -19,17 +19,12 @@ rustPlatform.buildRustPackage rec {
     owner = "Odonno";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-raDWqdOid4WSl6Ads8dmh7KI6NMWZrSwGfh+wbd/Vao=";
+    hash = "sha256-vCn5doVnD2TlwXhD7/mT+hLHTdNJUphID8MmX3D5+Xc=";
   };
 
-  cargoSha256 = "sha256-1+cvOhDeH9vx/8J1RwKLPdkBmqBKFmbNXv3H44pZfj0=";
-
-
-  # nativeBuildInputs = [
-  #   pkg-config
-  #   # needed on top of LIBCLANG_PATH to compile rquickjs
-  #   llvmPackages.clang
-  # ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   buildInputs = [ ]
     ++ lib.optionals stdenv.isDarwin [ Security ];

@@ -7,10 +7,9 @@
 , pkg-config
 , cli11
 , eigen
-, fmt
 , hidrd
 , inih
-, microsoft_gsl
+, microsoft-gsl
 , spdlog
 , systemd
 }:
@@ -38,10 +37,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cli11
     eigen
-    fmt
     hidrd
     inih
-    microsoft_gsl
+    microsoft-gsl
     spdlog
     systemd
   ];

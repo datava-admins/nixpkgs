@@ -19,17 +19,20 @@
 
 stdenv.mkDerivation rec {
   pname = "pods";
-  version = "1.1.3";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wZZBtvSMC83P38jzbZ1fX5f42WTPI68XGB1aG3gMYG0=";
+    sha256 = "sha256-1NeIrEr6judTR5zHhhboUncx953hEjIl0qVaWkMVNiU=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
+    outputHashes = {
+      "podman-api-0.10.0" = "sha256-nbxK/U5G+PlbytpHdr63x/C69hBgedPXBFfgdzT9fdc=";
+    };
   };
 
   nativeBuildInputs = [

@@ -13,9 +13,14 @@
 , version, src, meta, sourceRoot, commandLineArgs
 , executableName, longName, shortName, pname, updateScript
 , dontFixup ? false
+, rev ? null, vscodeServer ? null
+
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
 , sourceExecutableName ? executableName
+
+, useVSCodeRipgrep ? false
+, ripgrep
 }:
 
 let
@@ -27,6 +32,8 @@ let
       inherit executableName longName tests updateScript;
       fhs = fhs {};
       fhsWithPackages = f: fhs { additionalPkgs = f; };
+    } // lib.optionalAttrs (vscodeServer != null) {
+      inherit rev vscodeServer;
     };
 
     desktopItem = makeDesktopItem {
@@ -101,6 +108,11 @@ let
       # Override the previously determined VSCODE_PATH with the one we know to be correct
       sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}"
       grep -q "VSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}" # check if sed succeeded
+
+      # Remove native encryption code, as it derives the key from the executable path which does not work for us.
+      # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
+      # in the first place.
+      rm -rf $out/lib/vscode/resources/app/node_modules/vscode-encrypt
     '') + ''
       runHook postInstall
     '';
@@ -131,10 +143,17 @@ let
       # and the window immediately closes which renders VSCode unusable
       # see https://github.com/NixOS/nixpkgs/issues/152939 for full log
       ln -rs "$unpacked" "$packed"
-
-      # this fixes bundled ripgrep
-      chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
-    '';
+    '' + (let
+      vscodeRipgrep = if stdenv.isDarwin then
+        "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"
+      else
+        "resources/app/node_modules/@vscode/ripgrep/bin/rg";
+    in if !useVSCodeRipgrep then ''
+      rm ${vscodeRipgrep}
+      ln -s ${ripgrep}/bin/rg ${vscodeRipgrep}
+    '' else ''
+      chmod +x ${vscodeRipgrep}
+    '');
 
     inherit meta;
   };

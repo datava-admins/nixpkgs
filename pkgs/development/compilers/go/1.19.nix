@@ -47,11 +47,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.19.9";
+  version = "1.19.11";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${version}.src.tar.gz";
-    hash = "sha256-ExGQpGl6cMWx0jLfXT9Vo/nsDnjkBRYZb/s/Ca5qV0Q=";
+    hash = "sha256-4lyaty2BEUK39B/22lFl/sLRvl/uw+8sZrwL3stDFIk=";
   };
 
   strictDeps = true;

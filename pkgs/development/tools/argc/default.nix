@@ -2,28 +2,22 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, rust
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "argc";
-  version = "1.1.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-db75OoFmsR03lK99vGg8+fHJENOyoDFo+uqQJNYmI9M=";
+    hash = "sha256-B0oN5qYCShIsSvMFJB5EJPWOWM3Ubn8jl2gm+l5Wqg0=";
   };
 
-  cargoHash = "sha256-6TC4RWDcg4el+jkq8Jal0k+2sdNsjMkMYqP/b9wP5mU=";
+  cargoHash = "sha256-50ETDUKbK4oeVm9Ox44WVrAH5EAdH9F+sQk0WBTEQmY=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  preCheck = ''
-    export PATH=target/${rust.toRustTarget stdenv.hostPlatform}/release:$PATH
-  '';
 
   postInstall = ''
     installShellCompletion --cmd argc \

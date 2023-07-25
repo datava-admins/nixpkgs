@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , async-timeout
+, chacha20poly1305-reuseable
 , mock
 , noiseprotocol
 , protobuf
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "13.7.5";
+  version = "15.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -22,11 +23,12 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HBBhKRY3nfZ8TaQeXXlvowWqHt/vrwXD9PUb1cLvHLo=";
+    hash = "sha256-9wz8h0FwkjQywNLEL7gpYdlh+CwMrdUYZtfGw5/i2ME=";
   };
 
   propagatedBuildInputs = [
     async-timeout
+    chacha20poly1305-reuseable
     noiseprotocol
     protobuf
     zeroconf

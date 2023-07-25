@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.17.0";
+  version = "2.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gojQMjgA8mszGxVP0fsxzpL+mibz+Eg3NyCce/5Qrek=";
+    hash = "sha256-enDfQRHZy2lKJc7N0jKIJxWcUhOuHmMEyzq7OPN53Sk=";
   };
 
   propagatedBuildInputs = [

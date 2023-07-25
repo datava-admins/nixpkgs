@@ -126,7 +126,6 @@
 , withMultithread ? true # Multithreading via pthreads/win32 threads
 , withNetwork ? withHeadlessDeps # Network support
 , withPixelutils ? withHeadlessDeps # Pixel utils in libavutil
-, withLTO ? false # build with link-time optimization
 /*
  *  Program options
  */
@@ -384,7 +383,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     (enableFeature withSmallBuild "small")
     (enableFeature withRuntimeCPUDetection "runtime-cpudetect")
-    (enableFeature withLTO "lto")
     (enableFeature withGrayscale "gray")
     (enableFeature withSwscaleAlpha "swscale-alpha")
     (enableFeature withHardcodedTables "hardcoded-tables")
@@ -544,9 +542,10 @@ stdenv.mkDerivation (finalAttrs: {
   # outputs where we don't want them. Patch the generated config.h to remove all
   # such references except for data.
   postConfigure = let
-    toStrip = lib.remove "data" finalAttrs.outputs; # We want to keep references to the data dir.
+    toStrip = map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
+      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc;
   in
-    "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${placeholder o}") toStrip)} config.h";
+    "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
 
   nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ];
 

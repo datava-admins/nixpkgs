@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "23.13.26032.30";
+  version = "23.17.26241.24";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "sha256-KaU+11lY/chCySao1vLOejDJ9i4yjYWxaz0pzd8lWNY=";
+    sha256 = "sha256-FcI9bBJc23UlPP7qSBUc+t4e1X3UEJTYiy86N3KVWrs=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -34,6 +34,9 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "drivers" ];
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   postInstall = ''
     # Avoid clash with intel-ocl

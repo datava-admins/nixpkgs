@@ -5,6 +5,7 @@
 , makeWrapper
 , git
 , bash
+, coreutils
 , gitea
 , gzip
 , openssh
@@ -19,12 +20,12 @@
 
 buildGoModule rec {
   pname = "gitea";
-  version = "1.19.3";
+  version = "1.19.4";
 
   # not fetching directly from the git repo, because that lacks several vendor files for the web UI
   src = fetchurl {
     url = "https://dl.gitea.com/gitea/${version}/gitea-src-${version}.tar.gz";
-    hash = "sha256-rSvBeSnJ356Yba7tZXg0S11ZRzYmF3xnOl4ZUJ8XQYw=";
+    hash = "sha256-vNMNEKMpUoVLUGwPPVhLKfElFmjCWgZHY5i1liNs+xk=";
   };
 
   vendorHash = null;
@@ -34,7 +35,7 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    substituteInPlace modules/setting/setting.go --subst-var data
+    substituteInPlace modules/setting/server.go --subst-var data
   '';
 
   subPackages = [ "." ];
@@ -62,7 +63,7 @@ buildGoModule rec {
     cp -R ./options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
+      --prefix PATH : ${lib.makeBinPath [ bash coreutils git gzip openssh ]}
   '';
 
   passthru = {

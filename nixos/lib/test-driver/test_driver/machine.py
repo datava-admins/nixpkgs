@@ -369,8 +369,8 @@ class Machine:
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> StartCommand:
         rootlog.warning(
-            "Using legacy create_startcommand(),"
-            "please use proper nix test vm instrumentation, instead"
+            "Using legacy create_startcommand(), "
+            "please use proper nix test vm instrumentation, instead "
             "to generate the appropriate nixos test vm qemu startup script"
         )
         hda = None
@@ -514,7 +514,11 @@ class Machine:
         return "".join(output_buffer)
 
     def execute(
-        self, command: str, check_return: bool = True, timeout: Optional[int] = 900
+        self,
+        command: str,
+        check_return: bool = True,
+        check_output: bool = True,
+        timeout: Optional[int] = 900,
     ) -> Tuple[int, str]:
         self.run_callbacks()
         self.connect()
@@ -534,6 +538,9 @@ class Machine:
 
         assert self.shell
         self.shell.send(out_command.encode())
+
+        if not check_output:
+            return (-2, "")
 
         # Get the output
         output = base64.b64decode(self._next_newline_closed_block_from_shell())
@@ -641,7 +648,7 @@ class Machine:
             return status != 0
 
         with self.nested(f"waiting for failure: {command}"):
-            retry(check_failure)
+            retry(check_failure, timeout)
             return output
 
     def wait_for_shutdown(self) -> None:
@@ -745,7 +752,13 @@ class Machine:
             while not shell_ready(timeout_secs=30):
                 self.log("Guest root shell did not produce any data yet...")
 
-            self.log(self.shell.recv(1024).decode())
+            while True:
+                chunk = self.shell.recv(1024)
+                self.log(f"Guest shell says: {chunk!r}")
+                # NOTE: for this to work, nothing must be printed after this line!
+                if b"Spawning backdoor root shell..." in chunk:
+                    break
+
             toc = time.time()
 
             self.log("connected to guest root shell")
@@ -855,21 +868,37 @@ class Machine:
         with self.nested(f"waiting for {regex} to appear on screen"):
             retry(screen_matches)
 
-    def wait_for_console_text(self, regex: str) -> None:
+    def wait_for_console_text(self, regex: str, timeout: int | None = None) -> None:
+        """
+        Wait for the provided regex to appear on console.
+        For each reads,
+
+        If timeout is None, timeout is infinite.
+
+        `timeout` is in seconds.
+        """
+        # Buffer the console output, this is needed
+        # to match multiline regexes.
+        console = io.StringIO()
+
+        def console_matches(_: Any) -> bool:
+            nonlocal console
+            try:
+                # This will return as soon as possible and
+                # sleep 1 second.
+                console.write(self.last_lines.get(block=False))
+            except queue.Empty:
+                pass
+            console.seek(0)
+            matches = re.search(regex, console.read())
+            return matches is not None
+
         with self.nested(f"waiting for {regex} to appear on console"):
-            # Buffer the console output, this is needed
-            # to match multiline regexes.
-            console = io.StringIO()
-            while True:
-                try:
-                    console.write(self.last_lines.get())
-                except queue.Empty:
-                    self.sleep(1)
-                    continue
-                console.seek(0)
-                matches = re.search(regex, console.read())
-                if matches is not None:
-                    return
+            if timeout is not None:
+                retry(console_matches, timeout)
+            else:
+                while not console_matches(False):
+                    pass
 
     def send_key(
         self, key: str, delay: Optional[float] = 0.01, log: Optional[bool] = True

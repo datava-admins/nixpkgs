@@ -51,7 +51,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.15.2";
+  version = "0.15.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-cAmX3r6XhCBUnC/fNNPakZUNEcDFke0DJMi2PW7sOho=";
+    hash = "sha256-i1Lo6xbkCgRTJwRjk2bXkZ5a/JRUCzFzmEuPQlPvZf4=";
   };
 
   patches = [
@@ -251,14 +251,17 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     # Same as above
     "tests/pytest_tests/unit_tests/test_artifacts/test_storage.py"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals stdenv.isDarwin [
     # Same as above
     "tests/pytest_tests/unit_tests/test_lib/test_filesystem.py"
   ];
 
-  # Disable test that fails on darwin due to issue with python3Packages.psutil:
-  # https://github.com/giampaolo/psutil/issues/1219
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # Timing sensitive
+    "test_login_timeout"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Disable test that fails on darwin due to issue with python3Packages.psutil:
+    # https://github.com/giampaolo/psutil/issues/1219
     "test_tpu_system_stats"
   ];
 
