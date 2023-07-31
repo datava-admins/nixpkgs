@@ -11,6 +11,7 @@
 , ncurses
 , pkg-config
 , python3
+, scdoc
 
 , expat
 , fontconfig
@@ -54,11 +55,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-X3Z+f5r8surBW9FSsmWKZ/fr82ThXBUkS8fr/sTYR50=";
+    rev = "7b9f32300ee0a249c0872302c97635b460e45ba5";
+    hash = "sha256-KBx/5qEgPVHViPJvS/DK3vKWiO4l9KqCqjHaeGw/0MQ=";
   };
 
-  cargoHash = "sha256-JOmDmJl/y4WNsBnCixJykl4PgYgb5cSyo6MCdYmQAzQ=";
+  cargoHash = "sha256-ZIb70LhLcPp5rKl/Asbe+pYw1FLaObtxL/6N6fyDqm0=";
 
   nativeBuildInputs = [
     cmake
@@ -67,6 +68,7 @@ rustPlatform.buildRustPackage rec {
     ncurses
     pkg-config
     python3
+    scdoc
   ];
 
   buildInputs = rpathLibs
@@ -113,10 +115,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --fish extra/completions/alacritty.fish
 
     install -dm 755 "$out/share/man/man1"
-    gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
-    gzip -c extra/alacritty-msg.man > "$out/share/man/man1/alacritty-msg.1.gz"
-
-    install -Dm 644 alacritty.yml $out/share/doc/alacritty.yml
+    install -dm 755 "$out/share/man/man5"
+    scdoc < extra/man/alacritty.1.scd | gzip -c > "$out/share/man/man1/alacritty.1.gz"
+    scdoc < extra/man/alacritty-msg.1.scd | gzip -c > "$out/share/man/man1/alacritty-msg.1.gz"
+    scdoc < extra/man/alacritty.5.scd | gzip -c > "$out/share/man/man5/alacritty.5.gz"
+    scdoc < extra/man/alacritty-bindings.5.scd | gzip -c > "$out/share/man/man5/alacritty-bindings.5.gz"
 
     install -dm 755 "$terminfo/share/terminfo/a/"
     tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info
