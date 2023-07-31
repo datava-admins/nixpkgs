@@ -8077,8 +8077,6 @@ self: super: with self; {
 
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
-  pyre-extensions = callPackage ../development/python-modules/pyre-extensions { };
-
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
