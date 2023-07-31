@@ -1,34 +1,37 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  # propagateBuildInputs
-  typing-extensions,
-  typing-inspect,
-}: let
-  attrs = {
-    # NOTE: Kept in sync with xformers
-    pname = "pyre-extensions";
-    version = "0.0.29";
-
-    src = fetchPypi {
-      inherit (attrs) pname version;
-      hash = "sha256-QRNgBwbEcwahVtzJxAX01FjFBb5DJplXHjV+8g4tXXc=";
-    };
-
-    propagatedBuildInputs = [
-      typing-extensions
-      typing-inspect
-    ];
-
-    pythonImportsCheck = [(lib.strings.replaceStrings ["-"] ["_"] attrs.pname)];
-
-    meta = with lib; {
-      description = "Type system extensions for use with the pyre type checker";
-      homepage = "https://pyre-check.org";
-      license = licenses.mit;
-      maintainers = with maintainers; [connorbaker];
-    };
-  };
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+# build inputs
+, typing-extensions
+, typing-inspect
+}:
+let
+  pname = "pyre-extensions";
+  version = "0.0.30";
 in
-  buildPythonPackage attrs
+buildPythonPackage {
+  inherit pname version;
+  format = "setuptools";
+
+  disable = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-unkjxIbgia+zehBiOo9K6C1zz/QkJtcRxIrwcOW8MbI=";
+  };
+
+  propagatedBuildInputs = [
+    typing-extensions
+    typing-inspect
+  ];
+
+  pythonImportsCheck = [ "pyre_extensions" ];
+
+  meta = with lib; {
+    description = "This module defines extensions to the standard “typing” module that are supported by the Pyre typechecker";
+    homepage = "https://pypi.org/project/pyre-extensions";
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
+  };
+}

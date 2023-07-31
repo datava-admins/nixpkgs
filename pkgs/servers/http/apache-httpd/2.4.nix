@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
-, jansson, curl
+, fetchpatch
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = [ perl libxcrypt jansson curl ] ++
+  buildInputs = [ perl libxcrypt ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
     lib.optional modTlsSupport rustls-ffi ++
@@ -35,6 +35,14 @@ stdenv.mkDerivation rec {
     lib.optional libxml2Support libxml2 ++
     lib.optional http2Support nghttp2 ++
     lib.optional stdenv.isDarwin libiconv;
+
+  patches = lib.optionals modTlsSupport [
+    (fetchpatch {
+      name = "compat-with-rustls-ffi-0.10.0.patch";
+      url = "https://github.com/apache/httpd/commit/918620a183d843fb393ed939423a25d42c1044ec.patch";
+      hash = "sha256-YZi3t++hjM0skisax2xuh9DifZVZjCjVn6XQr6QKGEs=";
+    })
+  ];
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"

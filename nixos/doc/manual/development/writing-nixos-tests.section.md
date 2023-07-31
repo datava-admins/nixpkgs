@@ -139,6 +139,7 @@ to Python as `machine_a`.
 
 The following methods are available on machine objects:
 
+<<<<<<< HEAD
 `start`
 
 :   Start the virtual machine. This method is asynchronous --- it does
@@ -343,6 +344,9 @@ The following methods are available on machine objects:
     only be used during test development, not in production tests.
     Output from QEMU is only read line-wise. `Ctrl-c` kills QEMU and
     `Ctrl-d` closes console and returns to the test runner.
+=======
+@PYTHON_MACHINE_METHODS@
+>>>>>>> upstream/nixos-unstable
 
 To test user units declared by `systemd.user.services` the optional
 `user` argument can be used:

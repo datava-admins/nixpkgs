@@ -1,94 +1,85 @@
-{
-  buildPythonPackage,
-  config,
-  cudaPackages,
-  fetchFromGitHub,
-  lib,
-  symlinkJoin,
-  # nativeBuildInputs
-  git,
-  ninja,
-  which,
-  # propagatedBuildInputs
-  numpy,
-  pyre-extensions,
-  torch,
-}: let
-  cudaSupport = config.cudaSupport or false;
-
-  # Build-time dependencies
-  cuda-native-redist = symlinkJoin {
-    name = "cuda-native-redist-${cudaPackages.cudaVersion}";
-    paths = with cudaPackages; [
-      cuda_cccl #include <thrust/*>
-      cuda_cudart #include <cuda_runtime.h>
-      cuda_nvcc
-      libcublas #include <cublas_v2.h>
-      libcurand #include <curand_kernel.h>
-      libcusolver #include <cusolverDn.h>
-      libcusparse #include <cusparse.h>
-    ];
-  };
-
-  attrs = {
-    pname = "xformers";
-    version = "0.0.20";
-
-    src = fetchFromGitHub {
-      owner = "facebookresearch";
-      repo = attrs.pname;
-      rev = "v${attrs.version}";
-      fetchSubmodules = true;
-      leaveDotGit = true;
-      hash = "sha256-xFZ2+qu1sMmArn0EevRFOK7JSeMM/uDW7HV/h41R82U=";
-    };
-
-    nativeBuildInputs = [
-      cuda-native-redist
-      git
-      ninja
-      which
-    ];
-
-    propagatedBuildInputs = [
-      numpy
-      pyre-extensions
-      torch
-    ];
-
-    postPatch = ''
-      substituteInPlace xformers/__init__.py \
-        --replace "_is_functorch_available: bool = False" "_is_functorch_available: bool = True"
-    '';
-
-    preBuild =
-      ''
-        export XFORMERS_BUILD_TYPE=Release
-      ''
-      + lib.strings.optionalString cudaSupport ''
-        export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" torch.cudaCapabilities}"
-        export CC="${cudaPackages.backendStdenv.cc}/bin/cc"
-        export CXX="${cudaPackages.backendStdenv.cc}/bin/c++"
-      '';
-
-    # Note: Tests require ragged_inference, which is in the experimental module and is not built
-    # by default.
-    doCheck = false;
-    pythonImportsCheck = [attrs.pname];
-
-    passthru = {
-      inherit cudaSupport cudaPackages;
-      cudaCapabilities = lib.lists.optionals cudaSupport torch.cudaCapabilities;
-    };
-
-    meta = with lib; {
-      description = "Hackable and optimized Transformers building blocks, supporting a composable construction";
-      homepage = "https://github.com/facebookresearch/xformers";
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      broken = cudaSupport != torch.cudaSupport;
-      maintainers = with maintainers; [connorbaker];
-    };
-  };
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pythonRelaxDepsHook
+, which
+# runtime dependencies
+, numpy
+, torch
+, pyre-extensions
+# check dependencies
+, pytestCheckHook
+, pytest-cov
+# , pytest-mpi
+, pytest-timeout
+# , pytorch-image-models
+, hydra-core
+, fairscale
+, scipy
+, cmake
+, openai-triton
+, networkx
+}:
+let
+  version = "0.0.20";
 in
-  buildPythonPackage attrs
+buildPythonPackage {
+  pname = "xformers";
+  inherit version;
+  format = "setuptools";
+
+  disable = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "facebookresearch";
+    repo = "xformers";
+    rev = "v${version}";
+    hash = "sha256-OFH4I3eTKw1bQEKHh1AvkpcoShKK5R5674AoJ/mY85I=";
+    fetchSubmodules = true;
+  };
+
+  preBuild = ''
+    cat << EOF > ./xformers/version.py
+    # noqa: C801
+    __version__ = "${version}"
+    EOF
+  '';
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    which
+  ];
+
+  pythonRelaxDeps = [
+    "pyre-extensions"
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    torch
+    pyre-extensions
+  ];
+
+  pythonImportsCheck = [ "xformers" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov
+    pytest-timeout
+    hydra-core
+    fairscale
+    scipy
+    cmake
+    networkx
+    openai-triton
+  ];
+
+  meta = with lib; {
+    description = "XFormers: A collection of composable Transformer building blocks";
+    homepage = "https://github.com/facebookresearch/xformers";
+    changelog = "https://github.com/facebookresearch/xformers/blob/${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ happysalada ];
+  };
+}
