@@ -6679,6 +6679,12 @@
     githubId = 41522204;
     name = "hexchen";
   };
+  hexclover = {
+    email = "hexclover@outlook.com";
+    github = "hexclover";
+    githubId = 47456195;
+    name = "hexclover";
+  };
   heyimnova = {
     email = "git@heyimnova.dev";
     github = "heyimnova";
@@ -9667,6 +9673,12 @@
       fingerprint = "1763 9903 2D7C 5B82 5D5A  0EAD A2BC 3C6F 1435 1991";
     }];
   };
+  locochoco = {
+    email = "contact@locochoco.dev";
+    github = "loco-choco";
+    githubId = 58634087;
+    name = "Ivan Pancheniak";
+  };
   lodi = {
     email = "anthony.lodi@gmail.com";
     github = "lodi";
@@ -10277,6 +10289,13 @@
     githubId = 105451387;
     name = "Maria";
   };
+  marie = {
+    email = "tabmeier12+nix@gmail.com";
+    github = "nycodeghg";
+    githubId = 37078297;
+    matrix = "@marie:marie.cologne";
+    name = "Marie Ramlow";
+  };
   marijanp = {
     name = "Marijan Petričević";
     email = "marijan.petricevic94@gmail.com";
@@ -10510,6 +10529,12 @@
     keys = [{
       fingerprint = "CAEC A12D CE23 37A6 6DFD  17B0 7AC7 631D 70D6 C898";
     }];
+  };
+  max-amb = {
+    email = "maxpeterambaum@gmail.com";
+    github = "max-amb";
+    githubId = 137820334;
+    name = "Max Ambaum";
   };
   maxbrunet = {
     email = "max@brnt.mx";
@@ -18357,6 +18382,12 @@
     name = "Yuri Meister";
     github = "ymeister";
     githubId = 47071325;
+  };
+  yoavlavi = {
+    email = "yoav@yoavlavi.com";
+    github = "yoav-lavi";
+    githubId = 14347895;
+    name = "Yoav Lavi";
   };
   yochai = {
     email = "yochai@titat.info";
