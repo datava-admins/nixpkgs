@@ -342,7 +342,7 @@ with pkgs;
 
   beyond-identity = callPackage ../tools/security/beyond-identity { };
 
-  bibtex-tidy = nodePackages.bibtex-tidy;
+  bibtex-tidy = callPackage ../tools/typesetting/bibtex-tidy { };
 
   binbloom = callPackage ../tools/security/binbloom { };
 
@@ -424,6 +424,8 @@ with pkgs;
   catppuccin-papirus-folders = callPackage ../data/icons/catppuccin-papirus-folders { };
 
   catppuccin-plymouth = callPackage ../data/themes/catppuccin-plymouth { };
+
+  catppuccin-sddm-corners = callPackage ../data/themes/catppuccin-sddm-corners { };
 
   btdu = callPackage ../tools/misc/btdu { };
 
@@ -2510,9 +2512,7 @@ with pkgs;
 
   fusesoc = python3Packages.callPackage ../tools/package-management/fusesoc { };
 
-  fw = callPackage ../tools/misc/fw {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  fw = callPackage ../tools/misc/fw { };
 
   g810-led = callPackage ../misc/g810-led { };
 
@@ -2636,6 +2636,8 @@ with pkgs;
   };
 
   stella = callPackage ../applications/emulators/stella { };
+
+  tamatool = callPackage ../applications/emulators/tamatool { };
 
   termtekst = callPackage ../applications/emulators/termtekst { };
 
@@ -11817,6 +11819,8 @@ with pkgs;
 
   plotinus = callPackage ../tools/misc/plotinus { };
 
+  plots = callPackage ../applications/misc/plots { };
+
   plotutils = callPackage ../tools/graphics/plotutils { };
 
   plowshare = callPackage ../tools/misc/plowshare { };
@@ -11954,10 +11958,7 @@ with pkgs;
 
   prototypejs = callPackage ../development/libraries/prototypejs { };
 
-  inherit (callPackages ../tools/security/proxmark3 { gcc-arm-embedded = gcc-arm-embedded-8; })
-    proxmark3 proxmark3-unstable;
-
-  proxmark3-rrg = libsForQt5.callPackage ../tools/security/proxmark3/proxmark3-rrg.nix {
+  proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
   };
 
@@ -13480,7 +13481,7 @@ with pkgs;
 
   texstudio = qt6Packages.callPackage ../applications/editors/texstudio { };
 
-  textadept = callPackage ../applications/editors/textadept { };
+  textadept = libsForQt5.callPackage ../applications/editors/textadept { };
 
   texworks = qt6Packages.callPackage ../applications/editors/texworks { };
 
@@ -17092,6 +17093,7 @@ with pkgs;
   };
   rusty-man = callPackage ../development/tools/rust/rusty-man { };
   rustycli = callPackage ../development/tools/rust/rustycli { };
+  specr-transpile = callPackage ../development/tools/rust/specr-transpile { };
   typeshare = callPackage ../development/tools/rust/typeshare { };
 
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme { };
@@ -17881,6 +17883,11 @@ with pkgs;
   solargraph = rubyPackages.solargraph;
 
   rbenv = callPackage ../development/ruby-modules/rbenv { };
+
+  rubyfmt = callPackage ../development/tools/rubyfmt {
+    inherit (darwin.apple_sdk.frameworks) Foundation Security;
+    inherit (darwin) libobjc;
+  };
 
   inherit (callPackage ../development/interpreters/ruby {
     inherit (darwin) libobjc libunwind;
@@ -19210,7 +19217,8 @@ with pkgs;
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils { };
 
   ikos = callPackage ../development/tools/analysis/ikos {
-    inherit (llvmPackages_9) stdenv clang llvm;
+    inherit (llvmPackages_14) stdenv clang llvm;
+    tbb = tbb_2021_8;
   };
 
   img = callPackage ../development/tools/img { };
@@ -25452,6 +25460,8 @@ with pkgs;
   };
   zig = zig_0_10;
 
+  zigHook = callPackage ../development/compilers/zig/hook.nix { };
+
   zimlib = callPackage ../development/libraries/zimlib { };
 
   zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
@@ -27586,7 +27596,7 @@ with pkgs;
 
   gt = callPackage ../os-specific/linux/gt { };
 
-  inherit (nodePackages) gtop;
+  gtop = callPackage ../tools/system/gtop { };
 
   hd-idle = callPackage ../os-specific/linux/hd-idle { };
 
@@ -30753,6 +30763,8 @@ with pkgs;
     extraIntegrations = extras;
   };
 
+  dayon = callPackage ../applications/networking/remote/dayon { };
+
   ddgr = callPackage ../applications/misc/ddgr { };
 
   deadbeef = callPackage ../applications/audio/deadbeef { };
@@ -30819,7 +30831,7 @@ with pkgs;
   dnglab = callPackage ../tools/graphics/dnglab { };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_20_10;
+    docker_20_10 docker_24;
 
   docker = docker_20_10;
   docker-client = docker.override { clientOnly = true; };
@@ -31547,7 +31559,7 @@ with pkgs;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
   firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
   firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
-  firefox-esr-unwrapped = firefoxPackages.firefox-esr-102;
+  firefox-esr-unwrapped = firefoxPackages.firefox-esr-115;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped { };
@@ -31555,7 +31567,7 @@ with pkgs;
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
-  firefox-esr = firefox-esr-102;
+  firefox-esr = firefox-esr-115;
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
   firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
 
@@ -35016,6 +35028,8 @@ with pkgs;
 
   insync = callPackage ../applications/networking/insync { };
 
+  lemurs = callPackage ../applications/display-managers/lemurs { };
+
   libstrangle = callPackage ../tools/X11/libstrangle {
     stdenv = stdenv_32bit;
   };
@@ -36551,7 +36565,7 @@ with pkgs;
 
   zsteg = callPackage ../tools/security/zsteg { };
 
-  inherit (nodePackages) zx;
+  zx = callPackage ../tools/system/zx { };
 
   zxfer = callPackage ../applications/system/zxfer { };
 
@@ -41519,6 +41533,8 @@ with pkgs;
   ldid = callPackage ../development/tools/ldid {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+
+  ldid-procursus = callPackage ../development/tools/ldid-procursus { };
 
   xcolor = callPackage ../tools/graphics/xcolor { };
 
