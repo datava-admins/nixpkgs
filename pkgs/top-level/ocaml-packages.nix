@@ -343,6 +343,8 @@ let
 
     domain-local-await = callPackage ../development/ocaml-modules/domain-local-await { };
 
+    domain-local-timeout = callPackage ../development/ocaml-modules/domain-local-timeout { };
+
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
     domainslib = callPackage ../development/ocaml-modules/domainslib { };
@@ -797,6 +799,8 @@ let
 
     kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix { };
 
+    kcas = callPackage ../development/ocaml-modules/kcas { };
+
     ke = callPackage ../development/ocaml-modules/ke { };
 
     kicadsch = callPackage ../development/ocaml-modules/kicadsch { };
@@ -1000,7 +1004,7 @@ let
 
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
-    mirage-clock-freestanding = callPackage ../development/ocaml-modules/mirage-clock/freestanding.nix { };
+    mirage-clock-solo5 = callPackage ../development/ocaml-modules/mirage-clock/solo5.nix { };
 
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
 
@@ -1643,6 +1647,10 @@ let
       inherit (pkgs.python3Packages) torch;
     };
 
+    trace = callPackage ../development/ocaml-modules/trace { };
+
+    trace-tef = callPackage ../development/ocaml-modules/trace/tef.nix { };
+
     trie = callPackage ../development/ocaml-modules/trie { };
 
     tsdl = callPackage ../development/ocaml-modules/tsdl {
@@ -1795,7 +1803,7 @@ let
 
     ### End ###
 
-  })).overrideScope' liftJaneStreet;
+  })).overrideScope liftJaneStreet;
 
 in let inherit (pkgs) callPackage; in rec
 {

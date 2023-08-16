@@ -1,30 +1,38 @@
 { lib
 , stdenv
+, alembic
+, async-generator
+, beautifulsoup4
 , buildPythonPackage
-, pythonOlder
+, certipy
+, cryptography
+, entrypoints
 , fetchPypi
 , fetchzip
-, alembic
-, async_generator
-, certipy
-, python-dateutil
-, entrypoints
+, importlib-metadata
 , jinja2
+, jsonschema
 , jupyter-telemetry
+, jupyterlab
+, mock
+, nbclassic
+, nodePackages
+, notebook
 , oauthlib
+, packaging
 , pamela
+, playwright
 , prometheus-client
+, pytest-asyncio
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
 , requests
+, requests-mock
+, selenium
 , sqlalchemy
 , tornado
 , traitlets
-, nodePackages
-, beautifulsoup4
-, cryptography
-, notebook
-, pytest-asyncio
-, pytestCheckHook
-, requests-mock
 , virtualenv
 }:
 
@@ -61,12 +69,14 @@ in
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "1.5.0";
-  disabled = pythonOlder "3.6";
+  version = "4.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3GGPZXwjukYoDjYlflCTGAZnS6Dp5kmK+wke/GIm1p0=";
+    hash = "sha256-jig/9Z5cQBZxIHfSVJ7XSs2RWjKDb+ACGGeKh4G9ft4=";
   };
 
   # Most of this only applies when building from source (e.g. js/css assets are
@@ -111,21 +121,24 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    # https://github.com/jupyterhub/jupyterhub/blob/master/requirements.txt
     alembic
-    async_generator
+    async-generator
     certipy
     python-dateutil
     entrypoints
     jinja2
     jupyter-telemetry
     oauthlib
+    packaging
     pamela
     prometheus-client
     requests
+    selenium
     sqlalchemy
     tornado
     traitlets
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   preCheck = ''
@@ -134,10 +147,14 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    # https://github.com/jupyterhub/jupyterhub/blob/master/dev-requirements.txt
     beautifulsoup4
     cryptography
     notebook
+    jsonschema
+    nbclassic
+    mock
+    jupyterlab
+    playwright
     pytest-asyncio
     pytestCheckHook
     requests-mock
@@ -151,14 +168,39 @@ buildPythonPackage rec {
     "test_external_service"
     # attempts to do ssl connection
     "test_connection_notebook_wrong_certs"
+    # AttributeError: 'coroutine' object...
+    "test_valid_events"
+    "test_invalid_events"
+    "test_user_group_roles"
+  ];
+
+  disabledTestPaths = [
+    # Not testing with a running instance
+    # AttributeError: 'coroutine' object has no attribute 'db'
+    "docs/test_docs.py"
+    "jupyterhub/tests/browser/test_browser.py"
+    "jupyterhub/tests/test_api.py"
+    "jupyterhub/tests/test_auth_expiry.py"
+    "jupyterhub/tests/test_auth.py"
+    "jupyterhub/tests/test_metrics.py"
+    "jupyterhub/tests/test_named_servers.py"
+    "jupyterhub/tests/test_orm.py"
+    "jupyterhub/tests/test_pages.py"
+    "jupyterhub/tests/test_proxy.py"
+    "jupyterhub/tests/test_scopes.py"
+    "jupyterhub/tests/test_services_auth.py"
+    "jupyterhub/tests/test_singleuser.py"
+    "jupyterhub/tests/test_spawner.py"
+    "jupyterhub/tests/test_user.py"
   ];
 
   meta = with lib; {
-    broken = lib.versionAtLeast sqlalchemy.version "2.0";
     description = "Serves multiple Jupyter notebook instances";
     homepage = "https://jupyter.org/";
-    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/changelog.md";
+    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie cstrahan ];
+    # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }

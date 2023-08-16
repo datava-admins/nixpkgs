@@ -327,6 +327,23 @@ let
       '';
     };
 
+    idrac = {
+      exporterConfig = {
+        enable = true;
+        port = 9348;
+        configuration = {
+          hosts = {
+            default = { username = "username"; password = "password"; };
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-idrac-exporter.service")
+        wait_for_open_port(9348)
+        wait_until_succeeds("curl localhost:9348")
+      '';
+    };
+
     influxdb = {
       exporterConfig = {
         enable = true;
@@ -1203,7 +1220,7 @@ let
       };
       exporterTest = ''
         wait_until_succeeds(
-            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Device unavailable"'
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Unable to detect device type"'
         )
       '';
     };

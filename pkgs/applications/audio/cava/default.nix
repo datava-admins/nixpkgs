@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cava";
-  version = "0.8.3";
+  version = "0.9.0";
 
   buildInputs = [
     alsa-lib
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "karlstav";
     repo = "cava";
     rev = version;
-    sha256 = "sha256-6xiWhWynIbUWFIieiYIg24PgwnKuNSIEpkY+P6gyFGw=";
+    sha256 = "sha256-mIgkvgVcbRdE29lSLojIzIsnwZgnQ+B2sgScDWrLyd8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ offline mirrexagon ];
     platforms = platforms.linux;
+    mainProgram = "cava";
   };
 }
