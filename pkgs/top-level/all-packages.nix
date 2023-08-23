@@ -30186,10 +30186,11 @@ with pkgs;
     emacs29-gtk3
     emacs29-nox
     emacs29-pgtk
-    emacs-macport
+    emacs28-macport
+    emacs29-macport
   ;
 
-  emacsMacport = emacs-macport;
+  emacs-macport = emacs28-macport;
   emacs = emacs28;
   emacs-gtk = emacs28-gtk3;
   emacs-nox = emacs28-nox;
@@ -36875,11 +36876,15 @@ with pkgs;
 
   principia = callPackage ../games/principia { };
 
-  prismlauncher-qt5-unwrapped = libsForQt5.callPackage ../games/prismlauncher { };
+  prismlauncher-qt5-unwrapped = libsForQt5.callPackage ../games/prismlauncher {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   prismlauncher-qt5 = libsForQt5.callPackage ../games/prismlauncher/wrapper.nix { prismlauncher-unwrapped = prismlauncher-qt5-unwrapped; };
 
-  prismlauncher-unwrapped = qt6Packages.callPackage ../games/prismlauncher { };
+  prismlauncher-unwrapped = qt6Packages.callPackage ../games/prismlauncher {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   prismlauncher = qt6Packages.callPackage ../games/prismlauncher/wrapper.nix { };
 
