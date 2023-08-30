@@ -2003,6 +2003,10 @@ self: super: with self; {
 
   click-log = callPackage ../development/python-modules/click-log { };
 
+  click-odoo = callPackage ../development/python-modules/click-odoo { };
+
+  click-odoo-contrib = callPackage ../development/python-modules/click-odoo-contrib { };
+
   click-option-group = callPackage ../development/python-modules/click-option-group { };
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
@@ -6329,6 +6333,10 @@ self: super: with self; {
 
   manifest-ml = callPackage ../development/python-modules/manifest-ml { };
 
+  manifestoo = callPackage ../development/python-modules/manifestoo { };
+
+  manifestoo-core = callPackage ../development/python-modules/manifestoo-core { };
+
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix { };
 
   manuel = callPackage ../development/python-modules/manuel { };
@@ -9138,6 +9146,8 @@ self: super: with self; {
     inherit (pkgs.buildPackages) meson;
   };
 
+  pygobject-stubs = callPackage ../development/python-modules/pygobject-stubs { };
+
   pygogo = callPackage ../development/python-modules/pygogo { };
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
@@ -11641,6 +11651,8 @@ self: super: with self; {
   setuptools-git-versioning = callPackage ../development/python-modules/setuptools-git-versioning { };
 
   setuptools-lint = callPackage ../development/python-modules/setuptools-lint { };
+
+  setuptools-odoo = callPackage ../development/python-modules/setuptools-odoo { };
 
   setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
 

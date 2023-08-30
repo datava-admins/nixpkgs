@@ -378,6 +378,8 @@ with pkgs;
 
   circumflex = callPackage ../applications/networking/circumflex { };
 
+  citron = callPackage ../tools/misc/citron { };
+
   cxx-rs = callPackage ../development/libraries/cxx-rs { };
 
   elfcat = callPackage ../tools/misc/elfcat { };
@@ -1889,6 +1891,8 @@ with pkgs;
   };
 
   nominatim = callPackage ../servers/nominatim { };
+
+  ntpd-rs = callPackage ../tools/networking/ntpd-rs { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
@@ -9605,6 +9609,14 @@ with pkgs;
 
   jupyter = callPackage ../applications/editors/jupyter { };
 
+  jupyter-all = jupyter.override {
+    definitions = {
+      clojure = clojupyter.definition;
+      octave = octave-kernel.definition;
+      # wolfram = wolfram-for-jupyter-kernel.definition; # unfree
+    };
+  };
+
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
 
   justify = callPackage ../tools/text/justify { };
@@ -13227,7 +13239,9 @@ with pkgs;
   };
 
   soapui = callPackage ../applications/networking/soapui {
-    jdk = jdk11;
+    jdk = if stdenv.isDarwin
+      then (jdk11.override { enableJavaFX = true; })
+      else jdk11;
   };
 
   sockdump = callPackage ../tools/networking/sockdump { };
@@ -34342,6 +34356,8 @@ with pkgs;
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
+  ragnarwm = callPackage ../applications/window-managers/ragnarwm {};
+
   rime-cli = callPackage ../applications/office/rime-cli { };
 
   roxctl = callPackage ../applications/networking/cluster/roxctl {
@@ -42207,4 +42223,6 @@ with pkgs;
   wpm = callPackage ../applications/misc/wpm { };
 
   yazi = callPackage ../applications/file-managers/yazi { inherit (darwin.apple_sdk.frameworks) Foundation; };
+
+  ssl-proxy = callPackage ../tools/networking/ssl-proxy { };
 }
