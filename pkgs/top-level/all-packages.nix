@@ -678,6 +678,8 @@ with pkgs;
 
   glade = callPackage ../development/tools/glade { };
 
+  gobble = callPackage ../tools/X11/gobble { };
+
   goda = callPackage ../development/tools/goda { };
 
   gokrazy = callPackage ../development/misc/gokrazy { };
@@ -1656,6 +1658,8 @@ with pkgs;
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
 
+  asar = callPackage ../tools/compression/asar { };
+
   askalono = callPackage ../tools/misc/askalono { };
 
   asleap = callPackage ../tools/networking/asleap { };
@@ -1891,6 +1895,8 @@ with pkgs;
   };
 
   nominatim = callPackage ../servers/nominatim { };
+
+  npm-check-updates = callPackage ../tools/package-management/npm-check-updates { };
 
   ntpd-rs = callPackage ../tools/networking/ntpd-rs { };
 
@@ -4152,6 +4158,8 @@ with pkgs;
 
   atftp = callPackage ../tools/networking/atftp { };
 
+  atlas = callPackage ../development/tools/database/atlas { };
+
   authoscope = callPackage ../tools/security/authoscope {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -4787,7 +4795,9 @@ with pkgs;
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
-  wl-gammactl = callPackage ../tools/wayland/wl-gammactl { };
+  wl-gammactl = callPackage ../tools/wayland/wl-gammactl {
+    wlroots = wlroots_0_15;
+  };
 
   wluma = callPackage ../tools/wayland/wluma {  };
 
@@ -5407,7 +5417,9 @@ with pkgs;
 
   flashfocus = callPackage ../misc/flashfocus { };
 
-  qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
+  qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr {
+    wlroots = wlroots_0_15;
+  };
 
   fwup = callPackage ../tools/misc/fwup {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration;
@@ -5643,7 +5655,9 @@ with pkgs;
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
-  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker { };
+  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker {
+    wlroots = wlroots_0_15;
+  };
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
@@ -11819,9 +11833,7 @@ with pkgs;
 
   patchage = callPackage ../applications/audio/patchage { };
 
-  patchance = python3Packages.callPackage ../applications/audio/patchance {
-    inherit (qt5) qttools;
-  };
+  patchance = python3Packages.callPackage ../applications/audio/patchance { };
 
   patatt = callPackage ../development/tools/patatt { };
 
@@ -11922,7 +11934,9 @@ with pkgs;
 
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
 
-  phoc = callPackage ../applications/misc/phoc { };
+  phoc = callPackage ../applications/misc/phoc {
+    wlroots = wlroots_0_15;
+  };
 
   phockup = callPackage ../applications/misc/phockup { };
 
@@ -12126,9 +12140,7 @@ with pkgs;
 
   porsmo = callPackage ../applications/misc/porsmo { };
 
-  pantum-driver = callPackage ../misc/drivers/pantum-driver {
-    libjpeg8 = libjpeg.override { enableJpeg8 = true; };
-  };
+  pantum-driver = callPackage ../misc/drivers/pantum-driver { };
 
   posteid-seed-extractor = callPackage ../tools/security/posteid-seed-extractor { };
 
@@ -12301,9 +12313,7 @@ with pkgs;
 
   pystring = callPackage ../development/libraries/pystring { };
 
-  raysession = python3Packages.callPackage ../applications/audio/raysession {
-    inherit (qt5) qttools;
-  };
+  raysession = python3Packages.callPackage ../applications/audio/raysession {};
 
   revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
 
@@ -14873,7 +14883,6 @@ with pkgs;
   wkhtmltopdf = libsForQt5.callPackage ../tools/graphics/wkhtmltopdf { };
 
   wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin {
-    libjpeg8 = libjpeg.override { enableJpeg8 = true; };
     openssl = openssl_1_1;
   };
 
@@ -19517,6 +19526,8 @@ with pkgs;
 
   confluent-cli = callPackage ../development/tools/confluent-cli { };
 
+  html-minifier = callPackage ../development/tools/html-minifier { };
+
   htmlhint = callPackage ../development/tools/htmlhint { };
 
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
@@ -22308,7 +22319,7 @@ with pkgs;
 
   ispc = callPackage ../development/compilers/ispc {
     xcode = darwin.xcode_14;
-    llvmPackages = llvmPackages_14;
+    llvmPackages = llvmPackages_15;
   };
 
   isso = callPackage ../servers/isso {
@@ -23282,6 +23293,7 @@ with pkgs;
   # also known as libturbojpeg
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
   libjpeg = libjpeg_turbo;
+  libjpeg8 = libjpeg_turbo.override { enableJpeg8 = true; };
 
   libjreen = callPackage ../development/libraries/libjreen { };
 
@@ -25712,6 +25724,8 @@ with pkgs;
 
   whereami = callPackage ../development/libraries/whereami { };
 
+  where-is-my-sddm-theme = libsForQt5.callPackage ../data/themes/where-is-my-sddm-theme { };
+
   wildmidi = callPackage ../development/libraries/wildmidi {
     inherit (darwin.apple_sdk.frameworks) OpenAL;
   };
@@ -26185,17 +26199,17 @@ with pkgs;
     pkg = callPackage ../development/compilers/sbcl/bootstrap.nix {};
     faslExt = "fasl";
   };
-  sbcl_2_3_6 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.6"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_3_7 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.7"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_3_7;
+  sbcl_2_3_8 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.8"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_3_8;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -26400,7 +26414,11 @@ with pkgs;
 
   bind = callPackage ../servers/dns/bind { };
   dnsutils = bind.dnsutils;
-  dig = bind.dnsutils;
+  dig = bind.dnsutils // {
+    meta = bind.dnsutils.meta // {
+      mainProgram = "dig";
+    };
+  };
 
   bird = callPackage ../servers/bird { };
 
@@ -27337,9 +27355,7 @@ with pkgs;
   prometheus-sql-exporter = callPackage ../servers/monitoring/prometheus/sql-exporter.nix { };
   prometheus-systemd-exporter = callPackage ../servers/monitoring/prometheus/systemd-exporter.nix { };
   prometheus-tor-exporter = callPackage ../servers/monitoring/prometheus/tor-exporter.nix { };
-  prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix { };
   prometheus-v2ray-exporter = callPackage ../servers/monitoring/prometheus/v2ray-exporter.nix { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-vuls-exporter = callPackage ../servers/monitoring/prometheus/vuls-exporter.nix { };
@@ -30822,10 +30838,10 @@ with pkgs;
   };
   bitwig-studio3 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio3.nix { };
   bitwig-studio4 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio4.nix {
-    libjpeg = libjpeg.override { enableJpeg8 = true; };
+    libjpeg = libjpeg8;
   };
   bitwig-studio5 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio5.nix {
-    libjpeg = libjpeg.override { enableJpeg8 = true; };
+    libjpeg = libjpeg8;
   };
 
   bitwig-studio = bitwig-studio5;
@@ -31404,7 +31420,9 @@ with pkgs;
 
   dyff = callPackage ../development/tools/dyff { };
 
-  dwl = callPackage ../applications/window-managers/dwl { };
+  dwl = callPackage ../applications/window-managers/dwl {
+    wlroots = wlroots_0_16;
+  };
 
   dwm = callPackage ../applications/window-managers/dwm {
     # dwm is configured entirely through source modification. Allow users to
@@ -31790,6 +31808,8 @@ with pkgs;
   genxword = callPackage ../applications/misc/genxword { };
 
   geoipupdate = callPackage ../applications/misc/geoipupdate { };
+
+  glicol-cli = callPackage ../applications/audio/glicol-cli { };
 
   globe-cli = callPackage ../applications/misc/globe-cli { };
 
@@ -32827,7 +32847,9 @@ with pkgs;
 
   rootbar = callPackage ../applications/misc/rootbar { };
 
-  waybar = callPackage ../applications/misc/waybar { };
+  waybar = callPackage ../applications/misc/waybar {
+    wlroots = wlroots_0_15;
+  };
 
   waycorner = callPackage ../applications/misc/waycorner { };
 
@@ -32839,7 +32861,9 @@ with pkgs;
 
   wbg = callPackage ../applications/misc/wbg { };
 
-  hikari = callPackage ../applications/window-managers/hikari { };
+  hikari = callPackage ../applications/window-managers/hikari {
+    wlroots = wlroots_0_15;
+  };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
@@ -32905,7 +32929,9 @@ with pkgs;
 
   kitti3 = python3.pkgs.callPackage ../applications/window-managers/i3/kitti3.nix { };
 
-  waybox = callPackage ../applications/window-managers/waybox { };
+  waybox = callPackage ../applications/window-managers/waybox {
+    wlroots = wlroots_0_15;
+  };
 
   workstyle = callPackage ../applications/window-managers/i3/workstyle.nix { };
 
@@ -33452,7 +33478,9 @@ with pkgs;
 
   lame = callPackage ../development/libraries/lame { };
 
-  labwc = callPackage ../applications/window-managers/labwc { };
+  labwc = callPackage ../applications/window-managers/labwc {
+    wlroots = wlroots_0_16;
+  };
 
   larswm = callPackage ../applications/window-managers/larswm { };
 
@@ -34116,7 +34144,9 @@ with pkgs;
   wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
   mpv = wrapMpv mpv-unwrapped { };
 
-  mpvpaper = callPackage ../tools/wayland/mpvpaper { };
+  mpvpaper = callPackage ../tools/wayland/mpvpaper {
+    wlroots = wlroots_0_15;
+  };
 
   mpvScripts = import ../applications/video/mpv/scripts { inherit lib callPackage config; };
 
@@ -35332,6 +35362,8 @@ with pkgs;
 
   runc = callPackage ../applications/virtualization/runc { };
 
+  rust-traverse = callPackage ../applications/misc/rust-traverse { };
+
   rusty-psn = callPackage ../applications/misc/rusty-psn { };
 
   rusty-psn-gui = rusty-psn.override { withGui = true; };
@@ -35436,7 +35468,7 @@ with pkgs;
   sish = callPackage ../tools/networking/sish { };
 
   sky = libsForQt5.callPackage ../applications/networking/instant-messengers/sky {
-    libjpeg_turbo = libjpeg_turbo.override { enableJpeg8 = true; };
+    libjpeg_turbo = libjpeg8;
   };
 
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
@@ -35902,6 +35934,8 @@ with pkgs;
   termdbms = callPackage ../development/tools/database/termdbms { };
 
   termdown = python3Packages.callPackage ../applications/misc/termdown { };
+
+  termimage = callPackage ../tools/graphics/termimage { };
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier { };
 
@@ -39384,7 +39418,7 @@ with pkgs;
 
   inherit (callPackage ../development/libraries/science/math/magma {
     inherit (llvmPackages_rocm) openmp;
-  }) magma magma_2_7_1 magma_2_6_2;
+  }) magma magma_2_7_2 magma_2_6_2;
 
   magma-cuda = magma.override {
     cudaSupport = true;
