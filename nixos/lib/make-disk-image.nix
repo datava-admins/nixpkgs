@@ -618,12 +618,18 @@ let format' = format; in let
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
-        nixos-enter --root $mountPoint -- chown "root:users" "/etc/NIXOS"
-        nixos-enter --root $mountPoint -- chown 0:0 "/etc"
-        nixos-enter --root $mountPoint -- chown 0:0 "/root"
-        nixos-enter --root $mountPoint -- chown 0:0 "/nix"
-        nixos-enter --root $mountPoint -- chown -R 0:0 "/nix/store"
-        nixos-enter --root $mountPoint -- chown 0:0 "/nix/store"
+        echo "chown /etc/NIXOS"
+        nixos-enter --root $mountPoint -- chown "0:users" "/etc/NIXOS"
+        echo "chown /etc"
+        nixos-enter --root $mountPoint -- chown "0:0" "/etc"
+        echo "chown /root"
+        nixos-enter --root $mountPoint -- chown "0:0" "/root"
+        echo "chown /nix"
+        nixos-enter --root $mountPoint -- chown "0:0" "/nix"
+        echo "chown /nix/store (-R)"
+        nixos-enter --root $mountPoint -- chown -R "0:0" "/nix/store"
+        echo "chown /nix/store"
+        nixos-enter --root $mountPoint -- chown "0:0" "/nix/store"
         ls -lha /mnt/
         ls -lha /mnt/nix/
         ls -lha /mnt/etc/
