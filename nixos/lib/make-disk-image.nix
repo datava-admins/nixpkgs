@@ -619,13 +619,11 @@ let format' = format; in let
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
         nixos-enter --root $mountPoint -- chown "root:users" "/etc/NIXOS"
-        nixos-enter --root $mountPoint -- chown "root:root" "/etc"
-        nixos-enter --root $mountPoint -- chown "root:root" "/root"
-        nixos-enter --root $mountPoint -- chown "root:root" "/nix"
-        nixos-enter --root $mountPoint -- chown -R "root:root" "/nix/store"
-        nixos-enter --root $mountPoint -- chown "root:nixbld" "/nix/store"
-        nixos-enter --root $mountPoint -- ls -lha /
-        nixos-enter --root $mountPoint -- ls -lha /nix
+        nixos-enter --root $mountPoint -- chown 0:0 "/etc"
+        nixos-enter --root $mountPoint -- chown 0:0 "/root"
+        nixos-enter --root $mountPoint -- chown 0:0 "/nix"
+        nixos-enter --root $mountPoint -- chown -R 0:0 "/nix/store"
+        nixos-enter --root $mountPoint -- chown 0:0 "/nix/store"
         ls -lha /mnt/
         ls -lha /mnt/nix/
         ls -lha /mnt/etc/
