@@ -336,7 +336,9 @@ with pkgs;
 
   banana-accounting = callPackage ../applications/office/banana-accounting { };
 
-  beebeep = libsForQt5.callPackage ../applications/office/beebeep {};
+  beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
+
+  beeper = qt5.callPackage ../applications/networking/instant-messengers/beeper { };
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
@@ -347,6 +349,8 @@ with pkgs;
   beyond-identity = callPackage ../tools/security/beyond-identity { };
 
   bibtex-tidy = callPackage ../tools/typesetting/bibtex-tidy { };
+
+  bililiverecorder = callPackage ../servers/bililiverecorder { };
 
   binbloom = callPackage ../tools/security/binbloom { };
 
@@ -689,6 +693,8 @@ with pkgs;
   govulncheck = callPackage ../tools/security/govulncheck { };
 
   gpick = callPackage ../tools/misc/gpick { };
+
+  gradescope-submit = callPackage ../tools/misc/gradescope-submit { };
 
   gridlock = callPackage ../tools/nix/gridlock { };
   inherit (gridlock) nyarr;
@@ -1173,6 +1179,11 @@ with pkgs;
   fetchzip = callPackage ../build-support/fetchzip { }
     // {
       tests = pkgs.tests.fetchzip;
+    };
+
+  fetchDebianPatch = callPackage ../build-support/fetchdebianpatch { }
+    // {
+      tests = pkgs.tests.fetchDebianPatch;
     };
 
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
@@ -5653,6 +5664,8 @@ with pkgs;
 
   hyprland-share-picker = libsForQt5.callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland/hyprland-share-picker.nix { };
 
+  hyprnome = callPackage ../applications/misc/hyprnome { };
+
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
   hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker {
@@ -8386,7 +8399,7 @@ with pkgs;
   })
     garage
       garage_0_7 garage_0_8
-      garage_0_7_3 garage_0_8_2;
+      garage_0_7_3 garage_0_8_3;
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin { };
 
@@ -9818,6 +9831,7 @@ with pkgs;
 
   ligo = callPackage ../development/compilers/ligo {
     coq = coq_8_14;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15;
   };
 
   lego = callPackage ../tools/admin/lego { };
@@ -13687,6 +13701,8 @@ with pkgs;
 
   teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
 
+  teehee = callPackage ../applications/editors/teehee { };
+
   teip = callPackage ../tools/text/teip { };
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
@@ -15085,6 +15101,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  yx = callPackage ../tools/text/yx { };
+
   zarchive = callPackage ../tools/archivers/zarchive { };
 
   zprint = callPackage ../development/tools/zprint { };
@@ -15510,8 +15528,8 @@ with pkgs;
   colmap = libsForQt5.callPackage ../applications/science/misc/colmap { inherit (config) cudaSupport; };
   colmapWithCuda = colmap.override { cudaSupport = true; };
 
-  chickenPackages_4 = callPackage ../development/compilers/chicken/4 { };
-  chickenPackages_5 = callPackage ../development/compilers/chicken/5 { };
+  chickenPackages_4 = recurseIntoAttrs (callPackage ../development/compilers/chicken/4 { });
+  chickenPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/chicken/5 { });
   chickenPackages = dontRecurseIntoAttrs chickenPackages_5;
 
   inherit (chickenPackages_5)
@@ -15735,9 +15753,7 @@ with pkgs;
   flutterPackages =
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter-unwrapped = flutterPackages.stable;
-  flutter37-unwrapped = flutterPackages.v37;
   flutter = flutterPackages.wrapFlutter flutter-unwrapped;
-  flutter37 = flutterPackages.wrapFlutter flutter37-unwrapped;
 
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
@@ -17451,7 +17467,9 @@ with pkgs;
 
   stalin = callPackage ../development/compilers/stalin { };
 
-  stanc = callPackage ../development/compilers/stanc { };
+  stanc = callPackage ../development/compilers/stanc {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15;
+  };
 
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
@@ -24976,6 +24994,8 @@ with pkgs;
 
   rshell = python3.pkgs.callPackage ../development/embedded/rshell { };
 
+  rtlcss = callPackage ../development/libraries/rtlcss { };
+
   rttr = callPackage ../development/libraries/rttr { };
 
   rubberband = callPackage ../development/libraries/rubberband { };
@@ -27606,6 +27626,8 @@ with pkgs;
   unpackerr = callPackage ../servers/unpackerr {
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
   };
+
+  unstructured-api = callPackage ../servers/unstructured-api { };
 
   urserver = callPackage ../servers/urserver { };
 
@@ -34209,6 +34231,8 @@ with pkgs;
 
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
+  neosay = callPackage ../applications/networking/instant-messengers/neosay { };
+
   natron = libsForQt5.callPackage ../applications/video/natron { };
 
   natural-docs = callPackage ../applications/misc/natural-docs { };
@@ -34699,7 +34723,7 @@ with pkgs;
 
   orca-c = callPackage ../applications/audio/orca-c { };
 
-  organicmaps = libsForQt5.callPackage ../applications/misc/organicmaps { };
+  organicmaps = qt6Packages.callPackage ../applications/misc/organicmaps { };
 
   osm2xmap = callPackage ../applications/misc/osm2xmap { };
 
@@ -40135,7 +40159,15 @@ with pkgs;
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   golly = callPackage ../applications/science/misc/golly {
-    wxGTK = wxGTK32;
+    wxGTK = wxGTK32.overrideAttrs (x: {
+      configureFlags = x.configureFlags ++ [
+        "--enable-webrequest"
+      ];
+      buildInputs = x.buildInputs ++ [
+        curl
+      ];
+    });
+    perl = perl536;
   };
 
   megam = callPackage ../applications/science/misc/megam { };
