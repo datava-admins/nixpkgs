@@ -600,7 +600,6 @@ let format' = format; in let
       ${optionalString (fsType == "btrfs") ''
         echo "Creating Btrfs subvolumes and moving files..."
         ${concatStringsSep "\n" createSubvolumes}
-        #mv -u /mnt/roottmp/* /mnt/
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
         chown 0:0 /mnt/nix
         chown -R 0:0 /mnt/nix/store
@@ -612,7 +611,7 @@ let format' = format; in let
         echo "Creating Btrfs subvolumes and moving files..."
         du -shx /mnt/roottmp/*
         btrfs filesystem resize max /mnt/
-        cp --reflink=always --archive /mnt/roottmp/* /mnt/
+        #cp --reflink=always --archive /mnt/roottmp/* /mnt/
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
         echo "chown /etc/NIXOS"
