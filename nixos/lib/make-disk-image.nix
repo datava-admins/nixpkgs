@@ -604,7 +604,6 @@ let format' = format; in let
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
         chown 0:0 /mnt/nix
         chown -R 0:0 /mnt/nix/store
-        chown root:nixbld /mnt/nix/store
         btrfs subvolume list /mnt
         rm -rf /mnt/roottmp
         btrfs filesystem resize max /mnt
@@ -629,7 +628,7 @@ let format' = format; in let
         echo "chown /nix/store (-R)"
         nixos-enter --root $mountPoint -- chown -R "0:0" "/nix/store"
         echo "chown /nix/store"
-        nixos-enter --root $mountPoint -- chown "0:0" "/nix/store"
+        nixos-enter --root $mountPoint -- chown "0:nixbld" "/nix/store"
         ls -lha /mnt/
         ls -lha /mnt/nix/
         ls -lha /mnt/etc/
