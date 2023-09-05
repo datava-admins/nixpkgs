@@ -610,8 +610,6 @@ let format' = format; in let
       ''}
       ${optionalString (fsType == "btrfs") ''
         echo "Creating Btrfs subvolumes and moving files..."
-        ${concatStringsSep "\n" createSubvolumes}
-        df -h
         du -shx /mnt/roottmp/*
         btrfs filesystem resize max /mnt/
         cp --reflink=always --archive /mnt/roottmp/* /mnt/
