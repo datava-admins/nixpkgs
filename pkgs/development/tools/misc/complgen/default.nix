@@ -3,22 +3,23 @@
 , fetchFromGitHub
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "complgen";
-  version = "unstable-2023-08-22";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "adaszko";
     repo = "complgen";
-    rev = "8c9b9c51f3465c6d858e15f442b63e94b2f5ed1b";
-    hash = "sha256-oYRaH3FbAFY7QujgFpUDD8gVam4+Gm9qROxCTMYBg9I=";
+    rev = "v${version}";
+    hash = "sha256-zNYNwPPVlsvQiHy28rWB7OlnriJVktoFrDkJaIO9z8E=";
   };
 
-  cargoHash = "sha256-LHnIIkQLuY+A09qhxSiyLmUpX/dES7xBE5m1uRPI0i0=";
+  cargoHash = "sha256-BkflZ/d4TAZjjkQB5f0+rL4Zt7uWBLM3gM2UNKYZz+Q=";
 
   meta = with lib; {
     description = "Generate {bash,fish,zsh} completions from a single EBNF-like grammar";
     homepage = "https://github.com/adaszko/complgen";
+    changelog = "https://github.com/adaszko/complgen/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
   };

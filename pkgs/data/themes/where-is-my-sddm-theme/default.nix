@@ -23,13 +23,13 @@ in
 
 stdenvNoCC.mkDerivation rec {
   pname = "where-is-my-sddm-theme";
-  version = "1.3.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "stepanzubkov";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-40XTihp3hYbXzXSmgrmFCQjZUBkDi/NLiGQEs5ZmRIg=";
+    hash = "sha256-T6b+rxjlxZCQ/KDaxBM8ZryA3n6a+3jo+J2nETBYslM=";
   };
 
   propagatedUserEnvPkgs = [ qtgraphicaleffects ];

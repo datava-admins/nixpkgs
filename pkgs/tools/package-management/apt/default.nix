@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apt";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/a/apt/apt_${version}.tar.xz";
-    hash = "sha256-CVySyC/O/0zALdrcJHeFm4JjyI0wFdZ5mqcuMwE1my8=";
+    hash = "sha256-mtLrLE8lzjU12aXYBW4f6TLW27WMJkfNX8jfjJ+N71M=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +82,6 @@ stdenv.mkDerivation rec {
     changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${version}/debian/changelog";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

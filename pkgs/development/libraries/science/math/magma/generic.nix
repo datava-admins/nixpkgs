@@ -18,15 +18,12 @@
 , gfortran
 , cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
 , gpuTargets ? [ ] # Non-CUDA targets, that is HIP
-, hip
-, hipblas
-, hipsparse
+, rocmPackages
 , lapack
 , lib
 , libpthreadstubs
 , magmaRelease
 , ninja
-, openmp
 , rocmSupport ? false
 , static ? false
 , stdenv
@@ -47,7 +44,7 @@ let
   # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like cudaFlags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
-  rocmArches = lists.map (x: strings.removePrefix "gfx" x) hip.gpuTargets;
+  rocmArches = lists.map (x: strings.removePrefix "gfx" x) rocmPackages.clr.gpuTargets;
   supportedRocmArches = lists.intersectLists rocmArches supportedGpuTargets;
   unsupportedRocmArches = lists.subtractLists supportedRocmArches rocmArches;
 
@@ -113,18 +110,22 @@ stdenv.mkDerivation {
     lapack
     blas
   ] ++ lists.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart
-    libcublas # cublas_v2.h
-    libcusparse # cusparse.h
+    cuda_cudart.dev # cuda_runtime.h
+    cuda_cudart.lib # cudart
+    cuda_cudart.static # cudart_static
+    libcublas.dev # cublas_v2.h
+    libcublas.lib # cublas
+    libcusparse.dev # cusparse.h
+    libcusparse.lib # cusparse
   ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
-    cuda_nvprof # <cuda_profiler_api.h>
+    cuda_nvprof.dev # <cuda_profiler_api.h>
   ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
-    cuda_profiler_api # <cuda_profiler_api.h>
+    cuda_profiler_api.dev # <cuda_profiler_api.h>
   ]) ++ lists.optionals rocmSupport [
-    hip
-    hipblas
-    hipsparse
-    openmp
+    rocmPackages.clr
+    rocmPackages.hipblas
+    rocmPackages.hipsparse
+    rocmPackages.llvm.openmp
   ];
 
   cmakeFlags = [
@@ -138,8 +139,8 @@ stdenv.mkDerivation {
     "-DCMAKE_CXX_COMPILER=${backendStdenv.cc}/bin/c++"
     "-DMAGMA_ENABLE_CUDA=ON"
   ] ++ lists.optionals rocmSupport [
-    "-DCMAKE_C_COMPILER=${hip}/bin/hipcc"
-    "-DCMAKE_CXX_COMPILER=${hip}/bin/hipcc"
+    "-DCMAKE_C_COMPILER=${rocmPackages.clr}/bin/hipcc"
+    "-DCMAKE_CXX_COMPILER=${rocmPackages.clr}/bin/hipcc"
     "-DMAGMA_ENABLE_HIP=ON"
   ];
 

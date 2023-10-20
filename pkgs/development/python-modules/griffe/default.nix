@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.35.2";
+  version = "0.36.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Sskz14aAPqUXhQjetPfhjVm8gjG4yrck3sHpgD37DPU=";
+    hash = "sha256-e70SirkWOQveyH6qMe+v2JSoNFvEc0EwJ9tLQA0jxZI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

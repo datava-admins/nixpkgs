@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.7.3";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    hash = "sha256-BUbZe37rBZTr6nWb4lY2HHuwtq7toDUkGaJOiOoVkWI=";
+    hash = "sha256-5Tw7xltrsp+yGrdJ0O4MoFUvIaEiCQpMip5X1kfV/iM=";
   };
 
   vendorHash = null;

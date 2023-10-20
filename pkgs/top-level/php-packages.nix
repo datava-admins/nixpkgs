@@ -1,4 +1,6 @@
 { stdenv
+, config
+, callPackages
 , lib
 , pkgs
 , phpPackage
@@ -31,6 +33,7 @@
 , pam
 , pcre2
 , postgresql
+, bison
 , re2c
 , readline
 , rsync
@@ -43,11 +46,14 @@
 }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  buildPecl = import ../build-support/build-pecl.nix {
+  buildPecl = callPackage ../build-support/php/build-pecl.nix {
     php = php.unwrapped;
-    inherit lib;
-    inherit (pkgs) stdenv autoreconfHook fetchurl re2c nix-update-script;
   };
+
+  composerHooks = callPackages ../build-support/php/hooks { };
+
+  mkComposerRepository = callPackage ../build-support/php/build-composer-repository.nix { };
+  buildComposerProject = callPackage ../build-support/php/build-composer-project.nix { };
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
@@ -101,13 +107,21 @@ lib.makeScope pkgs.newScope (self: with self; {
         autoconf
         pkg-config
         re2c
+        bison
       ];
 
       inherit configureFlags internalDeps buildInputs zendExtension doCheck;
 
       preConfigurePhases = [
+        "genfiles"
         "cdToExtensionRootPhase"
       ];
+
+      genfiles = ''
+        if [ -f "scripts/dev/genfiles" ]; then
+          ./scripts/dev/genfiles
+        fi
+      '';
 
       cdToExtensionRootPhase = ''
         # Go to extension source root.
@@ -169,6 +183,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   tools = {
     box = callPackage ../development/php-packages/box { };
 
+    castor = callPackage ../development/php-packages/castor { };
+
     composer = callPackage ../development/php-packages/composer { };
 
     deployer = callPackage ../development/php-packages/deployer { };
@@ -218,8 +234,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     apcu = callPackage ../development/php-packages/apcu { };
 
-    apcu_bc = callPackage ../development/php-packages/apcu_bc { };
-
     ast = callPackage ../development/php-packages/ast { };
 
     couchbase = callPackage ../development/php-packages/couchbase { };
@@ -240,14 +254,17 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     imagick = callPackage ../development/php-packages/imagick { };
 
-    # Check PHP74 compat
     inotify = callPackage ../development/php-packages/inotify { };
 
     mailparse = callPackage ../development/php-packages/mailparse { };
 
     maxminddb = callPackage ../development/php-packages/maxminddb { };
 
+    memcache = callPackage ../development/php-packages/memcache { };
+
     memcached = callPackage ../development/php-packages/memcached { };
+
+    meminfo = callPackage ../development/php-packages/meminfo { };
 
     mongodb = callPackage ../development/php-packages/mongodb {
       inherit (pkgs) darwin;
@@ -285,9 +302,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
 
-    pdo_ibm = callPackage ../development/php-packages/pdo_ibm { };
-
-    php_excel = callPackage ../development/php-packages/php_excel { };
+    phalcon = callPackage ../development/php-packages/phalcon { };
 
     pinba = callPackage ../development/php-packages/pinba { };
 
@@ -298,6 +313,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     redis = callPackage ../development/php-packages/redis { };
 
     relay = callPackage ../development/php-packages/relay { inherit php; };
+
+    rrd = callPackage ../development/php-packages/rrd { };
 
     smbclient = callPackage ../development/php-packages/smbclient { };
 
@@ -318,8 +335,6 @@ lib.makeScope pkgs.newScope (self: with self; {
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
-
-    zstd = callPackage ../development/php-packages/zstd { };
   } // (
     # Core extensions
     let
@@ -386,13 +401,6 @@ lib.makeScope pkgs.newScope (self: with self; {
           configureFlags = [
             "--with-iconv${lib.optionalString stdenv.isDarwin "=${libiconv}"}"
           ];
-          patches = lib.optionals (lib.versionOlder php.version "8.0") [
-            # Header path defaults to FHS location, preventing the configure script from detecting errno support.
-            (fetchpatch {
-              url = "https://github.com/fossar/nix-phps/raw/263861a8c9bdafd7abe44db6db4ef0179643680c/pkgs/iconv-header-path.patch";
-              sha256 = "7GHnEUu+hcsQ4h3itDwk6p46ZKfib9JZ2XpWlXrdn6E=";
-            })
-          ];
           doCheck = false;
         }
         {
@@ -404,7 +412,6 @@ lib.makeScope pkgs.newScope (self: with self; {
           name = "intl";
           buildInputs = [ icu64 ];
         }
-        { name = "json"; enable = lib.versionOlder php.version "8.0"; }
         {
           name = "ldap";
           buildInputs = [ openldap cyrus_sasl ];
@@ -420,9 +427,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "mbstring";
-          buildInputs = [ oniguruma ] ++ lib.optionals (lib.versionAtLeast php.version "8.0") [
-            pcre2
-          ];
+          buildInputs = [ oniguruma pcre2 ];
           doCheck = false;
         }
         {
@@ -457,7 +462,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "opcache";
-          buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin && lib.versionAtLeast php.version "8.0") [
+          buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [
             valgrind.dev
           ];
           zendExtension = true;
@@ -614,15 +619,6 @@ lib.makeScope pkgs.newScope (self: with self; {
           ];
         }
         {
-          name = "xmlrpc";
-          buildInputs = [ libxml2 libiconv ];
-          # xmlrpc was unbundled in 8.0 https://php.watch/versions/8.0/xmlrpc
-          enable = lib.versionOlder php.version "8.0";
-          configureFlags = [
-            "--with-xmlrpc"
-          ];
-        }
-        {
           name = "xmlwriter";
           buildInputs = [ libxml2 ];
           configureFlags = [
@@ -632,7 +628,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "xsl";
           buildInputs = [ libxslt libxml2 ];
-          doCheck = lib.versionOlder php.version "8.0";
+          doCheck = false;
           configureFlags = [ "--with-xsl=${libxslt.dev}" ];
         }
         { name = "zend_test"; }

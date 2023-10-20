@@ -11,7 +11,6 @@
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , withInsults ? false
 , withSssd ? false
-, withStaticSudoers ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -58,8 +57,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withSssd [
     "--with-sssd"
     "--with-sssd-lib=${sssd}/lib"
-  ] ++ lib.optionals withStaticSudoers [
-    "--enable-static-sudoers"
   ];
 
   configureFlagsArray = [
@@ -105,7 +102,7 @@ stdenv.mkDerivation rec {
 
     license = "https://www.sudo.ws/sudo/license.html";
 
-    maintainers = with lib.maintainers; [ eelco delroth ma27 ];
+    maintainers = with lib.maintainers; [ delroth ];
 
     platforms = lib.platforms.linux;
   };

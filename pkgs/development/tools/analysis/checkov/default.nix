@@ -22,14 +22,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.4.18";
+  version = "2.5.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-iYfqriGCf+dbQx99+l7/636t/ArV2+6YI4SKW3+NLx8=";
+    hash = "sha256-cnlX40JwkSlqq+T328nQtI9v4RyW8EZ/nzXK9drdkSc=";
   };
 
   patches = [
@@ -65,7 +65,6 @@ buildPythonApplication rec {
     colorama
     configargparse
     cyclonedx-python-lib
-    deep_merge
     docker
     dockerfile-parse
     dpath
@@ -83,6 +82,7 @@ buildPythonApplication rec {
     prettytable
     pycep-parser
     pyyaml
+    rustworkx
     semantic-version
     spdx-tools
     tabulate

@@ -17,6 +17,8 @@ lib.makeScope newScope (self:
 
     asynctools = callPackage ../development/nim-packages/asynctools { };
 
+    atlas = callPackage ../development/nim-packages/atlas { };
+
     base32 = callPackage ../development/nim-packages/base32 { };
 
     base45 = callPackage ../development/nim-packages/base45 { };
@@ -30,6 +32,8 @@ lib.makeScope newScope (self:
     chroma = callPackage ../development/nim-packages/chroma { };
 
     coap = callPackage  ../development/nim-packages/coap { };
+
+    csvtools = callPackage ../development/nim-packages/csvtools { };
 
     db_connector = callPackage ../development/nim-packages/db_connector { };
 
@@ -66,6 +70,8 @@ lib.makeScope newScope (self:
 
     markdown = callPackage ../development/nim-packages/markdown { };
 
+    nimble = callPackage ../development/nim-packages/nimble { };
+
     nimcrypto = callPackage ../development/nim-packages/nimcrypto { };
 
     nimbox = callPackage ../development/nim-packages/nimbox { };
@@ -95,6 +101,8 @@ lib.makeScope newScope (self:
     rocksdb = callPackage ../development/nim-packages/rocksdb {
       inherit (pkgs) rocksdb;
     };
+
+    safeseq = callPackage ../development/nim-packages/safeseq { };
 
     safeset = callPackage ../development/nim-packages/safeset { };
 
