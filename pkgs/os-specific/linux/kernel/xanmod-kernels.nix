@@ -3,14 +3,14 @@
 let
   # These names are how they are designated in https://xanmod.org.
   ltsVariant = {
-    version = "6.1.37";
-    hash = "sha256-g8cmAhsM03jBu7UZoNOLBX7cGg8rz70/xhF7sJj9nCY=";
+    version = "6.1.58";
+    hash = "sha256-Lnp1CSh1jLbIkEx9hLfxhdIA12iQZmywhOec9uZ7UjI=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.4.1";
-    hash = "sha256-WPnINDkOj0IoUDLBG/2LOrppVi9o9XSSgMrs/NBbqdA=";
+    version = "6.5.8";
+    hash = "sha256-lHi+O7RE6YdiqPmuxHajGkc7jS9F5cB89+JbTVKkB/c=";
     variant = "main";
   };
 
@@ -29,9 +29,9 @@ let
       # AMD P-state driver
       X86_AMD_PSTATE = lib.mkOverride 60 yes;
 
-      # Google's BBRv2 TCP congestion Control
-      TCP_CONG_BBR2 = yes;
-      DEFAULT_BBR2 = yes;
+      # Google's BBRv3 TCP congestion Control
+      TCP_CONG_BBR = yes;
+      DEFAULT_BBR = yes;
 
       # FQ-PIE Packet Scheduling
       NET_SCH_DEFAULT = yes;
@@ -52,7 +52,7 @@ let
 
     extraMeta = {
       branch = lib.versions.majorMinor version;
-      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu shawn8901 ];
+      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu shawn8901 zzzsy ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
       broken = stdenv.isAarch64;
     };

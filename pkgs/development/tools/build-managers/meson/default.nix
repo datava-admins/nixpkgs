@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromGitHub
 , fetchpatch
 , installShellFiles
 , ninja
@@ -18,18 +18,16 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.1.1";
+  version = "1.2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0EtUH5fKQ5+4L6t9DUgJiL5L1OYlY6XKNfrbVAByexw=";
+  src = fetchFromGitHub {
+    owner = "mesonbuild";
+    repo = "meson";
+    rev = "refs/tags/${version}";
+    hash = "sha256-x2VN/6Kg/n6BW5S4nLKfG67dYrSR/G+Aowf6d2Vbc+0=";
   };
 
   patches = [
-    # Fix Meson tests that fail when the Nix store is case-sensitive APFS.
-    # https://github.com/mesonbuild/meson/pull/11820
-    ./darwin-case-sensitive-fs.patch
-
     # Meson is currently inspecting fewer variables than autoconf does, which
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827

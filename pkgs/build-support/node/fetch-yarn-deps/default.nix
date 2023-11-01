@@ -3,8 +3,10 @@
 let
   yarnpkg-lockfile-tar = fetchurl {
     url = "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz";
-    sha512 = "sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==";
+    hash = "sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==";
   };
+
+  tests = callPackage ./tests {};
 
 in {
   prefetch-yarn-deps = stdenv.mkDerivation {
@@ -38,6 +40,8 @@ in {
 
       runHook postInstall
     '';
+
+    passthru = { inherit tests; };
   };
 
   fetchYarnDeps = let
@@ -75,6 +79,6 @@ in {
     } // hash_ // (removeAttrs args ["src" "name" "hash" "sha256"]));
 
   in lib.setFunctionArgs f (lib.functionArgs f) // {
-    tests = callPackage ./tests {};
+    inherit tests;
   };
 }

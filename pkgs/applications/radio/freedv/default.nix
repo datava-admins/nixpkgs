@@ -25,16 +25,18 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.8.11";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-uI81dz0rU2/UnLvoQffuFOB3NGaTK0MJmCWGvGQKw24=";
+    hash = "sha256-3SQ3a1gg4/cXy8BJXazTgh6nkS/KQpM0fCA6JcbHOPc=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "-Wl,-ld_classic" ""
     substituteInPlace src/CMakeLists.txt \
       --replace "\''${CMAKE_SOURCE_DIR}/macdylibbundler/dylibbundler" "dylibbundler"
     sed -i "/hdiutil/d" src/CMakeLists.txt
@@ -69,7 +71,8 @@ stdenv.mkDerivation rec {
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
     "-DUSE_STATIC_DEPS:BOOL=FALSE"
     "-DUNITTEST=ON"
-  ] ++ lib.optionals pulseSupport [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
+    "-DUSE_PULSEAUDIO:BOOL=${if pulseSupport then "TRUE" else "FALSE"}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     "-DAPPLE_OLD_XCODE"

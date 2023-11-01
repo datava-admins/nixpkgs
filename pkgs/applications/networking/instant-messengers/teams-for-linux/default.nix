@@ -13,28 +13,25 @@
 , pipewire
 , alsa-utils
 , which
+, testers
+, teams-for-linux
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.1.11";
+  version = "1.3.14";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D0qZvKGfLE6VreCYn4Io2KmHcAHCVegG8xZwmxsQH5c=";
+    hash = "sha256-2H7j8e2wPMd4cHXDKxSmyC2Ng/B3jb3/tGVTpUOU3XM=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-Zk3TAoGAPeki/ogfNl/XqeBBn6N/kbNcktRHEyqPOAA=";
+    hash = "sha256-zB6H14VAf13pAHQmsWC51d/qqyfRmAEbltyLD5ucG4Y=";
   };
-
-  patches = [
-    # Can be removed once Electron upstream resolves https://github.com/electron/electron/issues/36660
-    ./screensharing-wayland-hack-fix.patch
-  ];
 
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
 
@@ -55,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -96,12 +93,16 @@ stdenv.mkDerivation (finalAttrs: {
   })];
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion rec {
+    package = teams-for-linux;
+    command = "HOME=$TMPDIR ${package.meta.mainProgram or package.pname} --version";
+  };
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight ];
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

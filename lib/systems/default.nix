@@ -85,17 +85,18 @@ rec {
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
-      extensions = rec {
-        sharedLibrary = assert final.hasSharedLibraries;
-          /**/ if final.isDarwin  then ".dylib"
+      extensions = lib.optionalAttrs final.hasSharedLibraries {
+        sharedLibrary =
+          if      final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
           else                         ".so";
+      } // {
         staticLibrary =
           /**/ if final.isWindows then ".lib"
           else                         ".a";
         library =
-          /**/ if final.isStatic then staticLibrary
-          else                        sharedLibrary;
+          /**/ if final.isStatic then final.extensions.staticLibrary
+          else                        final.extensions.sharedLibrary;
         executable =
           /**/ if final.isWindows then ".exe"
           else                         "";
@@ -177,11 +178,18 @@ rec {
         else if final.isLoongArch64 then "loongarch"
         else final.parsed.cpu.name;
 
+      # https://source.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L81-106
+      ubootArch =
+        if      final.isx86_32 then "x86"    # not i386
+        else if final.isMips64 then "mips64" # uboot *does* distinguish between mips32/mips64
+        else final.linuxArch;                # other cases appear to agree with linuxArch
+
       qemuArch =
         if final.isAarch32 then "arm"
         else if final.isS390 && !final.isS390x then null
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
+        else if final.isMips64n32 then "mipsn32${lib.optionalString final.isLittleEndian "el"}"
         else if final.isMips64 then "mips64${lib.optionalString final.isLittleEndian "el"}"
         else final.uname.processor;
 
@@ -223,6 +231,7 @@ rec {
               gtkSupport = false;
               sdlSupport = false;
               pulseSupport = false;
+              pipewireSupport = false;
               smbdSupport = false;
               seccompSupport = false;
               enableDocs = false;

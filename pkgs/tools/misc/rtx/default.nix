@@ -6,25 +6,28 @@
 , stdenv
 , coreutils
 , bash
+, pkg-config
+, openssl
 , direnv
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rtx";
-  version = "1.34.0";
+  version = "2023.10.2";
 
   src = fetchFromGitHub {
     owner = "jdxcode";
     repo = "rtx";
     rev = "v${version}";
-    sha256 = "sha256-ePRYlTGgZDrIClZ4kb9v62/FiLzZT6DzL3kaY6eAq5g=";
+    hash = "sha256-wp5+n8dSnCExxgnCHl0GhcWTu8J6nGBJnjzWmc7XJ3E=";
   };
 
-  cargoSha256 = "sha256-RFAIc4KfMvxz2BYX8x8j8T5evMqFP8ML4+wHwWdODVk=";
+  cargoHash = "sha256-Y/AUdg001/ezYHgOEt32go7DiIMLym9GyB88hG4NdKs=";
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+  buildInputs = [ openssl  ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   postPatch = ''
     patchShebangs --build ./test/data/plugins/**/bin/* ./src/fake_asdf.rs ./src/cli/reshim.rs
@@ -64,5 +67,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/jdxcode/rtx/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
+    mainProgram = "rtx";
   };
 }

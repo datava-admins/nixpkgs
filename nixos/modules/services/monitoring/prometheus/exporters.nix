@@ -36,6 +36,8 @@ let
     "fastly"
     "fritzbox"
     "graphite"
+    "idrac"
+    "imap-mailstat"
     "influxdb"
     "ipmi"
     "json"
@@ -49,6 +51,7 @@ let
     "mikrotik"
     "minio"
     "modemmanager"
+    "mysqld"
     "nextcloud"
     "nginx"
     "nginxlog"
@@ -56,6 +59,7 @@ let
     "nut"
     "openldap"
     "openvpn"
+    "pgbouncer"
     "php-fpm"
     "pihole"
     "postfix"
@@ -66,6 +70,7 @@ let
     "redis"
     "rspamd"
     "rtl_433"
+    "sabnzbd"
     "scaphandre"
     "script"
     "shelly"
@@ -296,6 +301,39 @@ in
           or 'services.prometheus.exporters.mail.configFile'.
       '';
     } {
+      assertion = cfg.mysqld.runAsLocalSuperUser -> config.services.mysql.enable;
+      message = ''
+        The exporter is configured to run as 'services.mysql.user', but
+          'services.mysql.enable' is set to false.
+      '';
+    } {
+      assertion = cfg.nextcloud.enable -> (
+        (cfg.nextcloud.passwordFile == null) != (cfg.nextcloud.tokenFile == null)
+      );
+      message = ''
+        Please specify either 'services.prometheus.exporters.nextcloud.passwordFile' or
+          'services.prometheus.exporters.nextcloud.tokenFile'
+      '';
+    } {
+      assertion =  cfg.pgbouncer.enable -> (
+        (cfg.pgbouncer.connectionStringFile != null || cfg.pgbouncer.connectionString != "")
+      );
+        message = ''
+          PgBouncer exporter needs either connectionStringFile or connectionString configured"
+        '';
+    } {
+      assertion = cfg.pgbouncer.enable -> (
+        config.services.pgbouncer.ignoreStartupParameters != null && builtins.match ".*extra_float_digits.*" config.services.pgbouncer.ignoreStartupParameters != null
+        );
+        message = ''
+          Prometheus PgBouncer exporter requires including `extra_float_digits` in services.pgbouncer.ignoreStartupParameters
+
+          Example:
+          services.pgbouncer.ignoreStartupParameters = extra_float_digits;
+
+          See https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+        '';
+    } {
       assertion = cfg.sql.enable -> (
         (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
       );
@@ -318,6 +356,14 @@ in
       message = ''
         Scaphandre needs 'intel_rapl_common' kernel module to be enabled. Please add it in 'boot.kernelModules'.
       '';
+    } {
+      assertion = cfg.idrac.enable -> (
+        (cfg.idrac.configurationPath == null) != (cfg.idrac.configuration == null)
+      );
+      message = ''
+        Please ensure you have either `services.prometheus.exporters.idrac.configuration'
+          or `services.prometheus.exporters.idrac.configurationPath' set!
+      '';
     } ] ++ (flip map (attrNames exporterOpts) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
       message = ''
@@ -325,7 +371,24 @@ in
         `openFirewall' is set to `true'!
       '';
     })) ++ config.services.prometheus.exporters.assertions;
-    warnings = config.services.prometheus.exporters.warnings;
+    warnings = [
+      (mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
+          Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
+          `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
+          Consider using `services.prometheus.exporters.idrac.configuration` instead.
+        ''
+      )
+      (mkIf
+        (cfg.pgbouncer.enable && cfg.pgbouncer.connectionString != "") ''
+          config.services.prometheus.exporters.pgbouncer.connectionString is insecure. Use connectionStringFile instead.
+        ''
+      )
+      (mkIf
+        (cfg.pgbouncer.enable && config.services.pgbouncer.authType != "any") ''
+          Admin user (with password or passwordless) MUST exist in the services.pgbouncer.authFile if authType other than any is used.
+        ''
+      )
+    ] ++ config.services.prometheus.exporters.warnings;
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;

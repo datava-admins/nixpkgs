@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
-  version = "0.15.0";
+  version = "0.20.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FLLlqpQ7Bf+oNRUvx7IniVxFusy/tPYxEP2T6VGF7h8=";
+    sha256 = "sha256-6ZHlDIKrTmr/aRz4k5FtRVxZ7B9Hlh2w42QT4YRsVi0=";
   };
 
   nativeBuildInputs= [

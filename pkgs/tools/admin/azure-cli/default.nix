@@ -1,45 +1,46 @@
-{ stdenv, lib, python3, fetchPypi, fetchFromGitHub, installShellFiles }:
+{ lib
+, callPackage
+, fetchFromGitHub
+, installShellFiles
+}:
 
 let
-  version = "2.49.0";
-  srcName = "azure-cli-${version}-src";
+  version = "2.53.0";
 
   src = fetchFromGitHub {
-    name = srcName;
+    name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-4R89RD4mDdhLdpgHQ8QT48cX+GzTLrSYPCwg0xWM8Ss=";
+    hash = "sha256-5c2Z0EJnKyLqWiz8/BEFAdy5A0+sBbai7UQ2KPL1jr8=";
   };
 
   # put packages that needs to be overridden in the py package scope
-  py = import ./python-packages.nix {
-    inherit stdenv lib src version python3 fetchPypi;
-  };
+  py = callPackage ./python-packages.nix { inherit src version; };
 in
+
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   pname = "azure-cli";
   inherit version src;
 
-  sourceRoot = "${srcName}/src/azure-cli";
+  sourceRoot = "${src.name}/src/azure-cli";
 
   prePatch = ''
     substituteInPlace setup.py \
       --replace "chardet~=3.0.4" "chardet" \
       --replace "javaproperties~=0.5.1" "javaproperties" \
       --replace "scp~=0.13.2" "scp" \
-      --replace "packaging>=20.9,<22.0" "packaging" \
       --replace "fabric~=2.4" "fabric"
 
     # remove namespace hacks
     # remove urllib3 because it was added as 'urllib3[secure]', which doesn't get handled well
     sed -i setup.py \
-      -e '/azure-cli-command_modules-nspkg/d' \
-      -e '/azure-cli-nspkg/d' \
       -e '/urllib3/d'
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   propagatedBuildInputs = with py.pkgs; [
     azure-appconfiguration
@@ -128,6 +129,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-web
     azure-multiapi-storage
     azure-storage-blob
+    azure-storage-common
     azure-synapse-accesscontrol
     azure-synapse-artifacts
     azure-synapse-managedprivateendpoints
@@ -269,8 +271,19 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   meta = with lib; {
     homepage = "https://github.com/Azure/azure-cli";
     description = "Next generation multi-platform command line experience for Azure";
+    downloadPage = "https://github.com/Azure/azure-cli/releases/tag/azure-cli-${version}";
+    longDescription = ''
+      The Azure Command-Line Interface (CLI) is a cross-platform
+      command-line tool to connect to Azure and execute administrative
+      commands on Azure resources. It allows the execution of commands
+      through a terminal using interactive command-line prompts or a script.
+    '';
+    changelog = "https://github.com/MicrosoftDocs/azure-docs-cli/blob/main/docs-ref-conceptual/release-notes-azure-cli.md";
+    sourceProvenance = [ sourceTypes.fromSource ];
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    mainProgram = "az";
+    maintainers = with maintainers; [ akechishiro jonringer ];
+    platforms = platforms.all;
   };
 })
 

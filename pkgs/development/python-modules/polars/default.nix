@@ -6,16 +6,17 @@
 , libiconv
 , fetchFromGitHub
 , typing-extensions
+, rust-jemalloc-sys
 , darwin
 }:
 let
   pname = "polars";
-  version = "0.18.0"; # Can't update to >0.18.0 until we get rust 1.71
+  version = "0.18.13";
   rootSource = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     rev = "refs/tags/py-${version}";
-    hash = "sha256-uzo8KPEegaVuzrfKUmsHheQfmm9hVMgkNJMWdfqDrw8=";
+    hash = "sha256-kV30r2wmswpCUmMRaFsCOeRrlTN5/PU0ogaU2JIHq0E=";
   };
 in
 buildPythonPackage {
@@ -35,7 +36,9 @@ buildPythonPackage {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "arrow2-0.17.3" = "sha256-pM6lNjMCpUzC98IABY+M23lbLj0KMXDefgBMjUPjDlg=";
       "jsonpath_lib-0.3.0" = "sha256-NKszYpDGG8VxfZSMbsTlzcMGFHBOUeFojNw4P2wM3qk=";
+      "simd-json-0.10.0" = "sha256-0q/GhL7PG5SLgL0EETPqe8kn6dcaqtyL+kLU9LL+iQs=";
     };
   };
   cargoRoot = "py-polars";
@@ -47,7 +50,9 @@ buildPythonPackage {
 
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
   ];

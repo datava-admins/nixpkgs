@@ -116,10 +116,10 @@ in {
   options = {
     services.hostapd = {
       enable = mkEnableOption (mdDoc ''
-        Whether to enable hostapd. hostapd is a user space daemon for access point and
+        hostapd, a user space daemon for access point and
         authentication servers. It implements IEEE 802.11 access point management,
         IEEE 802.1X/WPA/WPA2/EAP Authenticators, RADIUS client, EAP server, and RADIUS
-        authentication server.
+        authentication server
       '');
 
       package = mkPackageOption pkgs "hostapd" {};
@@ -921,9 +921,7 @@ in {
                 };
 
                 config = let
-                  bss = bssSubmod.name;
                   bssCfg = bssSubmod.config;
-
                   pairwiseCiphers =
                     concatStringsSep " " (unique (bssCfg.authentication.pairwiseCiphers
                       ++ optionals bssCfg.authentication.enableRecommendedPairwiseCiphers ["CCMP" "CCMP-256" "GCMP" "GCMP-256"]));
@@ -964,9 +962,9 @@ in {
                   } // optionalAttrs (bssCfg.bssid != null) {
                     bssid = bssCfg.bssid;
                   } // optionalAttrs (bssCfg.macAllow != [] || bssCfg.macAllowFile != null || bssCfg.authentication.saeAddToMacAllow) {
-                    accept_mac_file = "/run/hostapd/${bss}.mac.allow";
+                    accept_mac_file = "/run/hostapd/${bssCfg._module.args.name}.mac.allow";
                   } // optionalAttrs (bssCfg.macDeny != [] || bssCfg.macDenyFile != null) {
-                    deny_mac_file = "/run/hostapd/${bss}.mac.deny";
+                    deny_mac_file = "/run/hostapd/${bssCfg._module.args.name}.mac.deny";
                   } // optionalAttrs (bssCfg.authentication.mode == "none") {
                     wpa = mkDefault 0;
                   } // optionalAttrs (bssCfg.authentication.mode == "wpa3-sae") {
@@ -989,7 +987,7 @@ in {
                   } // optionalAttrs (bssCfg.authentication.wpaPassword != null) {
                     wpa_passphrase = bssCfg.authentication.wpaPassword;
                   } // optionalAttrs (bssCfg.authentication.wpaPskFile != null) {
-                    wpa_psk_file = bssCfg.authentication.wpaPskFile;
+                    wpa_psk_file = toString bssCfg.authentication.wpaPskFile;
                   };
 
                   dynamicConfigScripts = let
@@ -1051,7 +1049,6 @@ in {
           };
 
           config.settings = let
-            radio = radioSubmod.name;
             radioCfg = radioSubmod.config;
           in {
             driver = radioCfg.driver;
@@ -1268,6 +1265,7 @@ in {
           "AF_INET6"
           "AF_NETLINK"
           "AF_UNIX"
+          "AF_PACKET"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;

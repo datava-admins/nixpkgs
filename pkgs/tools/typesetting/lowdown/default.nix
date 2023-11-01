@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fixDarwinDylibNames, which, dieHook
-, enableShared ? !(stdenv.hostPlatform.isStatic)
+, enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 # for passthru.tests
 , nix
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "1cizrzmldi7lrgdkpn4b6skp1b5hz2jskkbcbv9k6lmz08clm02gyifh7fgd8j2rklqsim34n5ifyg83xhsjzd57xqjys1ccjdn3a5m";
+    hash = "sha512-tahhm2QsaC9xP6V9qWEf6HkXiyWjRo3pzEKi9tyBLvonQKUMgV+pmWkvtubUUnxYVrhTm0Xsne1lemKj9ecfWQ==";
   };
 
   nativeBuildInputs = [ which dieHook ]
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      inherit (stdenv.hostPlatform.extensions) sharedLibrary;
       soVersion = "3";
     in
 

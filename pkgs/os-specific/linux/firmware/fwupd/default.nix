@@ -54,6 +54,7 @@
 , libcbor
 , xz
 , enableFlashrom ? false
+, enablePassim ? false
 }:
 
 let
@@ -123,7 +124,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.3";
+  version = "1.9.6";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -134,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-IVP5RVHRxWkvPqndiuCxiguYWN5d32qJo9YzBOHoyUk";
+    hash = "sha256-9mA6gETnOmmkI+cdF0kP1moPV6DDvASq1JXarupM/tU=";
   };
 
   patches = [
@@ -212,9 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dplugin_dummy=true"
     # We are building the official releases.
     "-Dsupported_build=enabled"
-    # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
-    # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
-    "-Dsoup_session_compat=false"
+    "-Dlaunchd=disabled"
     "-Dudevdir=lib/udev"
     "-Dsystemd_root_prefix=${placeholder "out"}"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
@@ -223,11 +222,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Defi_os_dir=nixos"
     "-Dplugin_modem_manager=enabled"
-
     # We do not want to place the daemon into lib (cyclic reference)
     "--libexecdir=${placeholder "out"}/libexec"
+  ] ++ lib.optionals (!enablePassim) [
+    "-Dpassim=disabled"
   ] ++ lib.optionals (!haveDell) [
-    "-Dplugin_dell=disabled"
     "-Dplugin_synaptics_mst=disabled"
   ] ++ lib.optionals (!haveRedfish) [
     "-Dplugin_redfish=disabled"
@@ -351,8 +350,6 @@ stdenv.mkDerivation (finalAttrs: {
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA.pem"
       "grub.d/35_fwupd"
-    ] ++ lib.optionals haveDell [
-      "fwupd/remotes.d/dell-esrt.conf"
     ];
 
     # DisabledPlugins key in fwupd/daemon.conf
@@ -399,7 +396,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://fwupd.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ rvdp ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

@@ -18,16 +18,17 @@
 , autoPatchelfHook
 , buildPythonPackage
 , config
-, cudnn ? cudaPackages.cudnn
+, fetchPypi
 , fetchurl
 , flatbuffers
-, isPy39
+, jaxlib-build
 , lib
+, ml-dtypes
 , python
 , scipy
 , stdenv
   # Options:
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
 
@@ -35,61 +36,136 @@ let
   inherit (cudaPackages) cudatoolkit cudnn;
 in
 
-assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1";
-assert cudaSupport -> lib.versionAtLeast cudnn.version "8.2";
+assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1" && lib.versionAtLeast cudnn.version "8.2" && stdenv.isLinux;
 
 let
-  version = "0.4.4";
+  version = "0.4.19";
 
-  pythonVersion = python.pythonVersion;
+  inherit (python) pythonVersion;
+
+  # As of 2023-06-06, google/jax upstream is no longer publishing CPU-only wheels to their GCS bucket. Instead the
+  # official instructions recommend installing CPU-only versions via PyPI.
+  cpuSrcs =
+    let
+      getSrcFromPypi = { platform, dist, hash }: fetchPypi {
+        inherit version platform dist hash;
+        pname = "jaxlib";
+        format = "wheel";
+        # See the `disabled` attr comment below.
+        python = dist;
+        abi = dist;
+      };
+    in
+    {
+      "3.9-x86_64-linux" = getSrcFromPypi {
+        platform = "manylinux2014_x86_64";
+        dist = "cp39";
+        hash = "sha256-8bTrWutuK0qVnbkcwMfgBf414YdaLc3GK5IsCm/JNPE=";
+      };
+      "3.9-aarch64-darwin" = getSrcFromPypi {
+        platform = "macosx_11_0_arm64";
+        dist = "cp39";
+        hash = "sha256-Tmv2iOqlNbZqw/rYjef6GmM0N18EA5JTt6T3lQe+4Rs=";
+      };
+      "3.9-x86_64-darwin" = getSrcFromPypi {
+        platform = "macosx_10_14_x86_64";
+        dist = "cp39";
+        hash = "sha256-mDT1INLqPdCkxtMMFR0qHLOIZdWEy8Iuzw1/vOoECsA=";
+      };
+
+      "3.10-x86_64-linux" = getSrcFromPypi {
+        platform = "manylinux2014_x86_64";
+        dist = "cp310";
+        hash = "sha256-ksnY+CPEstact5lKjbSg+ZSPJtSt0Y0NFWEFufBCByk=";
+      };
+      "3.10-aarch64-darwin" = getSrcFromPypi {
+        platform = "macosx_11_0_arm64";
+        dist = "cp310";
+        hash = "sha256-O7dHvdKLKfNELGfF4TKy7N5EX6Ca7Zu8OtLXWvFykR8=";
+      };
+      "3.10-x86_64-darwin" = getSrcFromPypi {
+        platform = "macosx_10_14_x86_64";
+        dist = "cp310";
+        hash = "sha256-gqKMUZSXrt8sQtTAoQbzAfCzO8gM9Y1/tZpuJVWyN0Y=";
+      };
+
+      "3.11-x86_64-linux" = getSrcFromPypi {
+        platform = "manylinux2014_x86_64";
+        dist = "cp311";
+        hash = "sha256-m+NDzwXMNboNjDl2nLY+vqAoN2dQJZVWb1UQDpqqDPw=";
+      };
+      "3.11-aarch64-darwin" = getSrcFromPypi {
+        platform = "macosx_11_0_arm64";
+        dist = "cp311";
+        hash = "sha256-zCOAjaWWCQT9Jnm1jjc1Rh5gemqy7ACtTKLM0MqSJzM=";
+      };
+      "3.11-x86_64-darwin" = getSrcFromPypi {
+        platform = "macosx_10_14_x86_64";
+        dist = "cp311";
+        hash = "sha256-gOLIxkk+2hew2GqWu1WgMVEx1YEutx7Zod7QbwsuUVQ=";
+      };
+
+      "3.12-x86_64-linux" = getSrcFromPypi {
+        platform = "manylinux2014_x86_64";
+        dist = "cp312";
+        hash = "sha256-BZTmkgNuV4nWtfbY4t/19aP43szZQEdgpFXh5qwGRXk=";
+      };
+      "3.12-aarch64-darwin" = getSrcFromPypi {
+        platform = "macosx_11_0_arm64";
+        dist = "cp312";
+        hash = "sha256-aAMTrLXU9EYwPv+kdeyI88/D7b4NANB39Fn8vuXUqFA=";
+      };
+      "3.12-x86_64-darwin" = getSrcFromPypi {
+        platform = "macosx_10_14_x86_64";
+        dist = "cp312";
+        hash = "sha256-KHzlIfa9KtYcHX+i/F/SKaYTpD4/XjHVu5j3BdRTUmc=";
+      };
+    };
 
   # Find new releases at https://storage.googleapis.com/jax-releases/jax_releases.html.
   # When upgrading, you can get these hashes from prefetch.sh. See
-  # https://github.com/google/jax/issues/12879 as to why this specific URL is
-  # the correct index.
-  cpuSrcs = {
-    "x86_64-linux" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/nocuda/jaxlib-${version}-cp310-cp310-manylinux2014_x86_64.whl";
-      hash = "sha256-4VT909AB+ti5HzQvsaZWNY6MS/GItlVEFH9qeZnUuKQ=";
+  # https://github.com/google/jax/issues/12879 as to why this specific URL is the correct index.
+  gpuSrcs = {
+    "3.9" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp39-cp39-manylinux2014_x86_64.whl";
+      hash = "sha256-WB5Vbr/XeYKXCP/3DIXF20jR6/1xE3huX1h5ow8ETl0=";
     };
-    "aarch64-darwin" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/mac/jaxlib-${version}-cp310-cp310-macosx_11_0_arm64.whl";
-      hash = "sha256-wuOmoCeTldslSa0MommQeTe+RYKhUMam1ZXrgSov+8U=";
+    "3.10" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp310-cp310-manylinux2014_x86_64.whl";
+      hash = "sha256-zfN0n31+5GohwBkeQrqHus4qOyhM/GEdqG6KUupCZ4o=";
     };
-    "x86_64-darwin" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/mac/jaxlib-${version}-cp310-cp310-macosx_10_14_x86_64.whl";
-      hash = "sha256-arfiTw8yafJwjRwJhKby2O7y3+4ksh3PjaKW9JgJ1ok=";
+    "3.11" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp311-cp311-manylinux2014_x86_64.whl";
+      hash = "sha256-Q8ZtF2GCrG30GFbCeCZTWPmW2TBybeXzh2u+NRiYpx4=";
+    };
+    "3.12" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp312-cp312-manylinux2014_x86_64.whl";
+      hash = "sha256-lphkSDOJ9SwbO0hp/xC1bYn5fWgth9A9Iwsc9zV0buI=";
     };
   };
 
-  gpuSrc = fetchurl {
-    url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn82-cp310-cp310-manylinux2014_x86_64.whl";
-    hash = "sha256-bJ62DdzuPSV311ZI2R/LJQ3fOkDibtz2+8wDKw31FLk=";
-  };
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "jaxlib";
   inherit version;
   format = "wheel";
 
-  # At the time of writing (2022-10-19), there are releases for <=3.10.
-  # Supporting all of them is a pain, so we focus on 3.10, the current nixpkgs
-  # python version.
-  disabled = !(pythonVersion == "3.10");
+  disabled = !(pythonVersion == "3.9" || pythonVersion == "3.10" || pythonVersion == "3.11" || pythonVersion == "3.12");
 
   # See https://discourse.nixos.org/t/ofborg-does-not-respect-meta-platforms/27019/6.
   src =
     if !cudaSupport then
       (
-        cpuSrcs."${stdenv.hostPlatform.system}"
+        cpuSrcs."${pythonVersion}-${stdenv.hostPlatform.system}"
           or (throw "jaxlib-bin is not supported on ${stdenv.hostPlatform.system}")
-      ) else gpuSrc;
+      ) else gpuSrcs."${pythonVersion}";
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
-  nativeBuildInputs = lib.optionals cudaSupport [ autoPatchelfHook addOpenGLRunpath ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ]
+    ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
   # Dynamic link dependencies
-  buildInputs = [ stdenv.cc.cc ];
+  buildInputs = [ stdenv.cc.cc.lib ];
 
   # jaxlib contains shared libraries that open other shared libraries via dlopen
   # and these implicit dependencies are not recognized by ldd or
@@ -113,7 +189,12 @@ buildPythonPackage rec {
     done
   '';
 
-  propagatedBuildInputs = [ absl-py flatbuffers scipy ];
+  propagatedBuildInputs = [
+    absl-py
+    flatbuffers
+    ml-dtypes
+    scipy
+  ];
 
   # Note that cudatoolkit is snecessary since jaxlib looks for "ptxas" in $PATH.
   # See https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621 for
@@ -123,7 +204,7 @@ buildPythonPackage rec {
     ln -s ${cudatoolkit}/bin/ptxas $out/bin/ptxas
   '';
 
-  pythonImportsCheck = [ "jaxlib" ];
+  inherit (jaxlib-build) pythonImportsCheck;
 
   meta = with lib; {
     description = "XLA library for JAX";

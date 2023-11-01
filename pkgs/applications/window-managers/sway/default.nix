@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Use /run/current-system/sw/share and /etc instead of /nix/store
     # references:
     ./sway-config-nixos-paths.patch
+    # Drop ambient capabilities after getting SCHED_RR
+    ./drop_ambient_capabilities.patch
   ];
 
   strictDeps = true;
@@ -96,5 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos synthetica ];
+    mainProgram = "sway";
   };
 })

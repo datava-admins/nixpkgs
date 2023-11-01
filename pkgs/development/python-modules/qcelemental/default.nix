@@ -2,6 +2,7 @@
 , buildPythonPackage
 , lib
 , fetchPypi
+, poetry-core
 , networkx
 , numpy
 , pint
@@ -12,15 +13,20 @@
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.25.1";
-  format = "setuptools";
+  version = "0.27.0";
+
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4+DlP+BH0UdWcYRBBApdc3E18L2zPvsdY6GTW5WCGnQ=";
+    hash = "sha256-5VLNGD4glAIGgtt+q8YvwyAQvJU9mfyTpngwVr6gOYg=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     networkx

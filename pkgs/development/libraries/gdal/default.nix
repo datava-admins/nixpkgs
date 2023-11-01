@@ -1,6 +1,20 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
+
+, useMinimalFeatures ? false
+, useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
+, useLibHEIF ? (!useMinimalFeatures)
+, useLibJXL ? (!useMinimalFeatures)
+, useMysql ? (!useMinimalFeatures)
+, usePostgres ? (!useMinimalFeatures)
+, usePoppler ? (!useMinimalFeatures)
+, useArrow ? (!useMinimalFeatures)
+, useHDF ? (!useMinimalFeatures)
+, useNetCDF ? (!useMinimalFeatures)
+, useArmadillo ? (!useMinimalFeatures)
+
 , bison
 , cmake
 , gtest
@@ -53,7 +67,6 @@
 , libspatialite
 , sqlite
 , libtiff
-, useTiledb ? !(stdenv.isDarwin && stdenv.isx86_64)
 , tiledb
 , libwebp
 , xercesc
@@ -61,15 +74,15 @@
 , zstd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.7.0";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
-    rev = "v${version}";
-    hash = "sha256-hAuhftIuF9W0bQx73Mz8bAEegrX9g40ippqwv9mdstg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/7Egbg4Cg5Gqsy+CEMVbs2NCWbdJteDNWelBsrQSUj4=";
   };
 
   nativeBuildInputs = [
@@ -89,7 +102,7 @@ stdenv.mkDerivation rec {
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ] ++ lib.optionals doInstallCheck [
+  ] ++ lib.optionals finalAttrs.doInstallCheck [
     "-DBUILD_TESTING=ON"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
@@ -99,63 +112,83 @@ stdenv.mkDerivation rec {
     "-DGDAL_USE_TILEDB=OFF"
   ];
 
-  buildInputs = [
-    armadillo
-    c-blosc
-    brunsli
-    cfitsio
-    crunch
-    curl
-    cryptopp
-    libdeflate
-    expat
-    libgeotiff
-    geos
-    giflib
-    libheif
-    dav1d  # required by libheif
-    libaom  # required by libheif
-    libde265  # required by libheif
-    rav1e  # required by libheif
-    x265  # required by libheif
-    hdf4
-    hdf5-cpp
-    libjpeg
-    json_c
-    libjxl
-    libhwy  # required by libjxl
-    lerc
-    xz
-    libxml2
-    lz4
-    libmysqlclient
-    netcdf
-    openjpeg
-    openssl
-    pcre2
-    libpng
-    poppler
-    postgresql
-    proj
-    qhull
-    libspatialite
-    sqlite
-    libtiff
-    gtest
-  ] ++ lib.optionals useTiledb [
-    tiledb
-  ] ++ [
-    libwebp
-    zlib
-    zstd
-    python3
-    python3.pkgs.numpy
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # tests for formats enabled by these packages fail on macos
-    arrow-cpp
-    openexr
-    xercesc
-  ] ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs =
+    let
+      tileDbDeps = lib.optionals useTiledb [ tiledb ];
+      libHeifDeps = lib.optionals useLibHEIF [
+        libheif
+        dav1d
+        libaom
+        libde265
+        rav1e
+        x265
+      ];
+      libJxlDeps = lib.optionals useLibJXL [
+        libjxl
+        libhwy
+      ];
+      mysqlDeps = lib.optionals useMysql [ libmysqlclient ];
+      postgresDeps = lib.optionals usePostgres [ postgresql ];
+      popplerDeps = lib.optionals usePoppler [ poppler ];
+      arrowDeps = lib.optionals useArrow [ arrow-cpp ];
+      hdfDeps = lib.optionals useHDF [
+        hdf4
+        hdf5-cpp
+      ];
+      netCdfDeps = lib.optionals useNetCDF [ netcdf ];
+      armadilloDeps = lib.optionals useArmadillo [ armadillo ];
+
+      darwinDeps = lib.optionals stdenv.isDarwin [ libiconv ];
+      nonDarwinDeps = lib.optionals (!stdenv.isDarwin) ([
+        # tests for formats enabled by these packages fail on macos
+        openexr
+        xercesc
+      ] ++ arrowDeps);
+    in [
+      c-blosc
+      brunsli
+      cfitsio
+      crunch
+      curl
+      cryptopp
+      libdeflate
+      expat
+      libgeotiff
+      geos
+      giflib
+      libjpeg
+      json_c
+      lerc
+      xz
+      libxml2
+      lz4
+      openjpeg
+      openssl
+      pcre2
+      libpng
+      proj
+      qhull
+      libspatialite
+      sqlite
+      libtiff
+      gtest
+      libwebp
+      zlib
+      zstd
+      python3
+      python3.pkgs.numpy
+    ] ++ tileDbDeps
+      ++ libHeifDeps
+      ++ libJxlDeps
+      ++ mysqlDeps
+      ++ postgresDeps
+      ++ popplerDeps
+      ++ arrowDeps
+      ++ hdfDeps
+      ++ netCdfDeps
+      ++ armadilloDeps
+      ++ darwinDeps
+      ++ nonDarwinDeps;
 
   postInstall = ''
     wrapPythonPrograms
@@ -208,19 +241,25 @@ stdenv.mkDerivation rec {
     "test_rda_download_queue"
   ] ++ lib.optionals (lib.versionOlder proj.version "8") [
     "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
+  ] ++ lib.optionals (!usePoppler) [
+    "test_pdf_jpx_compression"
   ];
   postCheck = ''
     popd # autotest
   '';
 
+  passthru.tests = {
+    gdal = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
+  };
+
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    changelog = "https://github.com/OSGeo/gdal/blob/${src.rev}/NEWS.md";
+    changelog = "https://github.com/OSGeo/gdal/blob/v${finalAttrs.version}/NEWS.md";
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
     license = licenses.mit;
     maintainers = with maintainers; teams.geospatial.members ++ [ marcweber dotlambda ];
     platforms = platforms.unix;
   };
-}
+})

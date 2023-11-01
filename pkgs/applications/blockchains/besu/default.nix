@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "besu";
-  version = "23.4.1";
+  version = "23.7.3";
 
   src = fetchurl {
     url = "https://hyperledger.jfrog.io/artifactory/${pname}-binaries/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SdOnoGnK4wdJcJPYNPhzzngEpG3VkgfV6DIUWVMtMY4=";
+    sha256 = "sha256-wSymqYYVV+C/jycHb4yK/M5vFWRofl8Cv9yWwrGIRv8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

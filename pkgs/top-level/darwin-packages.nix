@@ -1,6 +1,6 @@
 { lib
 , buildPackages, pkgs, targetPackages
-, generateSplicesForMkScope, makeScopeWithSplicing
+, generateSplicesForMkScope, makeScopeWithSplicing'
 , stdenv
 , preLibcCrossHeaders
 , config
@@ -15,7 +15,10 @@ let
                                         (stdenv.targetPlatform.config + "-");
 in
 
-makeScopeWithSplicing (generateSplicesForMkScope "darwin") (_: {}) (spliced: spliced.apple_sdk.frameworks) (self: let
+makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "darwin";
+  extra = spliced: spliced.apple_sdk.frameworks;
+  f = (self: let
   inherit (self) mkDerivation callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
@@ -133,19 +136,9 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   sigtool = callPackage ../os-specific/darwin/sigtool { };
 
-  postLinkSignHook = pkgs.writeTextFile {
-    name = "post-link-sign-hook";
-    executable = true;
-
-    text = ''
-      if [ "$linkerOutput" != "/dev/null" ]; then
-        CODESIGN_ALLOCATE=${targetPrefix}codesign_allocate \
-          ${self.sigtool}/bin/codesign -f -s - "$linkerOutput"
-      fi
-    '';
-  };
-
   signingUtils = callPackage ../os-specific/darwin/signing-utils { };
+
+  postLinkSignHook = callPackage ../os-specific/darwin/signing-utils/post-link-sign-hook.nix { };
 
   autoSignDarwinBinariesHook = pkgs.makeSetupHook {
     name = "auto-sign-darwin-binaries-hook";
@@ -240,15 +233,26 @@ impure-cmds // appleSourcePackages // chooseLibs // {
             ../../nixos/modules/profiles/macos-builder.nix
           ] ++ modules;
 
+          # If you need to override this, consider starting with the right Nixpkgs
+          # in the first place, ie change `pkgs` in `pkgs.darwin.linux-builder`.
+          # or if you're creating new wiring that's not `pkgs`-centric, perhaps use the
+          # macos-builder profile directly.
           virtualisation.host = { inherit pkgs; };
+
+          nixpkgs.hostPlatform = lib.mkDefault (toGuest stdenv.hostPlatform.system);
         };
 
-        system = toGuest stdenv.hostPlatform.system;
+        system = null;
       };
 
     in
       nixos.config.system.build.macos-builder-installer) { modules = [ ]; };
 
+  linux-builder-x86_64 = self.linux-builder.override {
+    modules = [ { nixpkgs.hostPlatform = "x86_64-linux"; } ];
+  };
+
 } // lib.optionalAttrs config.allowAliases {
   builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
-})
+});
+}

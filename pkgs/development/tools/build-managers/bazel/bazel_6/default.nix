@@ -4,6 +4,7 @@
 , bazel_self
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
+, diffutils, gnupatch
 # updater
 , python3, writeScript
 # Apple dependencies
@@ -24,12 +25,12 @@
 }:
 
 let
-  version = "6.2.0";
+  version = "6.4.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-8ej3iGN6xXTUcdYZ0glrqsoEoZtXoDQ5ngeWM9tEGUU=";
+    hash = "sha256-vYj/YCyLuynugroqaxKtCS1R7GaMZXf5Yo8Y5I/05R4=";
   };
 
   # Update with
@@ -110,10 +111,12 @@ let
     [
       bash
       coreutils
+      diffutils
       file
       findutils
       gawk
       gnugrep
+      gnupatch
       gnused
       gnutar
       gzip
@@ -223,7 +226,7 @@ stdenv.mkDerivation rec {
 
   # Additional tests that check bazel’s functionality. Execute
   #
-  #     nix-build . -A bazel_5.tests
+  #     nix-build . -A bazel_6.tests
   #
   # in the nixpkgs checkout root to exercise them locally.
   passthru.tests =
@@ -327,6 +330,8 @@ stdenv.mkDerivation rec {
     installPhase = ''
       runHook preInstall
 
+      # prevent bazel version check failing in the updater
+      rm .bazelversion
       cp -r . "$out"
 
       runHook postInstall
@@ -624,6 +629,12 @@ stdenv.mkDerivation rec {
     }
 
     cd ./bazel_src
+
+    # If .bazelversion file is present in dist files and doesn't match `bazel` version
+    # running `bazel` command within bazel_src will fail.
+    # Let's remove .bazelversion within the test, if present it is meant to indicate bazel version
+    # to compile bazel with, not version of bazel to be built and tested.
+    rm -f .bazelversion
 
     # test whether $WORKSPACE_ROOT/tools/bazel works
 

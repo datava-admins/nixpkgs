@@ -10,19 +10,20 @@ let
     packageOverrides = self: super: {
       torch = super.torch-bin;
       torchvision = super.torchvision-bin;
+      tensorflow = super.tensorflow-bin;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.15.6";
+  version = "0.18.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZEmj0D+q2/UpDTEZDPb13BKiNRUcZsJmJRWOCq+8CUk=";
+    hash = "sha256-bTShJwzxff+R9GkR72qNzd22zY8LwUUsD8r30kZXAsI=";
   };
 
   postPatch = let
@@ -41,9 +42,15 @@ python.pkgs.buildPythonApplication rec {
   in ''
     sed -r -i \
       ${lib.concatStringsSep "\n" (map (package:
-        ''-e 's/${package}.*[<>=]+.*/${package}/g' \''
+        ''-e 's/${package}\s*[<>=]+.+/${package}/g' \''
       ) relaxedConstraints)}
     requirements.txt
+
+    sed -r -i \
+      ${lib.concatStringsSep "\n" (map (package:
+        ''-e 's/${package}\s*[<>=]+[^"]+/${package}/g' \''
+      ) relaxedConstraints)}
+    pyproject.toml
     # only used for notebooks and visualization
     sed -r -i -e '/umap-learn/d' requirements.txt
   '';

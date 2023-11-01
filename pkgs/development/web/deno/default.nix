@@ -3,6 +3,8 @@
 , callPackage
 , fetchFromGitHub
 , rustPlatform
+, cmake
+, protobuf
 , installShellFiles
 , libiconv
 , darwin
@@ -11,15 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.35.1";
+  version = "1.37.2";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8Q2U3+exWL3rz/YKCk0IvyfgTW6EGmzHG5py0cjW07U=";
+    hash = "sha256-F04Dxt3pLtUaku6bWGDSwJQwk/NUyBfZPhT7zLyBq48=";
   };
-  cargoHash = "sha256-ErCihNFxnQJUHG4QYeGTFwFq9jaOzAcXIREGsHTfmHM=";
+
+  cargoHash = "sha256-PfChqb2yMFk4HAAspkKHjstlxCTkEA2k+VRMf8MVwTw=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -27,7 +30,15 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace .cargo/config.toml --replace '"-C", "link-arg=-fuse-ld=lld"' ""
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  # uses zlib-ng but can't dynamically link yet
+  # https://github.com/rust-lang/libz-sys/issues/158
+  nativeBuildInputs = [
+    # required by libz-ng-sys crate
+    cmake
+    # required by deno_kv crate
+    protobuf
+    installShellFiles
+  ];
   buildInputs = lib.optionals stdenv.isDarwin (
     [ libiconv darwin.libobjc ] ++
     (with darwin.apple_sdk.frameworks; [ Security CoreServices Metal Foundation QuartzCore ])
@@ -79,6 +90,7 @@ rustPlatform.buildRustPackage rec {
       bash or python.
     '';
     license = licenses.mit;
+    mainProgram = "deno";
     maintainers = with maintainers; [ jk ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };

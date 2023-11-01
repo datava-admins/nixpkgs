@@ -1,20 +1,30 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dysk";
-  version = "2.6.1";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "dysk";
     rev = "v${version}";
-    hash = "sha256-rSnj38U4Rt5Wh+3A610tTeT2Q1BVGvpMa7rpDf4YzTI=";
+    hash = "sha256-h/vdc7ltlXJQi1f013+fNyYB6fc0hTUcx4LN6UySIGM=";
   };
 
-  cargoHash = "sha256-or1vLbtA2tPnGJ3tYWrmaXmPCIutojBlIWMLRNpxpY4=";
+  cargoHash = "sha256-LC7A+fu4SqfsxT3K9gYJPx8G9h+7kXq0Nq70iSlfygE=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installManPage $releaseDir/build/*/out/dysk.1
+    installShellCompletion $releaseDir/build/*/out/{dysk.bash,dysk.fish,_dysk}
+  '';
 
   meta = with lib; {
     description = "Get information on your mounted disks";

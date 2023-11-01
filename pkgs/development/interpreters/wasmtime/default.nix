@@ -2,18 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "10.0.1";
+  version = "14.0.2";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-UqjJVAmqITh7ixo71jfdQNZ5OLjmmmrk4b0saU2kyYo=";
+    hash = "sha256-/YAu2wIeDhMojWfutJSEp7SELOV4G/EfQjypLQI+jo8=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-fEDvxstvBP/e2G8KbTVQKdxafQXxz4mnqCAso16HYaY=";
-
+  # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
+  auditable = false;
+  cargoHash = "sha256-4Ca3RlpJQ67zwje0SowqqEcBGLnht5QL/PCrrtFTc4o=";
   cargoBuildFlags = [ "--package" "wasmtime-cli" "--package" "wasmtime-c-api" ];
 
   outputs = [ "out" "dev" ];
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage rec {
       "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
     license = licenses.asl20;
+    mainProgram = "wasmtime";
     maintainers = with maintainers; [ ereslibre matthewbauer ];
     platforms = platforms.unix;
     changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${version}/RELEASES.md";

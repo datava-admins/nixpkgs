@@ -20,22 +20,27 @@
 , cmake
 , openai-triton
 , networkx
+#, apex
+, einops
+, transformers
+, timm
+#, flash-attn
 }:
 let
-  version = "0.0.20";
+  version = "0.03";
 in
 buildPythonPackage {
   pname = "xformers";
   inherit version;
   format = "setuptools";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "xformers";
-    rev = "v${version}";
-    hash = "sha256-OFH4I3eTKw1bQEKHh1AvkpcoShKK5R5674AoJ/mY85I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-G8f7tny5B8SAQ6+2uOjhY7nD0uOT4sskIwtTdwivQXo=";
     fetchSubmodules = true;
   };
 
@@ -63,6 +68,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "xformers" ];
 
+  dontUseCmakeConfigure = true;
+
+  # see commented out missing packages
+  doCheck = false;
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
@@ -73,6 +83,11 @@ buildPythonPackage {
     cmake
     networkx
     openai-triton
+    # apex
+    einops
+    transformers
+    timm
+    # flash-attn
   ];
 
   meta = with lib; {

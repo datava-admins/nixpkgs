@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 # build inputs
@@ -9,16 +8,13 @@
 , backoff
 , python-dateutil
 # check inputs
+, pytestCheckHook
 , mock
 , freezegun
-, pylint
-, flake8
-, coverage
-, pytest
 }:
 let
   pname = "posthog";
-  version = "3.0.1";
+  version = "3.0.2";
 in
 buildPythonPackage {
   inherit pname version;
@@ -28,7 +24,7 @@ buildPythonPackage {
     owner = "PostHog";
     repo = "posthog-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GSHsa05DUcbIHg1HCoIn8d4NZoG+Iddqfgod2nP4fX0=";
+    hash = "sha256-QASqjphAWtYuIyhbFTYwv1gD+rXvrmp5W0Te4MFn1AA=";
   };
 
   propagatedBuildInputs = [
@@ -40,16 +36,20 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [
+    pytestCheckHook
     mock
     freezegun
-    pylint
-    flake8
-    coverage
-    pytest
   ];
 
   pythonImportsCheck = [
     "posthog"
+  ];
+
+  disabledTests = [
+    "test_load_feature_flags_wrong_key"
+    # Tests require network access
+    "test_request"
+    "test_upload"
   ];
 
   meta = with lib; {

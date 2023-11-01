@@ -1,17 +1,17 @@
-{ buildGoModule, fetchFromGitHub, lib, stdenv }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "bluetuith";
-  version = "0.1.6";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9fhgld0jhljvDMsRlU+jXsJla2oNjdsFm8TbmmvcoL4=";
+    sha256 = "sha256-b+J+8nxFZYJlAKOStpH7ItPqMw7inM5pss17kyX1brg=";
   };
 
-  vendorHash = "sha256-eSgjIZmD5HL8S1XY0LK2IeWDchjFWBlRq5qriBg7l2U=";
+  vendorHash = "sha256-d0O54KNGLXU8FGr1eSEp30JMWNVo91Le2MI8UnAfTuU=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -20,6 +20,7 @@ buildGoModule rec {
     homepage = "https://github.com/darkhz/bluetuith";
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "bluetuith";
     maintainers = with maintainers; [ thehedgeh0g ];
   };
 }

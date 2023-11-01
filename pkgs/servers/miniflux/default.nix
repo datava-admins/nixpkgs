@@ -1,27 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
+{ lib, buildGo121Module, fetchFromGitHub, installShellFiles, nixosTests }:
 
 let
   pname = "miniflux";
-  version = "2.0.45";
+  version = "2.0.49";
 
-in buildGoModule {
+in buildGo121Module {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "v2";
     rev = version;
-    sha256 = "sha256-/d5+Qc2kXZZkKe80+879YdxYt+zy/Y1sf2dwSjGw0EM=";
+    sha256 = "sha256-MGKQSlpTLqQPmvhACl9fbQkz2Uil8V8btjTwJIcY7g0=";
   };
 
-  vendorHash = "sha256-nwKo4Sjg8HjuxeDUgwQYZ2LOHxkRSlyaBlQwSjOuJ7U=";
+  vendorHash = "sha256-J3WHFfmjgE71hK58WP3dq+Px4XxLbluJSGv+eJiIB0E=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   checkFlags = [ "-skip=TestClient" ]; # skip client tests as they require network access
 
   ldflags = [
-    "-s" "-w" "-X miniflux.app/version.Version=${version}"
+    "-s" "-w" "-X miniflux.app/v2/internal/version.Version=${version}"
   ];
 
   postInstall = ''

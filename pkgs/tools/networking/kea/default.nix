@@ -51,6 +51,10 @@ stdenv.mkDerivation rec {
     "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config"
     "--with-pgsql=${postgresql}/bin/pg_config"
   ];
+  postConfigure = ''
+    # Mangle embedded paths to dev-only inputs.
+    sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i config.report
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -80,6 +84,8 @@ stdenv.mkDerivation rec {
     kea = nixosTests.kea;
     prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
     prometheus-exporter = nixosTests.prometheus-exporters.kea;
+    networking-scripted = lib.recurseIntoAttrs { inherit (nixosTests.networking.scripted) dhcpDefault dhcpSimple dhcpOneIf; };
+    networking-networkd = lib.recurseIntoAttrs { inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf; };
   };
 
   meta = with lib; {

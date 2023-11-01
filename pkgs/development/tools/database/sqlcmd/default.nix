@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "sqlcmd";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     repo = "go-sqlcmd";
     owner = "microsoft";
     rev = "v${version}";
-    sha256 = "sha256-nMTC4bOv2Mgmt0GFXoBkbSayJ85i1mS/mcCsP8/x00A=";
+    sha256 = "sha256-SSt3QOc8eKpcCHxfOuY+eAkH/xiFBUp2bJ9QXP9pq9M=";
   };
 
-  vendorHash = "sha256-+buoX9etR34p1N2G8+48ZvF6cg/y4uKb89sSIwkoeuY=";
+  vendorHash = "sha256-ODIDlP0w3t1t7H5jevXkKmFpWVSJFUwmT66LOS+ySI4=";
   proxyVendor = true;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];

@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , freezegun
 , tzdata
-, py
 , pyparsing
 , pydantic
 , pytest-asyncio
@@ -19,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "4.5.4";
+  version = "5.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-UcuJ23yzpRHDUFlwov692UyLXP/9Qb4F+IJIszo12/M=";
+    hash = "sha256-ffNgYtwErt9tzfDWQnt0h7QHQL+gMvFpP8zH6FSoHEM=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +48,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    py
     pytest-asyncio
     pytest-benchmark
     pytest-golden

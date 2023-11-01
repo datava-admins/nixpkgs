@@ -90,12 +90,17 @@ let
 
   getPoolMounts = prefix: pool:
     let
+      poolFSes = getPoolFilesystems pool;
+
       # Remove the "/" suffix because even though most mountpoints
       # won't have it, the "/" mountpoint will, and we can't have the
       # trailing slash in "/sysroot/" in stage 1.
       mountPoint = fs: escapeSystemdPath (prefix + (lib.removeSuffix "/" fs.mountPoint));
+
+      hasUsr = lib.any (fs: fs.mountPoint == "/usr") poolFSes;
     in
-      map (x: "${mountPoint x}.mount") (getPoolFilesystems pool);
+      map (x: "${mountPoint x}.mount") poolFSes
+      ++ lib.optional hasUsr "sysusr-usr.mount";
 
   getKeyLocations = pool: if isBool cfgZfs.requestEncryptionCredentials then {
     hasKeys = cfgZfs.requestEncryptionCredentials;
@@ -110,17 +115,18 @@ let
   createImportService = { pool, systemd, force, prefix ? "" }:
     nameValuePair "zfs-import-${pool}" {
       description = "Import ZFS pool \"${pool}\"";
-      # we need systemd-udev-settle to ensure devices are available
+      # We wait for systemd-udev-settle to ensure devices are available,
+      # but don't *require* it, because mounts shouldn't be killed if it's stopped.
       # In the future, hopefully someone will complete this:
       # https://github.com/zfsonlinux/zfs/pull/4943
-      requires = [ "systemd-udev-settle.service" ];
+      wants = [ "systemd-udev-settle.service" ];
       after = [
         "systemd-udev-settle.service"
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
       ];
-      wantedBy = (getPoolMounts prefix pool) ++ [ "local-fs.target" ];
-      before = (getPoolMounts prefix pool) ++ [ "local-fs.target" ];
+      requiredBy = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
+      before = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
       unitConfig = {
         DefaultDependencies = "no";
       };
@@ -628,8 +634,11 @@ in
             force = cfgZfs.forceImportRoot;
             prefix = "/sysroot";
           }) rootPools);
+          targets.zfs-import.wantedBy = [ "zfs.target" ];
+          targets.zfs.wantedBy = [ "initrd.target" ];
           extraBin = {
-            # zpool and zfs are already in thanks to fsPackages
+            zpool = "${cfgZfs.package}/sbin/zpool";
+            zfs = "${cfgZfs.package}/sbin/zfs";
             awk = "${pkgs.gawk}/bin/awk";
           };
         };
@@ -658,6 +667,11 @@ in
           pkgs.util-linux
         ];
       };
+
+      # ZFS already has its own scheduler. Without this my(@Artturin) computer froze for a second when I nix build something.
+      services.udev.extraRules = ''
+        ACTION=="add|change", KERNEL=="sd[a-z]*[0-9]*|mmcblk[0-9]*p[0-9]*|nvme[0-9]*n[0-9]*p[0-9]*", ENV{ID_FS_TYPE}=="zfs_member", ATTR{../queue/scheduler}="none"
+      '';
 
       environment.etc = genAttrs
         (map
@@ -739,15 +753,7 @@ in
                       map createSyncService allPools ++
                       map createZfsService [ "zfs-mount" "zfs-share" "zfs-zed" ]);
 
-      systemd.targets.zfs-import =
-        let
-          services = map (pool: "zfs-import-${pool}.service") dataPools;
-        in
-          {
-            requires = services;
-            after = services;
-            wantedBy = [ "zfs.target" ];
-          };
+      systemd.targets.zfs-import.wantedBy = [ "zfs.target" ];
 
       systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })

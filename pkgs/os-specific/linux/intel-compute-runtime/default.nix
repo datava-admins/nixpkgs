@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, patchelf
 , cmake
 , pkg-config
 , intel-gmmlib
@@ -12,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "23.17.26241.24";
+  version = "23.30.26918.20";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "sha256-FcI9bBJc23UlPP7qSBUc+t4e1X3UEJTYiy86N3KVWrs=";
+    hash = "sha256-dEznHRgAcJa/BBTD/AWJHlA7fNj2IXHHrYcKM4M+/1o=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

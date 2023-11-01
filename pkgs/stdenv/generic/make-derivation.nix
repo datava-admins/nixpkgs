@@ -48,7 +48,7 @@ let
 
     in finalPackage;
 
-  # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
+  #makeDerivationExtensibleConst = attrs: makeDerivationExtensible (_: attrs);
   # but pre-evaluated for a slight improvement in performance.
   makeDerivationExtensibleConst = attrs:
     mkDerivationSimple
@@ -164,6 +164,17 @@ let
 , env ? { }
 
 , ... } @ attrs:
+
+# Policy on acceptable hash types in nixpkgs
+assert attrs ? outputHash -> (
+  let algo =
+    attrs.outputHashAlgo or (lib.head (lib.splitString "-" attrs.outputHash));
+  in
+  if algo == "md5" then
+    throw "Rejected insecure ${algo} hash '${attrs.outputHash}'"
+  else
+    true
+);
 
 let
   # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
@@ -377,6 +388,8 @@ else let
           "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
         ] ++ lib.optionals (stdenv.buildPlatform.uname.release != null) [
           "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
+        ] ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+          "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
         ]);
 
       mesonFlags =

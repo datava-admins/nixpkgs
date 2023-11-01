@@ -78,9 +78,9 @@ in {
     server = {
       disableRegistration = mkOption {
         default = true;
-        type = types.bool;
+        type = types.enum [true false "invite_only"];
         description = lib.mdDoc ''
-          Whether to prohibit creating an account in plausible's UI.
+          Whether to prohibit creating an account in plausible's UI or allow on `invite_only`.
         '';
       };
       secretKeybaseFile = mkOption {
@@ -209,7 +209,7 @@ in {
             # Configuration options from
             # https://plausible.io/docs/self-hosting-configuration
             PORT = toString cfg.server.port;
-            DISABLE_REGISTRATION = boolToString cfg.server.disableRegistration;
+            DISABLE_REGISTRATION = if isBool cfg.server.disableRegistration then boolToString cfg.server.disableRegistration else cfg.server.disableRegistration;
 
             RELEASE_TMP = "/var/lib/plausible/tmp";
             # Home is needed to connect to the node with iex
@@ -248,10 +248,10 @@ in {
             # setup
             ${cfg.package}/createdb.sh
             ${cfg.package}/migrate.sh
+            export IP_GEOLOCATION_DB=${pkgs.dbip-country-lite}/share/dbip/dbip-country-lite.mmdb
+            ${cfg.package}/bin/plausible eval "(Plausible.Release.prepare() ; Plausible.Auth.create_user(\"$ADMIN_USER_NAME\", \"$ADMIN_USER_EMAIL\", \"$ADMIN_USER_PWD\"))"
             ${optionalString cfg.adminUser.activate ''
-              if ! ${cfg.package}/init-admin.sh | grep 'already exists'; then
-                psql -d plausible <<< "UPDATE users SET email_verified=true;"
-              fi
+              psql -d plausible <<< "UPDATE users SET email_verified=true where email = '$ADMIN_USER_EMAIL';"
             ''}
 
             exec plausible start
@@ -296,6 +296,6 @@ in {
     ];
   };
 
-  meta.maintainers = with maintainers; [ ma27 ];
+  meta.maintainers = with maintainers; [ ];
   meta.doc = ./plausible.md;
 }

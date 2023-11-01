@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.85";
+  version = "2.86";
   pname = "asymptote";
 
   src = fetchFromGitHub {
     owner = "vectorgraphics";
     repo = pname;
     rev = version;
-    hash = "sha256-GyW9OEolV97WtrSdIxp4MCP3JIyA1c/DQSqg8jLC0WQ=";
+    hash = "sha256-Bk8/WIQTfrbOo9b2hw580vJwiK6P1OBV5HMqMH+LkuE=";
   };
 
   nativeBuildInputs = [

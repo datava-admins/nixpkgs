@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "array-record";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "wheel";
 
   disabled = python.pythonVersion != "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     pname = "array_record";
     dist = "py310";
     python = "py310";
-    hash = "sha256-VHDU6RLR/z3/tNxJiDdAruz1cva6cHu5NzMlsKrLYXg=";
+    hash = "sha256-agyO1v36ryzs09XGucE+EWrTKZZJYRyP0YTWRVf7q6g=";
   };
 
   propagatedBuildInputs = [
@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/array_record";
     license = licenses.asl20;
     maintainers = with maintainers; [ GaetanLepage ];
+    platforms = [ "x86_64-linux" ];
   };
 }

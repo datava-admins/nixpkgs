@@ -1,4 +1,6 @@
 { stdenv
+, config
+, callPackages
 , lib
 , pkgs
 , phpPackage
@@ -31,6 +33,7 @@
 , pam
 , pcre2
 , postgresql
+, bison
 , re2c
 , readline
 , rsync
@@ -43,11 +46,14 @@
 }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  buildPecl = import ../build-support/build-pecl.nix {
+  buildPecl = callPackage ../build-support/php/build-pecl.nix {
     php = php.unwrapped;
-    inherit lib;
-    inherit (pkgs) stdenv autoreconfHook fetchurl re2c nix-update-script;
   };
+
+  composerHooks = callPackages ../build-support/php/hooks { };
+
+  mkComposerRepository = callPackage ../build-support/php/build-composer-repository.nix { };
+  buildComposerProject = callPackage ../build-support/php/build-composer-project.nix { };
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
@@ -101,13 +107,21 @@ lib.makeScope pkgs.newScope (self: with self; {
         autoconf
         pkg-config
         re2c
+        bison
       ];
 
       inherit configureFlags internalDeps buildInputs zendExtension doCheck;
 
       preConfigurePhases = [
+        "genfiles"
         "cdToExtensionRootPhase"
       ];
+
+      genfiles = ''
+        if [ -f "scripts/dev/genfiles" ]; then
+          ./scripts/dev/genfiles
+        fi
+      '';
 
       cdToExtensionRootPhase = ''
         # Go to extension source root.
@@ -168,6 +182,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   # This is a set of interactive tools based on PHP.
   tools = {
     box = callPackage ../development/php-packages/box { };
+
+    castor = callPackage ../development/php-packages/castor { };
 
     composer = callPackage ../development/php-packages/composer { };
 
@@ -244,7 +260,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     maxminddb = callPackage ../development/php-packages/maxminddb { };
 
+    memcache = callPackage ../development/php-packages/memcache { };
+
     memcached = callPackage ../development/php-packages/memcached { };
+
+    meminfo = callPackage ../development/php-packages/meminfo { };
 
     mongodb = callPackage ../development/php-packages/mongodb {
       inherit (pkgs) darwin;
@@ -253,6 +273,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     msgpack = callPackage ../development/php-packages/msgpack { };
 
     oci8 = callPackage ../development/php-packages/oci8 { };
+
+    opentelemetry = callPackage ../development/php-packages/opentelemetry { };
 
     openswoole = callPackage ../development/php-packages/openswoole { };
 
@@ -284,6 +306,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     php_excel = callPackage ../development/php-packages/php_excel { };
 
+    phalcon = callPackage ../development/php-packages/phalcon { };
+
+    php-spx = callPackage ../development/php-packages/php-spx { };
+
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
@@ -293,6 +319,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     redis = callPackage ../development/php-packages/redis { };
 
     relay = callPackage ../development/php-packages/relay { inherit php; };
+
+    rrd = callPackage ../development/php-packages/rrd { };
 
     smbclient = callPackage ../development/php-packages/smbclient { };
 
@@ -307,6 +335,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     swoole = callPackage ../development/php-packages/swoole { };
 
     uv = callPackage ../development/php-packages/uv { };
+
+    vld = callPackage ../development/php-packages/vld { };
 
     xdebug = callPackage ../development/php-packages/xdebug { };
 
@@ -438,9 +468,10 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "opcache";
-          buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [
-            valgrind.dev
-          ];
+          buildInputs = [ pcre2 ] ++
+            lib.optional
+              (!stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind)
+              valgrind.dev;
           zendExtension = true;
           postPatch = lib.optionalString stdenv.isDarwin ''
             # Tests are flaky on darwin

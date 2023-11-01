@@ -123,13 +123,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2023-06-25";
+  version = "2023-08-23";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "526e8bd7441d1beb271ff89bbca3604077ecffdb";
-    sha256 = "sha256-VRNI3H/WUTi7VTNLwO/I0gMnJ6ZMYRbBfgdsAj+TmP4=";
+    rev = "00d30874da759eb0f44f446415b2469920ff41b5";
+    sha256 = "sha256-e+68WCN1e1h2rf1pmwNNukTt5EBtF9KQNXhqJtoyJzo=";
   };
 
   buildInputs = [
@@ -245,6 +245,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Nix-based continuous build system";
+    homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lheckemann mindavi das_j ];

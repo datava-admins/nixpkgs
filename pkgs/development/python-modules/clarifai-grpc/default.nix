@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "clarifai-grpc";
-  version = "9.5.0";
+  version = "9.9.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-amMUgRXtvcrALfWwat7W0W60FJQnEeMvHhyxxBCMqUg=";
+    hash = "sha256-9h/d1w5toxWMHMvVkQiuHySf3+IjeumD4EipgI1kaEs=";
   };
 
   propagatedBuildInputs = [
