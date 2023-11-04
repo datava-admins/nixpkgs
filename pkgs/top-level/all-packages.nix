@@ -5702,7 +5702,7 @@ with pkgs;
   pn = callPackage ../tools/text/pn { };
 
   pocket-casts = callPackage ../applications/audio/pocket-casts {
-    electron = electron_22;
+    electron = electron_27;
   };
 
   portal = callPackage ../tools/misc/portal { };
@@ -17783,7 +17783,8 @@ with pkgs;
     electron_23-bin
     electron_24-bin
     electron_25-bin
-    electron_26-bin;
+    electron_26-bin
+    electron_27-bin;
 
   electron = electron-bin;
   electron_9 = electron_9-bin;
@@ -17804,6 +17805,7 @@ with pkgs;
   electron_24 = electron_24-bin;
   electron_25 = electron_25-bin;
   electron_26 = electron_26-bin;
+  electron_27 = electron_27-bin;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
