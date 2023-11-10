@@ -10,14 +10,14 @@
 , gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cowsql";
-  version = "0.15.2";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "cowsql";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-+za3pIcV4BhoImKvJlKatCK372wL4OyPbApQvGxGGGk=";
   };
 
@@ -39,9 +39,7 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" ];
 
   passthru = {
-    tests = {
-      inherit incus;
-    };
+    inherit (incus) tests;
 
     updateScript = gitUpdater {
       rev-prefix = "v";
@@ -55,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ adamcstephens ];
     platforms = platforms.unix;
   };
-}
+})

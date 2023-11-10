@@ -3,5 +3,8 @@
   mysqlPackages = {
     inherit (pkgs) mysql57 mysql80;
   };
+  perconaPackages = {
+    inherit (pkgs) percona-server_8_0;
+  };
   mkTestName = pkg: "mariadb_${builtins.replaceStrings ["."] [""] (lib.versions.majorMinor pkg.version)}";
 }

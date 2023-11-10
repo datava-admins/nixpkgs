@@ -1,8 +1,6 @@
-{ lib, mkDerivation, perl }:
+{ lib, mkDerivation, perl, qmake, patches, srcs }:
 
 let inherit (lib) licenses maintainers platforms; in
-
-{ self, srcs, patches }:
 
 args:
 
@@ -16,8 +14,10 @@ mkDerivation (args // {
   inherit pname version src;
   patches = (args.patches or []) ++ (patches.${pname} or []);
 
-  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
-  propagatedBuildInputs = (args.qtInputs or []) ++ (args.propagatedBuildInputs or []);
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl qmake ];
+  propagatedBuildInputs =
+    (lib.warnIf (args ? qtInputs) "qt5.qtModule's qtInputs argument is deprecated" args.qtInputs or []) ++
+    (args.propagatedBuildInputs or []);
 
   outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;
