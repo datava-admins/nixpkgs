@@ -306,6 +306,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       meta.maintainers = lib.teams.php.members;
     };
 
+    pdo_ibm = callPackage ../development/php-packages/pdo_ibm { };
+
     pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
 
     phalcon = callPackage ../development/php-packages/phalcon { };
