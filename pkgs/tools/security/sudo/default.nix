@@ -10,6 +10,7 @@
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , withInsults ? false
 , withSssd ? false
+, withStaticSudoers ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withSssd [
     "--with-sssd"
     "--with-sssd-lib=${sssd}/lib"
+  ] ++ lib.optionals withStaticSudoers [
+    "--enable-static-sudoers"
   ];
 
   configureFlagsArray = [
