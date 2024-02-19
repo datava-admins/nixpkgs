@@ -61,6 +61,11 @@ let
         type = listOf str;
         description = "A set of columns that will be used as values of this metric.";
       };
+      allow_zero_rows = mkOption {
+        type = bool;
+        default = false;
+        description = lib.mdDoc "Consider the query failed if it returns zero rows.";
+      };
     };
   };
 
