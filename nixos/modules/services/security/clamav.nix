@@ -100,15 +100,28 @@ in
       };
 
       scanner = {
-        enable = mkEnableOption "ClamAV scanner";
-
+        enable = mkEnableOption (lib.mdDoc "ClamAV Scheduled Scan");
+        sendToExporter = mkOption {
+          type = types.bool;
+          default = config.services.prometheus.exporters.clamscan.enable;
+          defaultText = literalExpression "config.services.prometheus.exporters.clamscan.enable";
+          description = lib.mdDoc ''
+            Wether to send the scan results to the Prometheus clamscan exporter or just stdout.
+          '';
+        };
         interval = mkOption {
           type = types.str;
-          default = "*-*-* 04:00:00";
-          description = ''
-            How often clamdscan is invoked. See systemd.time(7) for more
+          default = "hourly";
+          description = lib.mdDoc ''
+            How often clascan(d) is invoked. See systemd.time(7) for more
             information about the format.
-            By default this runs using 10 cores at most, be sure to run it at a time of low traffic.
+          '';
+        };
+        scanPaths = mkOption {
+          type = with types; listOf str;
+          default = [ "/" ];
+          description = lib.mdDoc ''
+            What directories/file patterns to scan (passed to find)
           '';
         };
 
@@ -181,6 +194,10 @@ in
         PrivateTmp = "yes";
         PrivateDevices = "yes";
         PrivateNetwork = "yes";
+        CPUSchedulingPolicy = "idle";
+        IOSchedulingClass = "idle";
+        IOSchedulingPriority = "2";
+        LimitNOFILE = 1048576;
       };
     };
 
@@ -275,6 +292,41 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkg}/bin/clamdscan --multiscan --fdpass --infected --allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
+    
+    systemd.timers.clamav-scanner = mkIf cfg.updater.enable {
+      description = "Timer for ClamAV Scanner";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.scanner.interval;
+        Unit = "clamav-scanner.service";
+      };
+    };
+
+    systemd.services.clamav-scanner = mkIf cfg.scanner.enable {
+      description = "ClamAV Scanner";
+      requires = [ "clamav-daemon.service" ];
+      path = with pkgs; [ netcat ];
+
+      serviceConfig = let
+        # I guess if the daemon is not enabled then we need to call the regular clamscan.
+        # For now just require that the daemon is running.
+        scanCmd = ''
+          ${pkgs.findutils}/bin/find ${builtins.toString cfg.scanner.scanPaths} -xdev -type f | \
+          ${pkg}/bin/clamdscan --multiscan --stdout --no-summary --fdpass -f /dev/stdin ${(if cfg.scanner.sendToExporter then " | tee | nc -N 127.0.0.1 9000" else "")}
+          '';
+      in {
+        Type = "simple";
+        ExecStart = pkgs.writeShellScript "clamav-scanner" scanCmd;
+        PrivateTmp = "yes";
+        PrivateDevices = "yes";
+        # Needs read access to all files...TODO: restrict fs to RO
+        #DynamicUser = "yes";
+        CPUSchedulingPolicy = "idle";
+        IOSchedulingClass = "idle";
+        IOSchedulingPriority = "2";
+        LimitNOFILE = 1048576;
+        StandardOutput = "journal";
+        StandardError = "journal";
       };
     };
   };
