@@ -292,6 +292,8 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkg}/bin/clamdscan --multiscan --fdpass --infected --allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
+      };
+    };
     
     systemd.timers.clamav-scanner = mkIf cfg.updater.enable {
       description = "Timer for ClamAV Scanner";
@@ -330,4 +332,4 @@ in
       };
     };
   };
-};
+}
