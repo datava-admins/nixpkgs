@@ -9,7 +9,7 @@ in
     importPort = mkOption {
       type = types.port;
       default = 9000;
-      description = lib.mdDoc ''
+      description = ''
         Port to listen to tcp connections on from clamscan netcat pipe.
       '';
     };

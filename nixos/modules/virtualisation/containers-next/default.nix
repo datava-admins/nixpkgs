@@ -442,7 +442,7 @@ in {
             type = types.attrs;
             example = "nixosConfigurations.<name>";
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               As an alternative to specifying
               {option}`config`, you can specify the path to
               the evaluated NixOS system configuration, typically a

@@ -105,14 +105,14 @@ in
           type = types.bool;
           default = config.services.prometheus.exporters.clamscan.enable;
           defaultText = literalExpression "config.services.prometheus.exporters.clamscan.enable";
-          description = lib.mdDoc ''
+          description = ''
             Wether to send the scan results to the Prometheus clamscan exporter or just stdout.
           '';
         };
         interval = mkOption {
           type = types.str;
           default = "hourly";
-          description = lib.mdDoc ''
+          description = ''
             How often clascan(d) is invoked. See systemd.time(7) for more
             information about the format.
           '';
@@ -120,7 +120,7 @@ in
         scanPaths = mkOption {
           type = with types; listOf str;
           default = [ "/" ];
-          description = lib.mdDoc ''
+          description = ''
             What directories/file patterns to scan (passed to find)
           '';
         };

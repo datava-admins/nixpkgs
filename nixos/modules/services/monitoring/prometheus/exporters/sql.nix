@@ -64,7 +64,7 @@ let
       allow_zero_rows = mkOption {
         type = bool;
         default = false;
-        description = lib.mdDoc "Consider the query failed if it returns zero rows.";
+        description = "Consider the query failed if it returns zero rows.";
       };
     };
   };
