@@ -100,7 +100,7 @@ in
       };
 
       scanner = {
-        enable = mkEnableOption (lib.mdDoc "ClamAV Scheduled Scan");
+        enable = mkEnableOption ("ClamAV Scheduled Scan");
         sendToExporter = mkOption {
           type = types.bool;
           default = config.services.prometheus.exporters.clamscan.enable;
