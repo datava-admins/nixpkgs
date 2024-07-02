@@ -11639,6 +11639,12 @@
     githubId = 1769386;
     name = "Liam Diprose";
   };
+  liarokapisv = {
+    email = "liarokapis.v@gmail.com";
+    github = "liarokapisv";
+    githubId = 19633626;
+    name = "Alexandros Liarokapis";
+  };
   liassica = {
     email = "git-commit.jingle869@aleeas.com";
     github = "Liassica";
@@ -22600,6 +22606,11 @@
     github = "yoctocell";
     githubId = 40352765;
     name = "Yoctocell";
+  };
+  yomaq = {
+    name = "yomaq";
+    github = "yomaq";
+    githubId = 112864332;
   };
   yorickvp = {
     email = "yorickvanpelt@gmail.com";
