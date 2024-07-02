@@ -5,15 +5,19 @@ in
 {
   openssh = common rec {
     pname = "openssh";
-    version = "9.8p1";
+    version = "9.6p1";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-3YvQAqN5tdSZ37BQ3R+pr4Ap6ARh9LtsUjxJlz9aOfM=";
+      hash = "sha256-kQIRwHJVqMWtZUORtA7lmABxDdgRndU2LeCThap6d3w=";
     };
 
-    extraPatches = [ ./ssh-keysign-8.5.patch ];
-    extraMeta.maintainers = lib.teams.helsinki-systems.members;
+    extraPatches = [
+      ./ssh-keysign-8.5.patch
+      ./openssh-9.6_p1-CVE-2024-6387.patch
+      ./openssh-9.6_p1-chaff-logic.patch
+    ];
+    extraMeta.maintainers = with lib.maintainers; [ das_j ];
   };
 
   openssh_hpn = common rec {
@@ -60,12 +64,12 @@ in
 
   openssh_gssapi = common rec {
     pname = "openssh-with-gssapi";
-    version = "9.7p1";
+    version = "9.6p1";
     extraDesc = " with GSSAPI support";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-SQQm92bYKidj/KzY2D6j1weYdQx70q/y5X3FZg93P/0=";
+      hash = "sha256-kQIRwHJVqMWtZUORtA7lmABxDdgRndU2LeCThap6d3w=";
     };
 
     extraPatches = [
@@ -75,8 +79,8 @@ in
 
       (fetchpatch {
         name = "openssh-gssapi.patch";
-        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-3/debian/patches/gssapi.patch";
-        hash = "sha256-/lEbH5sIS+o+DStEDAghFy43nZlvcIXSFJrnvp+fDdY=";
+        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-1/debian/patches/gssapi.patch";
+        hash = "sha256-gzDQdO6yOoN0apGj5aoKFdUkmKzFyphFUdgNhDLMp8U=";
       })
     ];
 
