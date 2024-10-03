@@ -2,16 +2,21 @@
 
 buildGoModule rec {
   pname = "traefik";
-  version = "3.0.2";
+  version = "3.1.2";
 
   # Archive with static assets for webui
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    hash = "sha256-h/LN++Jw8Yr08uH5T2Br1YVJtiAToI/1k4YDxqmFCZQ=";
+    hash = "sha256-PHS4x9RDoc2zDPS1SaYYEeZVa4SyQpvqzPT/SDo1ygg=";
     stripRoot = false;
   };
 
-  vendorHash = "sha256-XVRVrfraI7lQOrQKv0L557903hwZXlzI+9/tpXnAlW0=";
+  patches = [
+    # Rebased onto v3.1.2 from https://github.com/traefik/traefik/pull/11077
+    ./fix-CVE-2024-45410.patch
+  ];
+
+  vendorHash = "sha256-xQPDlwu/mRdyvZW0qSCA9eko9pOQAMwh2vVJWzMnyfs=";
 
   subPackages = [ "cmd/traefik" ];
 
