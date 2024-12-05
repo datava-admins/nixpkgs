@@ -5376,6 +5376,18 @@ with pkgs;
 
   subsurface = libsForQt5.callPackage ../applications/misc/subsurface { };
 
+  sudo = callPackage ../tools/security/sudo { };
+
+  sudo-rs = callPackage ../tools/security/sudo-rs { };
+
+  sudo-nspawn = sudo.override { withStaticSudoers = true; };
+
+  suidChroot = callPackage ../tools/system/suid-chroot { };
+
+  sundtek = callPackage ../misc/drivers/sundtek { };
+
+  sunxi-tools = callPackage ../development/tools/sunxi-tools { };
+
   sumorobot-manager = python3Packages.callPackage ../applications/science/robotics/sumorobot-manager { };
 
   sslscan = callPackage ../tools/security/sslscan {
@@ -12046,6 +12058,9 @@ with pkgs;
   };
 
   mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
+
+  mssql-cli = callPackage ../development/tools/mssql-cli { };
+
   jtds_jdbc = callPackage ../servers/sql/mssql/jdbc/jtds.nix { };
 
   miniflux = callPackage ../by-name/mi/miniflux/package.nix {
@@ -12131,6 +12146,7 @@ with pkgs;
   prometheus-bitcoin-exporter = callPackage ../servers/monitoring/prometheus/bitcoin-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-cloudflare-exporter = callPackage ../servers/monitoring/prometheus/cloudflare-exporter.nix { };
+  prometheus-clamscan-exporter = callPackage ../servers/monitoring/prometheus/clamscan-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
   prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
@@ -18593,6 +18609,14 @@ with pkgs;
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
   nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
   nixos-grub2-theme = callPackage ../data/misc/nixos-artwork/grub2-theme.nix { };
+
+  nixos-bgrt-plymouth = callPackage ../data/themes/nixos-bgrt-plymouth { };
+
+  nixos-nspawn = callPackage ../tools/virtualization/nixos-nspawn { };
+
+  nixos-container = callPackage ../tools/virtualization/nixos-container { };
+
+  nixos-generators = callPackage ../tools/nix/nixos-generators { };
 
   nixos-rebuild = callPackage ../os-specific/linux/nixos-rebuild { };
 

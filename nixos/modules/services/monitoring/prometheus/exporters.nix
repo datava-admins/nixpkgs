@@ -30,6 +30,7 @@ let
     "borgmatic"
     "buildkite-agent"
     "collectd"
+    "clamscan"
     "deluge"
     "dmarc"
     "dnsmasq"

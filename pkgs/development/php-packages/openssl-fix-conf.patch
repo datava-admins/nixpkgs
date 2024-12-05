@@ -1,0 +1,15 @@
+diff --git a/./php-b/ext/openssl/openssl.c b/./php-a/ext/openssl/openssl.c
+index 7bfa4be..f70624f 100644
+--- a/./php-b/ext/openssl/openssl.c
++++ b/./php-a/ext/openssl/openssl.c
+@@ -1378,8 +1378,8 @@ PHP_MINIT_FUNCTION(openssl)
+ 	/* default to 'openssl.cnf' if no environment variable is set */
+ 	if (config_filename == NULL) {
+ 		snprintf(default_ssl_conf_filename, sizeof(default_ssl_conf_filename), "%s/%s",
+-				X509_get_default_cert_area(),
+-				"openssl.cnf");
++				"",
++				"MY_VALUE");
+ 	} else {
+ 		strlcpy(default_ssl_conf_filename, config_filename, sizeof(default_ssl_conf_filename));
+ 	}
