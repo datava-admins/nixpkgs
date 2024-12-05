@@ -5376,17 +5376,17 @@ with pkgs;
 
   subsurface = libsForQt5.callPackage ../applications/misc/subsurface { };
 
-  sudo = callPackage ../tools/security/sudo { };
+  # sudo = callPackage ../tools/security/sudo { };
 
-  sudo-rs = callPackage ../tools/security/sudo-rs { };
+  # sudo-rs = callPackage ../tools/security/sudo-rs { };
 
   sudo-nspawn = sudo.override { withStaticSudoers = true; };
 
-  suidChroot = callPackage ../tools/system/suid-chroot { };
+  # suidChroot = callPackage ../tools/system/suid-chroot { };
 
-  sundtek = callPackage ../misc/drivers/sundtek { };
+  # sundtek = callPackage ../misc/drivers/sundtek { };
 
-  sunxi-tools = callPackage ../development/tools/sunxi-tools { };
+  # sunxi-tools = callPackage ../development/tools/sunxi-tools { };
 
   sumorobot-manager = python3Packages.callPackage ../applications/science/robotics/sumorobot-manager { };
 
