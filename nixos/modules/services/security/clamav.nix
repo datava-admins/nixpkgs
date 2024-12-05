@@ -301,7 +301,7 @@ in
         Type = "oneshot";
         ExecStart = "${cfg.package}/bin/clamdscan --multiscan --fdpass --infected --allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
         Slice = "system-clamav.slice";
-        ExecStart = "${pkg}/bin/clamdscan --multiscan --fdpass --infected --allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
+        #ExecStart = "${pkg}/bin/clamdscan --multiscan --fdpass --infected --allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
       };
     };
     
