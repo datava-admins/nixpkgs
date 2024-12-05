@@ -18610,13 +18610,13 @@ with pkgs;
   nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
   nixos-grub2-theme = callPackage ../data/misc/nixos-artwork/grub2-theme.nix { };
 
-  nixos-bgrt-plymouth = callPackage ../data/themes/nixos-bgrt-plymouth { };
+  # nixos-bgrt-plymouth = callPackage ../data/themes/nixos-bgrt-plymouth { };
 
   nixos-nspawn = callPackage ../tools/virtualization/nixos-nspawn { };
 
-  nixos-container = callPackage ../tools/virtualization/nixos-container { };
+  # nixos-container = callPackage ../tools/virtualization/nixos-container { };
 
-  nixos-generators = callPackage ../tools/nix/nixos-generators { };
+  # nixos-generators = callPackage ../tools/nix/nixos-generators { };
 
   nixos-rebuild = callPackage ../os-specific/linux/nixos-rebuild { };
 
